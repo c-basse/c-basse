@@ -18,19 +18,16 @@ const standard_roll_set = {
 		"roll-left": {bearing:"straight",speed: 1,direction: normal,roll_direction: left,slide: true,color: white,enabled: true},
 		"roll-right": {bearing:"straight",speed: 1,direction: normal,roll_direction: right,slide: true,color: white,enabled: true},
 	};
-const red_roll_set = {
-		"roll-left": {bearing:"straight",speed: 1,direction: normal,roll_direction: left,slide: true,color: red,enabled: true},
-		"roll-right": {bearing:"straight",speed: 1,direction: normal,roll_direction: right,slide: true,color: red,enabled: true},
+const microthrusters_roll_set = {
+		"roll-leftbankleft": {bearing:"bank",speed: 1,direction: left,roll_direction: left,slide: true,color: white,enabled: true},
+		"roll-leftbankright": {bearing:"bank",speed: 1,direction: right,roll_direction: left,slide: true,color: white,enabled: true},
+		"roll-rightbankleft": {bearing:"bank",speed: 1,direction: left,roll_direction: right,slide: true,color: white,enabled: true},
+		"roll-rightbankright": {bearing:"bank",speed: 1,direction: right,roll_direction: right,slide: true,color: white,enabled: true},
 	};
 const standard_boost_set = {
 		"boost-left": {bearing:"bank",speed: 1,direction: left,roll_direction: normal,slide: false,color: white,enabled: true},
 		"boost-mid": {bearing:"straight",speed: 1,direction: normal,roll_direction: normal,slide: false,color: white,enabled: true},
 		"boost-right": {bearing:"bank",speed: 1,direction: right,roll_direction: normal,slide: false,color: white,enabled: true}
-	};
-const red_boost_set = {
-		"boost-left": {bearing:"bank",speed: 1,direction: left,roll_direction: normal,slide: false,color: red,enabled: true},
-		"boost-mid": {bearing:"straight",speed: 1,direction: normal,roll_direction: normal,slide: false,color: red,enabled: true},
-		"boost-right": {bearing:"bank",speed: 1,direction: right,roll_direction: normal,slide: false,color: red,enabled: true}
 	};
 const standard_decloak_set = {
 		"decloak-left": {bearing:"straight",speed: 2,direction: normal,roll_direction: left,slide: true,color: white,enabled: true},
@@ -41,7 +38,7 @@ const standard_decloak_set = {
 //first_pilot is always generic
 const PILOTS_SEED = {
 'X-Wing':
-	[{pilot_name: 'Red Squadron Veteran', slots: ['Force']}],
+	[{pilot_name: 'Luke Skywalker', slots: ['Talent']}],
 'K-Wing':
 	[{pilot_name: 'Warden Squadron Pilot', slots: []}],
 'E-Wing':
@@ -71,7 +68,7 @@ const PILOTS_SEED = {
 	{pilot_name: 'Sabine Wren', slots: []},
 	{pilot_name: 'Hera Syndulla', slots: []}],
 'Sheathipede-Class Shuttle':
-	[{pilot_name: '"Zeb" Orrelios (Sheathipede)', slots: ['Force']}],
+	[{pilot_name: 'Ezra Bridger (Sheathipede)', slots: ['Talent']}],
 'B-Wing':
 	[{pilot_name: 'Blade Squadron Veteran', slots: []}],
 'ARC-170':
@@ -94,7 +91,7 @@ const PILOTS_SEED = {
 'Kihraxz Fighter':
 	[{pilot_name: 'Black Sun Ace', slots: []}],
 'Lancer-Class Pursuit Craft':
-	[{pilot_name: 'Ketsu Onyo', slots: ['Force']}],
+	[{pilot_name: 'Asajj Ventress', slots: ['Talent']}],
 'M12-L Kimogila Fighter':
 	[{pilot_name: 'Cartel Executioner', slots: []}],
 'M3-A Interceptor':
@@ -112,7 +109,7 @@ const PILOTS_SEED = {
 'Lambda-Class Shuttle':
 	[{pilot_name: 'Omicron Group Pilot', slots: []}],
 'TIE Advanced Prototype':
-	[{pilot_name: 'Baron of the Empire', slots: ['Force']}],
+	[{pilot_name: 'Grand Inquisitor', slots: ['Talent']}],
 'TIE Advanced':
 	[{pilot_name: 'Storm Squadron Ace', slots: []},
 	{pilot_name: 'Darth Vader', slots: []}],
@@ -147,7 +144,7 @@ const PILOTS_SEED = {
 'TIE/FO Fighter':
 	[{pilot_name: '"Midnight"', slots: []}],
 'TIE/VN Silencer':
-	[{pilot_name: 'First Order Test Pilot', slots: ['Force']}],
+	[{pilot_name: 'Kylo Ren', slots: ['Talent']}],
 'Upsilon-Class Shuttle':
 	[{pilot_name: 'Lieutenant Dormitz', slots: []}],
 'RZ-2 A-Wing':
@@ -155,7 +152,7 @@ const PILOTS_SEED = {
 'TIE/SF Fighter':
 	[{pilot_name: '"Backdraft"', slots: []}],
 'Scavenged YT-1300':
-	[{pilot_name: 'Chewbacca (Resistance)', slots: ['Force']}],
+	[{pilot_name: 'Rey', slots: ['Talent']}],
 'Mining Guild TIE Fighter':
 	[{pilot_name: 'Mining Guild Surveyor', slots: []}],
 'MG-100 StarFortress': [{pilot_name: 'Vennie', slots: []}]

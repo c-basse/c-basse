@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>YAEL</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/xwing-miniatures.css">
+    <link href="css/custom.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">Navbar</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Dropdown
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#">Disabled</a>
+          </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+      </div>
+    </nav>
+    <div class="container-fluid">
+      <div class="row left-buffer top-buffer">
+            <label for="faction" class="control-label"></label>
+            <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+              <label class="btn btn-primary button-option faction-option">
+              <input type="radio" name="faction" id="Rebel_Alliance" autocomplete="off">
+              <i class="xwing-miniatures-font xwing-miniatures-font-rebel"></i>
+              </label>
+              <label class="btn btn-primary active button-option faction-option">
+              <input type="radio" name="faction" id="Galactic_Empire" autocomplete="off" checked>
+              <i class="xwing-miniatures-font xwing-miniatures-font-empire"></i>
+              </label>
+              <label class="btn btn-primary button-option faction-option">
+              <input type="radio" name="faction" id="Scum_and_Villainy" autocomplete="off">
+              <i class="xwing-miniatures-font xwing-miniatures-font-scum"></i>
+              </label>
+              <label class="btn btn-primary button-option faction-option">
+              <input type="radio" name="faction" id="Resistance" autocomplete="off">
+              <i class="xwing-miniatures-font xwing-miniatures-font-rebel-outline"></i>
+              </label>
+              <label class="btn btn-primary button-option faction-option">
+              <input type="radio" name="faction" id="First_Order" autocomplete="off">
+              <i class="xwing-miniatures-font xwing-miniatures-font-firstorder"></i>
+              </label>
+            </div>
+          </div>
+        <div class="row left-buffer top-buffer">
+            <label for="ship_options" class="control-label"></label>
+            <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="A-Wing" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-rz1awing"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Aggressor" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-aggressorassaultfighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Alpha-Class_Star_Wing" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-alphaclassstarwing"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="ARC-170" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-arc170starfighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Attack_Shuttle" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-attackshuttle"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Auzituck_Gunship" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-auzituckgunship"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="B-Wing" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-asf01bwing"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Customized_YT-1300" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-customizedyt1300lightfreighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="E-Wing" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-ewing"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Escape_Craft" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-escapecraft"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Fang_Fighter" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-fangfighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Firespray-31" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-firesprayclasspatrolcraft"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="G-1A_Starfighter" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-g1astarfighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="HWK-290" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-hwk290lightfreighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="JumpMaster_5000" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-jumpmaster5000"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="K-Wing" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-btls8kwing"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Kihraxz_Fighter" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-kihraxzfighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Lambda-Class_Shuttle" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-lambdaclasst4ashuttle"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Lancer-Class_Pursuit_Craft" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-lancerclasspursuitcraft"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="M12-L_Kimogila_Fighter" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-m12lkimogilafighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="M3-A_Interceptor" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-m3ainterceptor"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="MG-100_StarFortress" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-mg100starfortresssf17"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Mining_Guild_TIE_Fighter" autocomplete="off">mgt</label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Quadjumper" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-quadrijettransferspacetug"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="RZ-2_A-Wing" autocomplete="off">rz2</label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Scavenged_YT-1300" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-modifiedyt1300lightfreighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Scurrg_H-6_Bomber" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-aggressorassaultfighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Sheathipede-Class_Shuttle" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-sheathipedeclassshuttle"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="StarViper" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-starviperclassattackplatform"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="T-70_X-Wing" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-t70xwing"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="TIE_Advanced_Prototype" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-tieadvancedv1"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="TIE_Advanced" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-tieadvancedx1"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="TIE_Aggressor" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-tieagaggressor"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="TIE_Bomber" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-tiesabomber"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="TIE_Defender" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-tieddefender"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="TIE_Fighter" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-tielnfighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="TIE_Interceptor" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-tieinterceptor"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="TIE_Phantom" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-tiephphantom"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="TIE_Punisher" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-tiecapunisher"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="TIE_Reaper" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-tiereaper"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="TIE_Striker" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-tieskstriker"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="TIE__D__FO_Fighter" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-tiefofighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="TIE__D__SF_Fighter" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-tiesffighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="TIE__D__VN_Silencer" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-tiesilencer"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="U-Wing" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-ut60duwing"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Upsilon-Class_Shuttle" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-upsilonclassshuttle"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="VCX-100" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-vcx100lightfreighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="VT-49_Decimator" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-vt49decimator"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="X-Wing" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-t65xwing"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Y-Wing" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-btla4ywing"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="YT-1300" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-modifiedyt1300lightfreighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="YT-2400" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-yt2400lightfreighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="YV-666" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-yv666lightfreighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Z-95_Headhunter" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-z95af4headhunter"></i>
+              </label>
+          </div>
+          </div>
+      </div> </div>
+      <div class="row top-buffer">
+        <div class="col-lg-8">
+          <canvas id="layer0" width="800" height="600"></canvas>
+        </div>
+        <div class="col-xl-4">
+          <div class="container">
+            <div class="form-group maneuver_box">
+              <div class="row">
+                <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="5-all" autocomplete="off" checked>5
+                  </label>
+                  <label class="btn btn-sm maneuver  btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="5-turnleft" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-turnleft"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="5-bankleft" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-bankleft"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="5-straight" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-straight"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="5-bankright" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-bankright"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="5-turnright" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-turnright"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="5-kturn" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-kturn"></i>
+                  </label>
+                  <label class="btn btn-light active maneuver-option btn-sm maneuver">
+                  <input type="checkbox" name="maneuver_options" id="5-sloopleft" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-sloopleft"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="5-sloopright" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-sloopright"></i>
+                  </label>
+                  <label class="btn btn-light active maneuver-option btn-sm maneuver">
+                  <input type="checkbox" name="maneuver_options" id="5-talonleft" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-trollleft"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="5-talonright" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-trollright"></i>
+                  </label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="4-all" autocomplete="off" checked>4
+                  </label>
+                  <label class="btn btn-sm maneuver  btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="4-turnleft" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-turnleft"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="4-bankleft" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-bankleft"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="4-straight" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-straight"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="4-bankright" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-bankright"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="4-turnright" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-turnright"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="4-kturn" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-kturn"></i>
+                  </label>
+                  <label class="btn btn-light active maneuver-option btn-sm maneuver">
+                  <input type="checkbox" name="maneuver_options" id="4-sloopleft" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-sloopleft"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="4-sloopright" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-sloopright"></i>
+                  </label>
+                  <label class="btn btn-light active maneuver-option btn-sm maneuver">
+                  <input type="checkbox" name="maneuver_options" id="4-talonleft" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-trollleft"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="4-talonright" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-trollright"></i>
+                  </label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="3-all" autocomplete="off" checked>3
+                  </label>
+                  <label class="btn btn-sm maneuver  btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="3-turnleft" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-turnleft"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="3-bankleft" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-bankleft"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="3-straight" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-straight"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="3-bankright" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-bankright"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="3-turnright" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-turnright"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="3-kturn" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-kturn"></i>
+                  </label>
+                  <label class="btn btn-light active maneuver-option btn-sm maneuver">
+                  <input type="checkbox" name="maneuver_options" id="3-sloopleft" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-sloopleft"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="3-sloopright" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-sloopright"></i>
+                  </label>
+                  <label class="btn btn-light active maneuver-option btn-sm maneuver">
+                  <input type="checkbox" name="maneuver_options" id="3-talonleft" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-trollleft"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="3-talonright" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-trollright"></i>
+                  </label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="2-all" autocomplete="off" checked>2
+                  </label>
+                  <label class="btn btn-sm maneuver  btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="2-turnleft" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-turnleft"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="2-bankleft" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-bankleft"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="2-straight" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-straight"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="2-bankright" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-bankright"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="2-turnright" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-turnright"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="2-kturn" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-kturn"></i>
+                  </label>
+                  <label class="btn btn-light active maneuver-option btn-sm maneuver">
+                  <input type="checkbox" name="maneuver_options" id="2-sloopleft" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-sloopleft"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="2-sloopright" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-sloopright"></i>
+                  </label>
+                  <label class="btn btn-light active maneuver-option btn-sm maneuver">
+                  <input type="checkbox" name="maneuver_options" id="2-talonleft" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-trollleft"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="2-talonright" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-trollright"></i>
+                  </label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="1-all" autocomplete="off" checked>1
+                  </label>
+                  <label class="btn btn-sm maneuver  btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="1-turnleft" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-turnleft"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="1-bankleft" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-bankleft"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="1-straight" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-straight"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="1-bankright" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-bankright"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="1-turnright" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-turnright"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="1-kturn" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-kturn"></i>
+                  </label>
+                  <label class="btn btn-light active maneuver-option btn-sm maneuver">
+                  <input type="checkbox" name="maneuver_options" id="1-sloopleft" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-sloopleft"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="1-sloopright" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-sloopright"></i>
+                  </label>
+                  <label class="btn btn-light active maneuver-option btn-sm maneuver">
+                  <input type="checkbox" name="maneuver_options" id="1-talonleft" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-trollleft"></i>
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="1-talonright" autocomplete="off" checked>
+                  <i class="xwing-miniatures-font xwing-miniatures-font-trollright"></i>
+                  </label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="all-all" autocomplete="off" checked>All
+                  </label>
+                  <label class="btn btn-sm maneuver  btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="all-turnleft" autocomplete="off" checked>
+                  ^
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="all-bankleft" autocomplete="off" checked>
+                  ^
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="all-straight" autocomplete="off" checked>
+                  ^
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="all-bankright" autocomplete="off" checked>
+                  ^
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="all-turnright" autocomplete="off" checked>
+                  ^
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="all-kturn" autocomplete="off" checked>
+                  ^
+                  </label>
+                  <label class="btn btn-light active maneuver-option btn-sm maneuver">
+                  <input type="checkbox" name="maneuver_options" id="all-sloopleft" autocomplete="off" checked>
+                  ^
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="all-sloopright" autocomplete="off" checked>
+                  ^
+                  </label>
+                  <label class="btn btn-light active maneuver-option btn-sm maneuver">
+                  <input type="checkbox" name="maneuver_options" id="all-talonleft" autocomplete="off" checked>
+                  ^
+                  </label>
+                  <label class="btn btn-sm maneuver btn-light active maneuver-option">
+                  <input type="checkbox" name="maneuver_options" id="all-talonright" autocomplete="off" checked>
+                  ^
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="start_stress_options" class="control-label">Start State:</label>
+            <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+              <label class="btn btn-primary button-option display-option">
+              <input type="radio" name="start_state" id="start_stressed" autocomplete="off">1x Stress
+              </label>
+              <label class="btn btn-primary button-option display-option">
+              <input type="radio" name="start_state" id="start_double_stressed" autocomplete="off">2x Stress
+              </label>
+              <label class="btn btn-primary active button-option display-option">
+              <input type="radio" name="start_state" id="start_unstressed" autocomplete="off" checked>No Stress
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="stress_options" class="control-label">End State:</label>
+            <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+              <label class="btn btn-primary button-option display-option">
+              <input type="radio" name="end_state" id="show_stressed" autocomplete="off">Stressed
+              </label>
+              <label class="btn btn-primary button-option display-option">
+              <input type="radio" name="end_state" id="show_unstressed" autocomplete="off">Not Stressed
+              </label>
+              <label class="btn btn-primary active button-option display-option">
+              <input type="radio" name="end_state" id="show_regardless_stress" autocomplete="off" checked>Anything Goes
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="position" class="control-label">Show Position:</label>
+            <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+              <label class="btn btn-primary active button-option display-option">
+              <input type="checkbox" name="position" id="show_starting_location" autocomplete="off" checked>Starting
+              </label>
+              <label class="btn btn-primary button-option display-option">
+              <input type="checkbox" name="position" id="show_intermediate_location" autocomplete="off">Intermediate
+              </label>
+              <label class="btn btn-primary active button-option display-option">
+              <input type="checkbox" name="position" id="show_final_location" autocomplete="off" checked>Final
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="slide" class="control-label">Slide:</label>
+            <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+              <label class="btn btn-primary button-option display-option">
+              <input type="radio" name="slide" id="show_fwd_slide" autocomplete="off">Fwd
+              </label>
+              <label class="btn btn-primary active button-option display-option">
+              <input type="radio" name="slide" id="show_mid_slide" autocomplete="off" checked>Mid
+              </label>
+              <label class="btn btn-primary button-option display-option">
+              <input type="radio" name="slide" id="show_bwd_slide" autocomplete="off">Bwd
+              </label>
+              <label class="btn btn-primary button-option display-option">
+              <input type="radio" name="slide" id="show_all_slide" autocomplete="off">All
+              </label>
+            </div>
+          </div>
+          <!--
+          <div class="form-group">
+            <label for="faction" class="control-label">Faction:</label>
+            <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+              <label class="btn btn-primary button-option faction-option">
+              <input type="radio" name="faction" id="Rebel_Alliance" autocomplete="off">
+              <i class="xwing-miniatures-font xwing-miniatures-font-rebel"></i>
+              </label>
+              <label class="btn btn-primary active button-option faction-option">
+              <input type="radio" name="faction" id="Galactic_Empire" autocomplete="off" checked>
+              <i class="xwing-miniatures-font xwing-miniatures-font-empire"></i>
+              </label>
+              <label class="btn btn-primary button-option faction-option">
+              <input type="radio" name="faction" id="Scum_and_Villainy" autocomplete="off">
+              <i class="xwing-miniatures-font xwing-miniatures-font-scum"></i>
+              </label>
+              <label class="btn btn-primary button-option faction-option">
+              <input type="radio" name="faction" id="Resistance" autocomplete="off">
+              <i class="xwing-miniatures-font xwing-miniatures-font-rebel-outline"></i>
+              </label>
+              <label class="btn btn-primary button-option faction-option">
+              <input type="radio" name="faction" id="First_Order" autocomplete="off">
+              <i class="xwing-miniatures-font xwing-miniatures-font-firstorder"></i>
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="ship_options" class="control-label">Ship:</label>
+            <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="A-Wing" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-rz1awing"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Aggressor" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-aggressorassaultfighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Alpha-Class_Star_Wing" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-alphaclassstarwing"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="ARC-170" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-arc170starfighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Attack_Shuttle" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-attackshuttle"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Auzituck_Gunship" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-auzituckgunship"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="B-Wing" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-asf01bwing"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Customized_YT-1300" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-customizedyt1300lightfreighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="E-Wing" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-ewing"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Escape_Craft" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-escapecraft"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Fang_Fighter" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-fangfighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Firespray-31" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-firesprayclasspatrolcraft"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="G-1A_Starfighter" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-g1astarfighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="HWK-290" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-hwk290lightfreighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="JumpMaster_5000" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-jumpmaster5000"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="K-Wing" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-btls8kwing"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Kihraxz_Fighter" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-kihraxzfighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Lambda-Class_Shuttle" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-lambdaclasst4ashuttle"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Lancer-Class_Pursuit_Craft" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-lancerclasspursuitcraft"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="M12-L_Kimogila_Fighter" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-m12lkimogilafighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="M3-A_Interceptor" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-m3ainterceptor"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="MG-100_StarFortress" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-mg100starfortresssf17"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Mining_Guild_TIE_Fighter" autocomplete="off">mgt</label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Quadjumper" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-quadrijettransferspacetug"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="RZ-2_A-Wing" autocomplete="off">rz2</label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Scavenged_YT-1300" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-modifiedyt1300lightfreighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Scurrg_H-6_Bomber" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-aggressorassaultfighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Sheathipede-Class_Shuttle" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-sheathipedeclassshuttle"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="StarViper" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-starviperclassattackplatform"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="T-70_X-Wing" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-t70xwing"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="TIE_Advanced_Prototype" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-tieadvancedv1"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="TIE_Advanced" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-tieadvancedx1"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="TIE_Aggressor" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-tieagaggressor"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="TIE_Bomber" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-tiesabomber"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="TIE_Defender" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-tieddefender"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="TIE_Fighter" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-tielnfighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="TIE_Interceptor" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-tieinterceptor"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="TIE_Phantom" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-tiephphantom"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="TIE_Punisher" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-tiecapunisher"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="TIE_Reaper" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-tiereaper"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="TIE_Striker" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-tieskstriker"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="TIE__D__FO_Fighter" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-tiefofighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="TIE__D__SF_Fighter" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-tiesffighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="TIE__D__VN_Silencer" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-tiesilencer"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="U-Wing" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-ut60duwing"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Upsilon-Class_Shuttle" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-upsilonclassshuttle"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="VCX-100" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-vcx100lightfreighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="VT-49_Decimator" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-vt49decimator"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="X-Wing" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-t65xwing"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Y-Wing" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-btla4ywing"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="YT-1300" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-modifiedyt1300lightfreighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="YT-2400" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-yt2400lightfreighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="YV-666" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-yv666lightfreighter"></i>
+              </label>
+              <label class="btn btn-primary button-option ship-option">
+              <input type="radio" name="ship_options" id="Z-95_Headhunter" autocomplete="off">
+              <i class="xwing-miniatures-ship xwing-miniatures-ship-z95af4headhunter"></i>
+              </label>
+            </div>
+          </div>
+        -->
+          <div class="form-group">
+            <label for="pilot_options" class="control-label">Pilot Ability:</label>
+            <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+              <label class="btn btn-primary button-option pilot-option">
+              <input type="radio" name="pilot_options" id="no_pilot" autocomplete="off">None
+              </label>
+              <label class="btn btn-primary button-option pilot-option">
+              <input type="radio" name="pilot_options" id="Sabine_Wren___O__TIE_Fighter__C__" autocomplete="off">Sabine
+              </label>
+              <label class="btn btn-primary button-option pilot-option">
+              <input type="radio" name="pilot_options" id="Lando_Calrissian" autocomplete="off">Lando
+              </label>
+              <label class="btn btn-primary button-option pilot-option">
+              <input type="radio" name="pilot_options" id="Hera_Syndulla___O__VCX-100__C__" autocomplete="off">Hera
+              </label>
+              <label class="btn btn-primary button-option pilot-option">
+              <input type="radio" name="pilot_options" id="Sabine_Wren" autocomplete="off">Sabine
+              </label>
+              <label class="btn btn-primary button-option pilot-option">
+              <input type="radio" name="pilot_options" id="Hera_Syndulla" autocomplete="off">Hera
+              </label>
+              <label class="btn btn-primary button-option pilot-option">
+              <input type="radio" name="pilot_options" id="IG-88D" autocomplete="off">IG-88D
+              </label>
+              <label class="btn btn-primary button-option pilot-option">
+              <input type="radio" name="pilot_options" id="Darth_Vader" autocomplete="off">Vader
+              </label>
+              <label class="btn btn-primary button-option pilot-option">
+              <input type="radio" name="pilot_options" id="Countess_Ryad" autocomplete="off">Ryad
+              </label>
+              <label class="btn btn-primary button-option pilot-option">
+              <input type="radio" name="pilot_options" id="__Q__Echo__Q__" autocomplete="off">Echo
+              </label>
+              <label class="btn btn-primary button-option pilot-option">
+              <input type="radio" name="pilot_options" id="__Q__Duchess__Q__" autocomplete="off">Duchess
+              </label>
+              <label class="btn btn-primary button-option pilot-option">
+              <input type="radio" name="pilot_options" id="Poe_Dameron" autocomplete="off">Poe
+              </label>
+              <label class="btn btn-primary button-option pilot-option">
+              <input type="radio" name="pilot_options" id="Nien_Nunb" autocomplete="off">Nien
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="talent_options" class="control-label">
+            <i class="xwing-miniatures-font xwing-miniatures-font-talent"></i>/<i class="xwing-miniatures-font xwing-miniatures-font-forcepower"></i>
+            </label>
+            <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+              <label class="btn btn-primary button-option talent-option upgrade-option">
+              <input type="radio" name="talent_options" id="no_talent" autocomplete="off">None
+              </label>
+              <label class="btn btn-primary button-option force-option upgrade-option smallbaseonly">
+              <input type="radio" name="talent_options" id="supernatural_reflexes" autocomplete="off">SR
+              </label>
+              <label class="btn btn-primary button-option talent-option upgrade-option smallbaseonly">
+              <input type="radio" name="talent_options" id="daredevil" autocomplete="off">DD
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="sensor_options" class="control-label">
+            <i class="xwing-miniatures-font xwing-miniatures-font-sensor"></i>
+            </label>
+            <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+              <label class="btn btn-primary button-option sensor-option upgrade-option">
+              <input type="radio" name="sensor_options" id="no_sensor" autocomplete="off">None
+              </label>
+              <label class="btn btn-primary button-option sensor-option upgrade-option">
+              <input type="radio" name="sensor_options" id="advanced_sensors" autocomplete="off">AS
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="tech_options" class="control-label">
+            <i class="xwing-miniatures-font xwing-miniatures-font-tech"></i>
+            </label>
+            <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+              <label class="btn btn-primary button-option tech-option upgrade-option">
+              <input type="radio" name="tech_options" id="no_tech" autocomplete="off">None
+              </label>
+              <label class="btn btn-primary button-option tech-option upgrade-option smallbaseonly">
+              <input type="radio" name="tech_options" id="primed_thrusters" autocomplete="off">PT
+              </label>
+              <label class="btn btn-primary button-option tech-option upgrade-option">
+              <input type="radio" name="tech_options" id="pattern_analyzer" autocomplete="off">PA
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/global_constants.js"></script>
+    <script src="js/cards-common.js"></script>
+    <script src="js/xwing_ships.js"></script>
+    <script src="js/generate_shipstates.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>

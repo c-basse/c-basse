@@ -1,0 +1,27 @@
+canvas {
+	border:solid;
+	width:100%;
+}
+
+label.maneuver {
+	width: 40px;
+	height: 40px;
+}
+
+div.maneuver_box {
+	height:240px;
+}
+.blue-maneuver {
+	color: blue;
+}
+
+.red-maneuver {
+	color: red;
+}
+
+.white-maneuver {
+	color: black;
+}
+
+.top-buffer { margin-top:15px; }
+.left-buffer { margin-left:15px; }

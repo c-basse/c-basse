@@ -5,10 +5,31 @@ Required Input ship_config (ShipConfig object) is needed as it holds which upgra
 Required Input options (options dictionary object) is needed as it determines starting ship state and other options such as slide choices
 */
 function generate_shipstates(ship_config, options) {
-	var starting_point = new ShipState(ship_config.basesize,ship_config.actions);
+    
+    if(ship_config.pilot.pilot_name == "IG-88D"){
+    	ship_config.move_sets.maneuver_set["3-ig88dright"].enabled = ship_config.move_sets.maneuver_set["3-sloopright"].enabled;
+    	ship_config.move_sets.maneuver_set["3-ig88dleft"].enabled = ship_config.move_sets.maneuver_set["3-sloopleft"].enabled;
+    	ship_config.move_sets.maneuver_set["3-kturn"].enabled = (ship_config.move_sets.maneuver_set["3-sloopright"].enabled || ship_config.move_sets.maneuver_set["3-sloopleft"].enabled);
+    }
+
+    if(ship_config.pilot.pilot_name == "Countess Ryad"){
+    	ship_config.move_sets.maneuver_set["2-ryadturn"].enabled = ship_config.move_sets.maneuver_set["2-straight"].enabled;
+    	ship_config.move_sets.maneuver_set["3-ryadturn"].enabled = ship_config.move_sets.maneuver_set["3-straight"].enabled;
+    	ship_config.move_sets.maneuver_set["4-ryadturn"].enabled = ship_config.move_sets.maneuver_set["4-straight"].enabled;
+    	ship_config.move_sets.maneuver_set["5-ryadturn"].enabled = ship_config.move_sets.maneuver_set["5-straight"].enabled;
+    }
+
+    if(ship_config.upgrades.pivot_wing){
+    	ship_config.move_sets.maneuver_set["left_pivot"].enabled = ship_config.move_sets.maneuver_set["0-straight"].enabled;
+    	ship_config.move_sets.maneuver_set["right_pivot"].enabled = ship_config.move_sets.maneuver_set["0-straight"].enabled;
+    	ship_config.move_sets.maneuver_set["flip_pivot"].enabled = ship_config.move_sets.maneuver_set["0-straight"].enabled;
+    }
+
+
+	var starting_point = new ShipState(ship_config.basesize);
 	starting_point.force_count = ship_config.pilot.starting_force;
 	
-	if($.inArray("Cloak",ship_config.actions)>=0){
+	if($.inArray("Cloak",ship_config.action_bar)>=0){
 		starting_point.is_cloaked = true;
 	}
 	var shipstateArray = [];
@@ -32,21 +53,36 @@ function generate_shipstates(ship_config, options) {
 	shipstateArray.push(starting_point);
 
 	//Systems phase
-	shipstateArray = decloack_phase(shipstateArray, ship_config);
+	shipstateArray = decloak_phase(shipstateArray, ship_config);
 
 	//Before you activate
+	if (ship_config.pilot.pilot_name == "Sabine Wren (TIE Fighter)" || ship_config.pilot.pilot_name == "Sabine Wren"){
+		shipstateArray = action_phase(shipstateArray, ship_config, {require_move: false, slam_allowed: false, temp_add_boost: true});
+	}
 	if (ship_config.upgrades.supernatural_reflexes){
 		shipstateArray = action_phase(shipstateArray, ship_config, {require_move: false, slam_allowed: false, force_cost: 1});
 	}
 
 	//Before you reveal your dial
 	if (ship_config.ship_ability.adaptive_ailerons) {
-		shipstateArray = maneuver_phase(shipstateArray, ship_config.move_sets.aileron_set, ship_config, {intermediate_move: true, must_if_unstressed: true});
+		if(ship_config.pilot.pilot_name == '"Duchess"'){
+			shipstateArray = maneuver_phase(shipstateArray, ship_config.move_sets.aileron_set, ship_config, {intermediate_move: true, must_if_unstressed: false});
+		} else {
+			shipstateArray = maneuver_phase(shipstateArray, ship_config.move_sets.aileron_set, ship_config, {intermediate_move: true, must_if_unstressed: true});
+		}
 	}
 
 	//After you reveal your dial
 	if (ship_config.upgrades.advanced_sensors) {
 		shipstateArray = action_phase(shipstateArray, ship_config, {require_move: false, disable_future_actions: true, slam_allowed: false});
+	}
+
+	//Before you execute a maneuver
+	if (ship_config.upgrades.bb_astromech){
+		shipstateArray = action_phase(shipstateArray, ship_config, {require_move: false, slam_allowed: false, boost_allowed: false, temp_add_roll: true});
+	}
+	if (ship_config.upgrades.bb_8){
+		shipstateArray = action_phase(shipstateArray, ship_config, {require_move: false, slam_allowed: false, temp_add_roll: true, temp_add_boost: true});
 	}
 
 	//Execute maneuver
@@ -80,44 +116,52 @@ function maneuver_phase(shipstateArray, move_set, ship_config,
 				if (move_set[move_name].enabled) { //maneuver must be enabled
 					var loop_count = (move_set[move_name].slide) ? shipstateArray[i].slide_array.length : 1; //only do once if not a slide maneuver; otherwise repeat for however many slide options are enabled
 					for(var k=0; k<loop_count; k++){
-						var maneuver = $.extend(true,{slide_direction: shipstateArray[i].slide_array[k]},move_set[move_name]); 
-						var ship = shipstateArray[i].clone();
+						var maneuver = $.extend(true,{slide_direction: shipstateArray[i].slide_array[k]},move_set[move_name]);
+						if(ship_config.upgrades.r4_astromech && maneuver.color != blue && (maneuver.speed == 1 || maneuver.speed == 2)){
+							maneuver.color -= 1;
+						} 
+						var new_ship_state = shipstateArray[i].clone();
 						switch (maneuver.color) { //determine color
 
 							case red:
 
-								if(ship.stress_count >= 1 && attempted_stressed_red_maneuver == false){ //if already stressed and not yet attempted a stressed red maneuver
-									ship.add_move(stressed_red_maneuver); // do an emergency two straight
-									ship.slam_speed = (record_slam_speed) ? stressed_red_maneuver.speed : ship.slam_speed;
+								if((!ship_config.upgrades.reys_falcon || maneuver.bearing != "sloop") && new_ship_state.stress_count >= 1 && attempted_stressed_red_maneuver == false){ //if already stressed and not yet attempted a stressed red maneuver
+									new_ship_state.add_move(stressed_red_maneuver); // do an emergency two straight
+									new_ship_state.slam_speed = (record_slam_speed) ? stressed_red_maneuver.speed : new_ship_state.slam_speed;
 									attempted_stressed_red_maneuver = true;
 								} else {
-									ship.add_move(maneuver); // do the maneuver
-									ship.slam_speed = (record_slam_speed) ? maneuver.speed : ship.slam_speed;
+									new_ship_state.add_move(maneuver); // do the maneuver
+									new_ship_state.slam_speed = (record_slam_speed) ? maneuver.speed : new_ship_state.slam_speed;
 									if(ship_config.upgrades.pattern_analyzer){
-										ship.has_moved = true;
-										new_shipstateArray = new_shipstateArray.concat(action_phase([ship],ship_config,{require_move:false,force_red:true}));
+										new_ship_state.has_moved = true;
+										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state],ship_config,{require_move:false,force_red:true}));
 									}
-									ship.stress_count += 1;
+									if(ship_config.pilot.pilot_name != "Nien Nunb"){
+										new_ship_state.stress_count += 1;
+									}
 								}
 								break;
 
 							case white:
 
-								ship.add_move(maneuver); // do the maneuver
-								ship.slam_speed = (record_slam_speed) ? maneuver.speed : ship.slam_speed;
+								new_ship_state.add_move(maneuver); // do the maneuver
+								new_ship_state.slam_speed = (record_slam_speed) ? maneuver.speed : new_ship_state.slam_speed;
 								break;
 
 							case blue:
 
-								ship.add_move(maneuver); // do the maneuver
-								ship.slam_speed = (record_slam_speed) ? maneuver.speed : ship.slam_speed;
-								if(ship.stress_count > 0){
-									ship.stress_count -= 1;
+								new_ship_state.add_move(maneuver); // do the maneuver
+								new_ship_state.slam_speed = (record_slam_speed) ? maneuver.speed : new_ship_state.slam_speed;
+								if(new_ship_state.stress_count > 0){
+									new_ship_state.stress_count -= 1;
 								}
 								break;
 						}	
-						ship.has_moved = (intermediate_move) ? ship.has_moved : true;
-						new_shipstateArray.push(ship);
+						new_ship_state.has_moved = (intermediate_move) ? new_ship_state.has_moved : true;
+						new_shipstateArray.push(new_ship_state);
+						if(ship_config.upgrades.afterburners && maneuver.speed >= 3){
+							new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, {require_move: false, disable_future_actions: false, slam_allowed: false, roll_allowed: false, temp_add_boost: true, force_white: true}));
+						} 
 					}
 				}
 			}
@@ -138,17 +182,28 @@ Optional Input: force_red means the action is treated as red even if normally th
 Optional Input: force_cost means the action cost force point to perform
 */
 function action_phase(shipstateArray, ship_config,
-	{require_move = true, disable_future_actions = false, boost_allowed = true, roll_allowed = true, slam_allowed = true, force_red =  false, force_cost = 0}={}) {
+	{require_move = true, disable_future_actions = false, boost_allowed = true, roll_allowed = true, slam_allowed = true, force_red =  false, force_white = false, force_cost = 0,temp_add_boost = false,temp_add_roll = false}={}) {
 	new_shipstateArray = [];
 	for (var i=0; i<shipstateArray.length; i++) {
-		if(!shipstateArray[i].frozen && (shipstateArray[i].stress_count <= 0 || (ship_config.upgrades.primed_thrusters && shipstateArray[i].stress_count <= 2)) && (require_move == false || shipstateArray[i].has_moved) && shipstateArray[i].actions_disabled == false) { //action possible only if unstressed and has already moved and actions not disabled (i.e. adv sensors used)
-			for (var j = 0; j < shipstateArray[i].actions_remaining.length; j++) {
-				switch(shipstateArray[i].actions_remaining[j]) {
+		if(!shipstateArray[i].frozen && (require_move == false || shipstateArray[i].has_moved) && shipstateArray[i].actions_disabled == false) { //action possible only if unstressed and has already moved and actions not disabled (i.e. adv sensors used)
+			var possible_actions = ship_config.action_bar.slice(0);
+			if(temp_add_boost && $.inArray("Boost",ship_config.action_bar)==-1){
+				possible_actions.push("Boost");
+			}
+			if(temp_add_roll && $.inArray("Barrel Roll",ship_config.action_bar)==-1){
+				possible_actions.push("Barrel Roll");
+			}
+
+			for (var j = 0; j < possible_actions.length; j++) {
+				if($.inArray(possible_actions[j],shipstateArray[i].actions_used) > -1){
+					continue; //can't do the same action twice in one turn, so sayeth the xwing gods
+				}
+				switch(possible_actions[j]) {
 
 					/*improvement opportunity: there is lots of duplicated code betwen different actions, consolidate somehow*/
 
 					case "Barrel Roll":
-						if(roll_allowed && force_cost<=shipstateArray[i].force_count){
+						if(roll_allowed && force_cost<=shipstateArray[i].force_count && (shipstateArray[i].stress_count <= 0 || (ship_config.upgrades.primed_thrusters && shipstateArray[i].stress_count <= 2))){
 							for (var move_name in ship_config.move_sets.roll_set) {
 								var loop_count = (ship_config.move_sets.roll_set[move_name].slide) ? shipstateArray[i].slide_array.length : 1; //only do once if not a slide maneuver; otherwise repeat for however many slide options are enabled
 								for(var k=0; k<loop_count; k++){
@@ -160,10 +215,14 @@ function action_phase(shipstateArray, ship_config,
 										if(disable_future_actions){
 											new_ship_state.actions_disabled = true;
 										}
-										var difficulty = (force_red) ? red : maneuver.color;
+										var difficulty = (ship_config.upgrades.expert_handling) ? white : ship_config.move_sets.roll_set[move_name].color;
+										difficulty = (force_white) ? white : difficulty;
+										difficulty = (force_red) ? red : difficulty;
 										switch (difficulty) {          //check color
 											case red:
-												new_ship_state.stress_count += 1;
+												if(ship_config.pilot.pilot_name != "Nien Nunb"){
+													new_ship_state.stress_count += 1;
+												}
 												break;
 											case blue:
 												if(new_ship_state.stress_count > 0){
@@ -172,24 +231,30 @@ function action_phase(shipstateArray, ship_config,
 												break;
 										}
 										new_shipstateArray.push(new_ship_state);
-										new_ship_state.actions_remaining.splice(j,1);
+										new_ship_state.actions_used.push(possible_actions[j]); 
+										
 										if(ship_config.ship_ability.autothrusters){
 											new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, {require_move: false, disable_future_actions: false, slam_allowed: false, force_red: true}));
 										} else if (ship_config.ship_ability.refined_gyrostabilizers) {
 											new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, {require_move: false, disable_future_actions: false, slam_allowed: false, roll_allowed: false, force_red: true}));
 										} else if (ship_config.ship_ability.vectored_thrusters) {
 											new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, {require_move: false, disable_future_actions: false, slam_allowed: false, roll_allowed: false, force_red: true}));
+										} else if (ship_config.pilot.pilot_name == "Poe Dameron" && new_ship_state.force_count >= 1){
+											new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, {require_move: false, disable_future_actions: false, slam_allowed: false, force_red: true, force_cost: 1}));
 										}
+										/*
+										until we model the ability to supernatural boost (take damage) and/or other actions, vader pilot ability is pointless
 										if(ship_config.pilot.pilot_name="Darth Vader"){
 											new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, {require_move: false, disable_future_actions: false,force_cost:1}));
 										}
+										*/
 									}
 								}
 							}
 						}
 						break; //break for action name switch
 					case "Boost":
-						if(boost_allowed && force_cost<=shipstateArray[i].force_count){
+						if(boost_allowed && force_cost<=shipstateArray[i].force_count  && (shipstateArray[i].stress_count <= 0 || (ship_config.upgrades.primed_thrusters && shipstateArray[i].stress_count <= 2) || (ship_config.upgrades.reys_falcon && shipstateArray[i].stress_count <= 2) )){
 							for (var move_name in ship_config.move_sets.boost_set) {
 								if (ship_config.move_sets.boost_set[move_name].enabled) {                //check if this boost is enabled
 									var new_ship_state = shipstateArray[i].clone();
@@ -198,10 +263,14 @@ function action_phase(shipstateArray, ship_config,
 									if(disable_future_actions){
 										new_ship_state.actions_disabled = true;
 									}
-									var difficulty = (force_red) ? red : ship_config.move_sets.boost_set[move_name].color;
+									var difficulty = (ship_config.upgrades.engine_upgrade) ? white : ship_config.move_sets.boost_set[move_name].color;
+									difficulty = (force_white) ? white : difficulty;
+									difficulty = (force_red) ? red : difficulty;
 									switch (difficulty) {          //check color
 										case red:
-											new_ship_state.stress_count += 1;
+											if(ship_config.pilot.pilot_name != "Nien Nunb"){
+												new_ship_state.stress_count += 1;
+											}
 											break;
 										case blue:
 											if(new_ship_state.stress_count > 0){
@@ -210,13 +279,15 @@ function action_phase(shipstateArray, ship_config,
 											break;
 									}
 									new_shipstateArray.push(new_ship_state);
-									new_ship_state.actions_remaining.splice(j,1);
+									new_ship_state.actions_used.push(possible_actions[j]); 
 									if(ship_config.ship_ability.autothrusters){
 										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, {require_move: false, disable_future_actions: false, slam_allowed: false, force_red: true}));
 									} else if (ship_config.ship_ability.refined_gyrostabilizers) {
 										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, {require_move: false, disable_future_actions: false, slam_allowed: false, roll_allowed: false, force_red: true}));
 									} else if (ship_config.ship_ability.vectored_thrusters) {
 										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, {require_move: false, disable_future_actions: false, slam_allowed: false, roll_allowed: false, force_red: true}));
+									} else if (ship_config.pilot.pilot_name == "Poe Dameron" && new_ship_state.force_count >= 1){
+										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, {require_move: false, disable_future_actions: false, slam_allowed: false, force_red: true, force_cost: 1}));
 									}
 								}
 							}
@@ -232,10 +303,14 @@ function action_phase(shipstateArray, ship_config,
 									if(disable_future_actions){
 										new_ship_state.actions_disabled = true;
 									}
-									var difficulty = (force_red) ? red : ship_config.move_sets.maneuver_set[move_name].color;
+									var difficulty = ship_config.move_sets.maneuver_set[move_name].color;
+									difficulty = (force_white) ? white : difficulty;
+									difficulty = (force_red) ? red : difficulty;
 									switch (difficulty) {          //check color
 										case red:
-											new_ship_state.stress_count += 1;
+											if(ship_config.pilot.pilot_name != "Nien Nunb"){
+												new_ship_state.stress_count += 1;
+											}
 											break;
 										case blue:
 											if(new_ship_state.stress_count > 0){
@@ -244,13 +319,15 @@ function action_phase(shipstateArray, ship_config,
 											break; 
 									}
 									new_shipstateArray.push(new_ship_state);
-									new_ship_state.actions_remaining.splice(j,1);
+									new_ship_state.actions_used.push(possible_actions[j]);
 									if(ship_config.ship_ability.autothrusters){
 										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, {require_move: false, disable_future_actions: false, slam_allowed: false, force_red: true}));
 									} else if (ship_config.ship_ability.refined_gyrostabilizers) {
 										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, {require_move: false, disable_future_actions: false, slam_allowed: false, roll_allowed: false, force_red: true}));
 									} else if (ship_config.ship_ability.vectored_thrusters) {
 										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, {require_move: false, disable_future_actions: false, slam_allowed: false, roll_allowed: false, force_red: true}));
+									} else if (ship_config.pilot.pilot_name == "Poe Dameron" && new_ship_state.force_count >= 1){
+										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, {require_move: false, disable_future_actions: false, slam_allowed: false, force_red: true, force_cost: 1}));
 									}
 
 								}
@@ -270,15 +347,15 @@ Output: an updated ShipState array
 Required Input shipstateArray (array of ShipState object) is needed as every incoming ShipState will ahve all valid and enabled action phase outcomes executed on it.
 Required Input ship_config (ShipConfig object) is needed as it holds which upgrades are enabled
 */
-function decloack_phase(shipstateArray, ship_config) {
+function decloak_phase(shipstateArray, ship_config) {
 	new_shipstateArray = [];
 	for (var i=0; i<shipstateArray.length; i++) {
 		if(!shipstateArray[i].frozen && shipstateArray[i].is_cloaked && shipstateArray[i].has_moved == false) { //action possible only if cloaked and has not moved
-			for (var move_name in ship_config.move_sets.decloack_set) {
-				if (ship_config.move_sets.decloack_set[move_name].enabled) { //maneuver must be enabled
-					var loop_count = (ship_config.move_sets.decloack_set[move_name].slide) ? shipstateArray[i].slide_array.length : 1; //only do once if not a slide maneuver; otherwise repeat for however many slide options are enabled
+			for (var move_name in ship_config.move_sets.decloak_set) {
+				if (ship_config.move_sets.decloak_set[move_name].enabled) { //maneuver must be enabled
+					var loop_count = (ship_config.move_sets.decloak_set[move_name].slide) ? shipstateArray[i].slide_array.length : 1; //only do once if not a slide maneuver; otherwise repeat for however many slide options are enabled
 					for(var k=0; k<loop_count; k++){
-						var maneuver = $.extend(true,{slide_direction: shipstateArray[i].slide_array[k]},ship_config.move_sets.decloack_set[move_name]); 
+						var maneuver = $.extend(true,{slide_direction: shipstateArray[i].slide_array[k]},ship_config.move_sets.decloak_set[move_name]); 
 						var ship = shipstateArray[i].clone(); 
 						ship.add_move(maneuver);
 						ship.is_cloaked = false;

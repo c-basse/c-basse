@@ -24,6 +24,24 @@ const microthrusters_roll_set = {
 		"roll-rightbankleft": {bearing:"bank",speed: 1,direction: left,roll_direction: right,slide: true,color: white,enabled: true},
 		"roll-rightbankright": {bearing:"bank",speed: 1,direction: right,roll_direction: right,slide: true,color: white,enabled: true},
 	};
+
+const ig88d_sloop_set = {
+		"3-ig88dright": {bearing:"ig88d",speed: 3,direction: right,roll_direction: normal,slide: false,color: red,enabled: true},
+		"3-kturn": {bearing:"kturn",speed: 3,direction: left,roll_direction: normal,slide: false,color: red,enabled: true},
+		"3-ig88dleft": {bearing:"ig88d",speed: 3,direction: left,roll_direction: normal,slide: false,color: red,enabled: true}
+}
+
+const ryad_kturn_set = {
+		"2-ryadturn": {bearing:"kturn",speed: 2,direction: normal,roll_direction: normal,slide: false,color: white,enabled: true},
+		"3-ryadturn": {bearing:"kturn",speed: 3,direction: normal,roll_direction: normal,slide: false,color: white,enabled: true},
+		"4-ryadturn": {bearing:"kturn",speed: 4,direction: normal,roll_direction: normal,slide: false,color: white,enabled: true},
+		"5-ryadturn": {bearing:"kturn",speed: 5,direction: normal,roll_direction: normal,slide: false,color: white,enabled: true}
+}
+const pivot_wing_set = {
+		"left_pivot": {bearing:"rotate",speed: 90,direction: left,roll_direction: normal,slide: false,color: red,enabled: true},
+		"right_pivot": {bearing:"rotate",speed: 90,direction: right,roll_direction: normal,slide: false,color: red,enabled: true},
+		"flip_pivot": {bearing:"rotate",speed: 180,direction: left,roll_direction: normal,slide: false,color: red,enabled: true}
+}
 const standard_boost_set = {
 		"boost-left": {bearing:"bank",speed: 1,direction: left,roll_direction: normal,slide: false,color: white,enabled: true},
 		"boost-mid": {bearing:"straight",speed: 1,direction: normal,roll_direction: normal,slide: false,color: white,enabled: true},
@@ -32,7 +50,16 @@ const standard_boost_set = {
 const standard_decloak_set = {
 		"decloak-left": {bearing:"straight",speed: 2,direction: normal,roll_direction: left,slide: true,color: white,enabled: true},
 		"decloak-right": {bearing:"straight",speed: 2,direction: normal,roll_direction: right,slide: true,color: white,enabled: true},
-		"decloak-straight": {bearing:"straight",speed: 2,direction: normal,roll_direction: normal,slide: true,color: white,enabled: true}
+		"decloak-straight": {bearing:"straight",speed: 2,direction: normal,roll_direction: normal,slide: false,color: white,enabled: true}
+	};
+
+const echo_decloak_set = {
+		"decloak-leftbankleft": {bearing:"bank",speed: 2,direction: left,roll_direction: left,slide: true,color: white,enabled: true},
+		"decloak-leftbankright": {bearing:"bank",speed: 2,direction: right,roll_direction: left,slide: true,color: white,enabled: true},
+		"decloak-rightbankleft": {bearing:"bank",speed: 2,direction: left,roll_direction: right,slide: true,color: white,enabled: true},
+		"decloak-rightbankright": {bearing:"bank",speed: 2,direction: right,roll_direction: right,slide: true,color: white,enabled: true},
+		"decloak-straightbankleft": {bearing:"bank",speed: 2,direction: left,roll_direction: normal,slide: false,color: white,enabled: true},
+		"decloak-straightbankright": {bearing:"bank",speed: 2,direction: right,roll_direction: normal,slide: false,color: white,enabled: true}
 	};
 
 //first_pilot is always generic
@@ -50,8 +77,7 @@ const PILOTS_SEED = {
 'YT-2400':
 	[{pilot_name: 'Dash Rendar', slots: []}],
 'YT-1300':
-	[{pilot_name: 'Chewbacca', slots: []},
-	{pilot_name: 'Lando Calrissian', slots: []}],
+	[{pilot_name: 'Chewbacca', slots: []}],
 'HWK-290':
 	[{pilot_name: 'Jan Ors', slots: []}],
 'A-Wing':
@@ -61,12 +87,10 @@ const PILOTS_SEED = {
 'Auzituck Gunship':
 	[{pilot_name: 'Lowhhrick', slots: []}],
 'VCX-100':
-	[{pilot_name: 'Kanan Jarrus', slots: []},
-	{pilot_name: 'Hera Syndulla (VCX-100)', slots: []}],
+	[{pilot_name: 'Kanan Jarrus', slots: []}],
 'Attack Shuttle':
 	[{pilot_name: 'Ezra Bridger', slots: []},
-	{pilot_name: 'Sabine Wren', slots: []},
-	{pilot_name: 'Hera Syndulla', slots: []}],
+	{pilot_name: 'Sabine Wren', slots: []}],
 'Sheathipede-Class Shuttle':
 	[{pilot_name: 'Ezra Bridger (Sheathipede)', slots: ['Talent']}],
 'B-Wing':
@@ -111,8 +135,7 @@ const PILOTS_SEED = {
 'TIE Advanced Prototype':
 	[{pilot_name: 'Grand Inquisitor', slots: ['Talent']}],
 'TIE Advanced':
-	[{pilot_name: 'Storm Squadron Ace', slots: []},
-	{pilot_name: 'Darth Vader', slots: []}],
+	[{pilot_name: 'Darth Vader', slots: ['Talent']}],
 'TIE Interceptor':
 	[{pilot_name: 'Soontir Fel', slots: []}],
 'TIE Reaper':
@@ -140,7 +163,7 @@ const PILOTS_SEED = {
 'T-70 X-Wing':
 	[{pilot_name: 'Black Squadron Ace (T-70)', slots: []},
 	{pilot_name: 'Poe Dameron', slots: []},
-	{pilot_name: 'Nien Numb', slots: []}],
+	{pilot_name: 'Nien Nunb', slots: []}],
 'TIE/FO Fighter':
 	[{pilot_name: '"Midnight"', slots: []}],
 'TIE/VN Silencer':

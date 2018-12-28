@@ -57,20 +57,20 @@ function get_selected_radio_option(html_class){
 	return $(html_class).children('input:radio:checked')[0].id;
 }
 
-function ShipState(basesize,actions_remaining){
+function ShipState(basesize){
 
 	this.basesize = basesize || smallbase;
-	this.actions_remaining = actions_remaining || [];
+	//this.actions_remaining = actions_remaining || [];
 
-	this.movearray = [];
+	this.movearray = []; //moves to execute to get to final state, in order
 	this.stress_count = 0;
 	this.actions_used = [];
 	this.frozen = false;
 	this.has_moved = false;
 	this.is_cloaked = false;
 	this.actions_disabled = false;
-	this.slide_array = [];
-	this.slam_speed = 99;
+	this.slide_array = []; //available slide maneuvers
+	this.slam_speed = 99; //99 means no slam, unless FFG releases a ship with a 99 speed maneuver. In which case, rekt.
 	this.force_count = 0;
 
 	this.execute_moves = function() {
@@ -182,6 +182,10 @@ function ShipState(basesize,actions_remaining){
 					this.execute_move({bearing:"bank",speed:speed,direction:direction});
 					this.execute_move({bearing:"rotate",speed:180,direction:right});
 					break;
+				case "ig88d":
+					this.execute_move({bearing:"turn",speed:speed,direction:direction});
+					this.execute_move({bearing:"rotate",speed:180,direction:right});
+					break;
 				case "talon":
 					this.execute_move({bearing:"turn",speed:speed,direction:direction});
 					this.execute_move({bearing:"rotate",speed:90,direction:direction});
@@ -204,7 +208,7 @@ function ShipState(basesize,actions_remaining){
 	}
 
 	this.clone = function() {
-		var cloned_shipstate = new ShipState(this.basesize,this.actions_remaining.slice(0));
+		var cloned_shipstate = new ShipState(this.basesize);
 		cloned_shipstate.movearray = this.movearray.slice(0);
 		cloned_shipstate.stress_count = this.stress_count;
 		cloned_shipstate.actions_used = this.actions_used.slice(0);
@@ -221,13 +225,14 @@ function ShipState(basesize,actions_remaining){
 function ShipConfig(){
 
 	this.ship_name = "default";
+	this.ship_id = "default";
 	this.faction_name = "";
 	this.basesize = smallbase;
-	this.actions = [];
+	this.action_bar = [];
 	this.move_sets = {
 		roll_set: {},
 		boost_set: {},
-		decloack_set: {},
+		decloak_set: {},
 		aileron_set: {},
 		maneuver_set: {}
 	};
@@ -283,19 +288,19 @@ function ShipConfig(){
 			this.move_sets.roll_set = $.extend(true, {}, standard_roll_set);
 		}
 		this.move_sets.boost_set = $.extend(true, {}, standard_boost_set);
-		this.move_sets.decloack_set = $.extend(true, {}, standard_decloak_set);
+		this.move_sets.decloak_set = $.extend(true, {}, standard_decloak_set);
 		this.move_sets.aileron_set = $.extend(true, {}, standard_boost_set);
 		this.move_sets.maneuver_set = {};
 
-		this.actions = yasb_ship.actions.slice(0);
+		this.action_bar = yasb_ship.actions.slice(0);
 		for(var i=0; i< yasb_ship.actionsred.length; i++){
 			if(yasb_ship.actionsred[i]=="Barrel Roll"){
-				this.actions.push(yasb_ship.actionsred[i]);
+				this.action_bar.push(yasb_ship.actionsred[i]);
 				for(var move_name in this.move_sets.roll_set){
 					this.move_sets.roll_set[move_name].color = red;
 				}
 			} else if (yasb_ship.actionsred[i]=="Boost"){
-				this.actions.push(yasb_ship.actionsred[i]);
+				this.action_bar.push(yasb_ship.actionsred[i]);
 				for(var move_name in this.move_sets.boost_set){
 					this.move_sets.boost_set[move_name].color = red;
 				}
@@ -325,12 +330,6 @@ function ShipConfig(){
 	    var parent_elements = $(".maneuver-option");
 
 	  	for (var move_name in this.move_sets.maneuver_set) {
-	  		var direction = "";
-	  		if (this.move_sets.maneuver_set[move_name].direction == left) {
-	  			direction = "left";
-	  		} else if (this.move_sets.maneuver_set[move_name].direction == right) {
-	  			direction = "right";
-	  		}
 	  		this.move_sets.maneuver_set[move_name].enabled = ($(parent_elements.children("#"+move_name)[0]).is(":checked")) ? true : false;
 	  	}
 	}
@@ -409,6 +408,7 @@ function process_ship_change(ship_id,ship_config){
 
 	//step1
 	ship_config.change_ship(basicCardData().ships[yasb_ship_name]);
+	ship_config.ship_id = ship_id;
 
 	//step2
 	var default_pilot_id;
@@ -460,16 +460,9 @@ function process_ship_change(ship_id,ship_config){
 
 
 	for (var move_name in ship_config.move_sets.maneuver_set) {
-		var direction_name = "";
-		if (ship_config.move_sets.maneuver_set[move_name].direction == left) {
-			direction_name = "left";
-		} else if (ship_config.move_sets.maneuver_set[move_name].direction == right) {
-			direction_name = "right";
-		}
+		
 		var [speed,bearing_direction] = move_name.split("-");
-		//var speed = ship_config.move_sets.maneuver_set[move_name].speed;
-		//var bearing_direction = ship_config.move_sets.maneuver_set[move_name].bearing+direction_name;
-
+		
 		$("#" + speed + "-" + bearing_direction).parent().removeClass("invisible"); //make button visible because it's maneuver exists in the ship
 		
 		switch(ship_config.move_sets.maneuver_set[move_name].color){
@@ -506,7 +499,7 @@ function process_ship_change(ship_id,ship_config){
 		}
 	}
 	process_pilot_change(default_pilot_id,ship_config);
-	process_maneuver_button_change($(document));
+	process_maneuver_button_change($(document),ship_config);
 	ship_config.update_maneuver_set();
 }
 
@@ -526,6 +519,23 @@ function process_pilot_change(pilot_id,ship_config){
 				break;
 			}
 		}
+	}
+
+	switch(ship_config.pilot.pilot_name){
+		case "IG-88D":
+			ship_config.move_sets.maneuver_set = $.extend(true,ship_config.move_sets.maneuver_set,ig88d_sloop_set);
+		break;
+		case "Countess Ryad":
+			ship_config.move_sets.maneuver_set = $.extend(true,ship_config.move_sets.maneuver_set,ryad_kturn_set);
+		break;
+		case '"Echo"':
+			ship_config.move_sets.decloak_set = $.extend(true,{},echo_decloak_set);
+		break;
+		case "Poe Dameron":
+			ship_config.pilot.starting_force = 1; //using "force" as a stand-in for charge. I don't see any overlap scenario that would cause problems since poe is not a force user. 
+		default:
+			ship_config.move_sets.decloak_set = $.extend(true,{},standard_decloak_set); //undo-echo
+		break;
 	}
 
 	var upgrade_buttons = get_button_states(".upgrade-option");
@@ -557,7 +567,9 @@ function process_pilot_change(pilot_id,ship_config){
 
 		if ($.inArray("Talent",ship_config.pilot.slots)>=0 && $($("#" + upgrade_id).parent()).hasClass("talent-option") &&
 		(!($($("#" + upgrade_id).parent()).hasClass("smallbaseonly")) || ship_config.basesize == smallbase) &&
-		(!($($("#" + upgrade_id).parent()).hasClass("requiresboost")) || $.inArray("Boost",ship_config.actions)>-1)){
+		(!($($("#" + upgrade_id).parent()).hasClass("requiresboost")) || $.inArray("Boost",ship_config.action_bar)>-1) &&
+		(!($($("#" + upgrade_id).parent()).hasClass("requiresredroll")) || $.inArray("Barrel Roll",basicCardData().ships[ship_config.ship_name].actionsred)>-1)&&
+		(!($($("#" + upgrade_id).parent()).hasClass("requiresredboost")) || $.inArray("Boost",basicCardData().ships[ship_config.ship_name].actionsred)>-1)){
 			$($("#" + upgrade_id).parent()).removeClass("d-none"); 
 		} else if ($($("#" + upgrade_id).parent()).hasClass("talent-option")) {
 			$($("#" + upgrade_id).parent()).addClass("d-none"); 
@@ -570,14 +582,46 @@ function process_pilot_change(pilot_id,ship_config){
 			$($("#" + upgrade_id).parent()).addClass("d-none"); 
 		}
 
-		if ($.inArray("Crew",ship_config.pilot.slots)>=0 && $($("#" + upgrade_id).parent()).hasClass("crew-option") &&
-		(!($($("#" + upgrade_id).parent()).hasClass("smallbaseonly")) || ship_config.basesize == smallbase)){
+		if ($.inArray("Configuration",ship_config.pilot.slots)>=0 && $($("#" + upgrade_id).parent()).hasClass("configuration-option") &&
+		(!($($("#" + upgrade_id).parent()).hasClass("smallbaseonly")) || ship_config.basesize == smallbase) &&
+		$($("#" + upgrade_id).parent()).hasClass(ship_config.ship_id)){
 			$($("#" + upgrade_id).parent()).removeClass("d-none"); 
-		} else if ($($("#" + upgrade_id).parent()).hasClass("crew-option")) {
+		} else if ($($("#" + upgrade_id).parent()).hasClass("configuration-option")) {
+			$($("#" + upgrade_id).parent()).addClass("d-none"); 
+		}
+
+		if ($.inArray("Title",ship_config.pilot.slots)>=0 && $($("#" + upgrade_id).parent()).hasClass("title-option") &&
+		(!($($("#" + upgrade_id).parent()).hasClass("smallbaseonly")) || ship_config.basesize == smallbase) &&
+		$($("#" + upgrade_id).parent()).hasClass(ship_config.ship_id)){
+			$($("#" + upgrade_id).parent()).removeClass("d-none"); 
+		} else if ($($("#" + upgrade_id).parent()).hasClass("title-option")) {
+			$($("#" + upgrade_id).parent()).addClass("d-none"); 
+		}
+
+		if ($.inArray("Astromech",ship_config.pilot.slots)>=0 && $($("#" + upgrade_id).parent()).hasClass("astromech-option") &&
+		(!($($("#" + upgrade_id).parent()).hasClass("smallbaseonly")) || ship_config.basesize == smallbase)&&
+		(!($($("#" + upgrade_id).parent()).hasClass("resistanceonly")) || ship_config.faction_name == "Resistance")){
+			$($("#" + upgrade_id).parent()).removeClass("d-none"); 
+		} else if ($($("#" + upgrade_id).parent()).hasClass("astromech-option")) {
+			$($("#" + upgrade_id).parent()).addClass("d-none"); 
+		}
+
+		if ($.inArray("Modification",ship_config.pilot.slots)>=0 && $($("#" + upgrade_id).parent()).hasClass("modification-option") &&
+		(!($($("#" + upgrade_id).parent()).hasClass("smallbaseonly")) || ship_config.basesize == smallbase) &&
+		(!($($("#" + upgrade_id).parent()).hasClass("requiresboost")) || $.inArray("Boost",ship_config.action_bar)>-1) &&
+		(!($($("#" + upgrade_id).parent()).hasClass("requiresslam")) || $.inArray("Slam",ship_config.action_bar)>-1) &&
+		(!($($("#" + upgrade_id).parent()).hasClass("requiresredroll")) || $.inArray("Barrel Roll",basicCardData().ships[ship_config.ship_name].actionsred)>-1)&&
+		(!($($("#" + upgrade_id).parent()).hasClass("requiresredboost")) || $.inArray("Boost",basicCardData().ships[ship_config.ship_name].actionsred)>-1)
+		){
+			$($("#" + upgrade_id).parent()).removeClass("d-none"); 
+		} else if ($($("#" + upgrade_id).parent()).hasClass("modification-option")) {
 			$($("#" + upgrade_id).parent()).addClass("d-none"); 
 		}
 	}
-	process_upgrade_buttons(ship_config);
+	process_upgrade_buttons(ship_config); 
+	ship_config.update_maneuver_set(); //need to de-enable extra moves like from ryad or ig-88d
+	
+
 }
 
 function process_upgrade_buttons(ship_config){
@@ -592,6 +636,76 @@ function process_upgrade_buttons(ship_config){
 			delete ship_config.move_sets.boost_set["daredevil-left"];
 		}
 
+
+		if(ship_config.upgrades.pivot_wing){
+			ship_config.move_sets.maneuver_set = $.extend(true,ship_config.move_sets.maneuver_set,pivot_wing_set);
+		}
+
+		if(ship_config.ship_name == "X-Wing") {
+			if(ship_config.upgrades.t65_foils){
+				ship_config.action_bar = ["Focus", "Lock", "Boost","Barrel Roll"];
+			} else {
+				ship_config.action_bar = ["Focus", "Lock", "Barrel Roll"];
+			}
+		}
+
+		if (ship_config.ship_name == "T-70 X-Wing"){
+			if(ship_config.upgrades.t70_foils){
+				ship_config.action_bar = ["Focus", "Lock", "Boost","Barrel Roll"];
+			} else {
+				ship_config.action_bar = ["Focus", "Lock", "Boost"];
+			}
+			if(ship_config.upgrades.black_one){
+				ship_config.action_bar.push("Slam")
+			}
+		}
+
+		if (ship_config.ship_name == "G-1A Starfighter"){
+			if(ship_config.upgrades.mist_hunter){
+				ship_config.action_bar = ["Focus", "Lock", "Jam","Barrel Roll"];
+			} else {
+				ship_config.action_bar = ["Focus", "Lock", "Jam"];
+			}
+		}
+
+		ship_config.update_maneuver_set(); //this is needed to denable for things that have changed the maneuver set (e.g. pivot wing)
+		revalidate_maneuver_button_colors(ship_config); // this updates how maneuver colors are displayed based on some upgrades even though we don't update that actual color in case the upgrade is removed later. color change effect is actually handled in genereate_shipstates maneuver
+
+}
+
+//revalidate_maneuver_button_colors is needed to undo upgrades like r4 astromech which temporarily change color from what the dial shows
+function revalidate_maneuver_button_colors(ship_config){
+
+	for (var move_name in ship_config.move_sets.maneuver_set) {
+		
+		var [speed,bearing_direction] = move_name.split("-");
+		
+		//$("#" + speed + "-" + bearing_direction).parent().removeClass("invisible"); //make button visible because it's maneuver exists in the ship
+		
+		var maneuver_color = ship_config.move_sets.maneuver_set[move_name].color;
+
+		if(ship_config.upgrades.r4_astromech && maneuver_color != blue && (ship_config.move_sets.maneuver_set[move_name].speed == 1 || ship_config.move_sets.maneuver_set[move_name].speed == 2)){
+			maneuver_color-=1;
+		}
+
+		switch(maneuver_color){
+			case red:
+				$($("#"+speed+"-"+bearing_direction).parent().children()[1]).addClass("red-maneuver")
+				$($("#"+speed+"-"+bearing_direction).parent().children()[1]).removeClass("blue-maneuver")
+				$($("#"+speed+"-"+bearing_direction).parent().children()[1]).removeClass("white-maneuver")
+				break;
+			case blue:
+				$($("#"+speed+"-"+bearing_direction).parent().children()[1]).removeClass("red-maneuver")
+				$($("#"+speed+"-"+bearing_direction).parent().children()[1]).addClass("blue-maneuver")
+				$($("#"+speed+"-"+bearing_direction).parent().children()[1]).removeClass("white-maneuver")
+				break;
+			case white:
+				$($("#"+speed+"-"+bearing_direction).parent().children()[1]).removeClass("red-maneuver")
+				$($("#"+speed+"-"+bearing_direction).parent().children()[1]).removeClass("blue-maneuver")
+				$($("#"+speed+"-"+bearing_direction).parent().children()[1]).addClass("white-maneuver")
+				break;
+		}
+	}
 }
 
 //updates button enable/disable state based on press of other buttons, i.e. re-validates "select all" buttons
@@ -678,7 +792,7 @@ $(document).ready(function(){
 	}); 
 
 	$(".maneuver-option").change(function(){
-		process_maneuver_button_change(this);
+		process_maneuver_button_change(this,ship_config);
 		ship_config.update_maneuver_set();
 		draw_everything(generate_shipstates(ship_config,options),options,c);
 	}); 

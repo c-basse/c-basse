@@ -490,14 +490,14 @@
           <div class="form-group">
             <label for="position" class="control-label">Show Position:</label>
             <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+              <label class="btn btn-primary button-option display-option">
+              <input type="radio" name="position" id="show_intermediate_location" autocomplete="off">Intermediate Only
+              </label>
               <label class="btn btn-primary active button-option display-option">
-              <input type="checkbox" name="position" id="show_starting_location" autocomplete="off" checked>Starting
+              <input type="radio" name="position" id="show_final_location" autocomplete="off" checked>Final Only
               </label>
               <label class="btn btn-primary button-option display-option">
-              <input type="checkbox" name="position" id="show_intermediate_location" autocomplete="off">Intermediate
-              </label>
-              <label class="btn btn-primary active button-option display-option">
-              <input type="checkbox" name="position" id="show_final_location" autocomplete="off" checked>Final
+              <input type="radio" name="position" id="show_all_locations" autocomplete="off">Intermediate + Final
               </label>
             </div>
           </div>

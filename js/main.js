@@ -346,7 +346,8 @@ function draw_everything(shipstateArray,options,canvas) {
 					(
 						(options.show_intermediate_location && i>0 && !shipstateArray[i].has_moved) ||
 						(options.show_final_location && shipstateArray[i].has_moved) ||
-						(options.show_starting_location && i == 0)
+						(i == 0) ||
+						(options.show_all_locations)
 					) && (
 						(
 							(options.show_stressed && shipstateArray[i].stress_count > 0) ||

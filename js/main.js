@@ -75,20 +75,21 @@ function ShipState(basesize){
 
 	this.execute_moves = function() {
 		for (var i = 0;  i < this.movearray.length; i++) {
-			this.execute_move(this.movearray[i])
+			this.execute_move(this.movearray[i],true)
 		}
 	}
 
-	this.draw = function() {
+	this.draw = function(shipbase_alpha) {
 		c.save();
-		this.execute_moves();		
-		c.moveTo(0,0);
-		c.beginPath();
-		c.lineTo(this.basesize/2,0);
-		c.lineTo(this.basesize/2,this.basesize);
-		c.lineTo(-1*this.basesize/2,this.basesize);
-		c.lineTo(-1*this.basesize/2,0);
-		c.lineTo(this.basesize/2,0);
+		this.execute_moves();
+		c.setLineDash([0,0]);		
+		// c.moveTo(0,0);
+		// c.beginPath();
+		// c.lineTo(this.basesize/2,0);
+		// c.lineTo(this.basesize/2,this.basesize);
+		// c.lineTo(-1*this.basesize/2,this.basesize);
+		// c.lineTo(-1*this.basesize/2,0);
+		// c.lineTo(this.basesize/2,0);
 
 		if (this.stress_count >= 1) {
 			c.strokeStyle = '#ff0000';
@@ -96,9 +97,22 @@ function ShipState(basesize){
 			c.strokeStyle = '#000000';
 		}
 
-		c.stroke();
+		//c.font = "20px Arial";
+		//c.fillText("^", -5, 20);
+		//c.arc(0,10,5,0,2*Math.PI);
+		c.globalAlpha = shipbase_alpha+0.3;
 		c.beginPath();
-		c.arc(0,10,5,0,2*Math.PI);
+		c.rect(-1*this.basesize / 2, 0, this.basesize, this.basesize);
+		c.stroke();
+		c.globalAlpha = shipbase_alpha;
+		c.fillStyle = "white";
+		c.fill();
+		c.globalAlpha = shipbase_alpha+0.3;
+		c.beginPath();
+		c.moveTo(-1*this.basesize / 5, this.basesize / 5);
+		c.lineTo(0,this.basesize / 10);
+		c.lineTo(this.basesize / 5,this.basesize / 5);
+		
 		c.stroke();
 
 		c.restore();
@@ -108,21 +122,30 @@ function ShipState(basesize){
 		this.movearray.push(maneuver);
 	}
 
-	this.execute_move = function(maneuver){
+	this.execute_move = function(maneuver,draw_path=false){
 		var bearing = maneuver.bearing;
 		var speed = maneuver.speed;
 		var direction = maneuver.direction;
 		var roll_direction = maneuver.roll_direction || normal; //normal means not a roll
 		var slide_direction = maneuver.slide_direction || mid;
 		var radius;
+		var draw_type = maneuver.draw_type;
+		switch(draw_type){
+			case 0:
+				c.setLineDash([0,0]);
+			break;
+			case 1:
+				c.setLineDash([2,2]);
+			break;
+		}
 		if (roll_direction != 0) {
-			this.execute_move({bearing:"rotate",speed:90,direction:roll_direction});
+			this.execute_move({bearing:"rotate",speed:90,direction:roll_direction,draw_type:draw_type},draw_path);
 			if(this.basesize > smallbase){
-				this.execute_move({bearing:bearing,speed:speed/2,direction:direction});
+				this.execute_move({bearing:bearing,speed:speed/2,direction:direction,draw_type:draw_type},draw_path);
 			} else {
-				this.execute_move({bearing:bearing,speed:speed,direction:direction});
+				this.execute_move({bearing:bearing,speed:speed,direction:direction,draw_type:draw_type},draw_path);
 			}
-			this.execute_move({bearing:"rotate",speed:90,direction:-1*roll_direction});
+			this.execute_move({bearing:"rotate",speed:90,direction:-1*roll_direction,draw_type:draw_type},draw_path);
 			
 			if(this.basesize > smallbase){
 				c.translate(0,-1*slide_distance*2*slide_direction);
@@ -130,18 +153,24 @@ function ShipState(basesize){
 				c.translate(0,-1*slide_distance*slide_direction);
 			}
 		} else if (speed < 0) {
-			this.execute_move({bearing:"rotate",speed:180,direction:right});
-			this.execute_move({bearing:bearing,speed:speed*-1,direction:direction*-1});
-			this.execute_move({bearing:"rotate",speed:180,direction:right});
+			this.execute_move({bearing:"rotate",speed:180,direction:right,draw_type:draw_type},draw_path);
+			this.execute_move({bearing:bearing,speed:speed*-1,direction:direction*-1,draw_type:draw_type},draw_path);
+			this.execute_move({bearing:"rotate",speed:180,direction:right,draw_type:draw_type},draw_path),draw_path;
 		} else {
 			switch(bearing) {
 				case "straight":
 					switch(speed) {
 							case 0:
-						this.execute_move({bearing:"straight",speed:-1});
-						this.execute_move({bearing:"straight",speed:+1});
+						this.execute_move({bearing:"straight",speed:-1,draw_type:draw_type},false);
+						this.execute_move({bearing:"straight",speed:+1,draw_type:draw_type},false);
 							break;
 						default:
+							if(draw_path){
+								c.beginPath(); //path
+								c.moveTo(0,0); //path
+								c.lineTo(0,-40*speed); //path
+								c.stroke(); //path
+							}
 							c.translate(0,-40*speed);
 							c.translate(0,-1*this.basesize);
 						}
@@ -158,6 +187,12 @@ function ShipState(basesize){
 							radius = 89.5;
 							break;
 						}
+					if(draw_path){
+						c.beginPath(); //path
+						ccw = (direction == right) ? false : true;
+						c.arc(0+radius*direction,0,radius,(direction+1)/2*Math.PI,1.5*Math.PI,ccw);
+						c.stroke(); //path
+					}
 					c.translate(direction*radius,-radius);
 					c.rotate(direction * 90 * Math.PI / 180);
 					c.translate(0,-1*this.basesize);
@@ -174,29 +209,35 @@ function ShipState(basesize){
 							radius = 182;
 							break;
 						}
+					if(draw_path){
+						c.beginPath(); //path
+						ccw = (direction == right) ? false : true;
+						c.arc(0+radius*direction,0,radius,(direction+1)/2*Math.PI,Math.PI*(1.5-direction*0.25),ccw);
+						c.stroke(); //path
+					}
 					c.translate(direction*radius*(1-Math.cos(Math.PI*45/180)),-radius*Math.sin(Math.PI*45/180));
 					c.rotate(direction * 45 * Math.PI / 180);
 					c.translate(0,-1*this.basesize);
 					break;
 				case "sloop":
-					this.execute_move({bearing:"bank",speed:speed,direction:direction});
-					this.execute_move({bearing:"rotate",speed:180,direction:right});
+					this.execute_move({bearing:"bank",speed:speed,direction:direction,draw_type:draw_type},draw_path);
+					this.execute_move({bearing:"rotate",speed:180,direction:right,draw_type:draw_type},draw_path);
 					break;
 				case "ig88d":
-					this.execute_move({bearing:"turn",speed:speed,direction:direction});
-					this.execute_move({bearing:"rotate",speed:180,direction:right});
+					this.execute_move({bearing:"turn",speed:speed,direction:direction,draw_type:draw_type},draw_path);
+					this.execute_move({bearing:"rotate",speed:180,direction:right,draw_type:draw_type},draw_path);
 					break;
 				case "talon":
-					this.execute_move({bearing:"turn",speed:speed,direction:direction});
-					this.execute_move({bearing:"rotate",speed:90,direction:direction});
+					this.execute_move({bearing:"turn",speed:speed,direction:direction,draw_type:draw_type},draw_path);
+					this.execute_move({bearing:"rotate",speed:90,direction:direction,draw_type:draw_type},draw_path);
 					c.translate(0,-1*slide_distance*slide_direction);
 					break;
 				case "kturn":
-					this.execute_move({bearing:"straight",speed:speed,direction:direction});
-					this.execute_move({bearing:"rotate",speed:180,direction:right});
+					this.execute_move({bearing:"straight",speed:speed,direction:direction,draw_type:draw_type},draw_path);
+					this.execute_move({bearing:"rotate",speed:180,direction:right,draw_type:draw_type},draw_path);
 					break;
 				case "stop":
-					this.execute_move({bearing:"straight",speed:-1});
+					this.execute_move({bearing:"straight",speed:-1,draw_type:draw_type},draw_path);
 					break;
 				case "rotate":
 					c.translate(0,this.basesize/2);
@@ -205,6 +246,7 @@ function ShipState(basesize){
 					break;
 			}
 		}
+
 	}
 
 	this.clone = function() {
@@ -312,10 +354,10 @@ function ShipConfig(){
 				if(translate_color[yasb_ship.maneuvers[speed][i]] != none){
 					var new_maneuver;
 					if(translate_bearing[i] == "talon"){
-						new_maneuver = {bearing:translate_bearing[i],speed: speed*translate_speed_polarity[i],direction: translate_direction[i],	roll_direction: normal,slide: true,color: translate_color[yasb_ship.maneuvers[speed][i]],enabled: default_enable};
+						new_maneuver = {bearing:translate_bearing[i],speed: speed*translate_speed_polarity[i],direction: translate_direction[i],	roll_direction: normal,slide: true,color: translate_color[yasb_ship.maneuvers[speed][i]],enabled: default_enable, draw_type: 0};
 						this.move_sets.maneuver_set[(speed*translate_speed_polarity[i]).toString().replace(/^-/,"m")+"-"+translate_bearing[i]+translate_direction_name[i]] = new_maneuver;
 					} else {
-						new_maneuver = {bearing:translate_bearing[i],speed: speed*translate_speed_polarity[i],direction: translate_direction[i],	roll_direction: normal,slide: false,color: translate_color[yasb_ship.maneuvers[speed][i]],enabled: default_enable};
+						new_maneuver = {bearing:translate_bearing[i],speed: speed*translate_speed_polarity[i],direction: translate_direction[i],	roll_direction: normal,slide: false,color: translate_color[yasb_ship.maneuvers[speed][i]],enabled: default_enable, draw_type: 0};
 						this.move_sets.maneuver_set[(speed*translate_speed_polarity[i]).toString().replace(/^-/,"m")+"-"+translate_bearing[i]+translate_direction_name[i]] = new_maneuver;
 					}
 					
@@ -341,7 +383,7 @@ function draw_everything(shipstateArray,options,canvas) {
   	canvas.clearRect(0, 0, layer0.width, layer0.height);
   	canvas.translate(layer0.width/2,layer0.height-200);
 
-	for (var i = 0; i < shipstateArray.length; i++) {
+	for (var i = (shipstateArray.length-1); i >= 0; i--) {
 			if (
 					(
 						(options.show_intermediate_location && i>0 && !shipstateArray[i].has_moved) ||
@@ -358,7 +400,8 @@ function draw_everything(shipstateArray,options,canvas) {
 						)
 					) 
 				) {
-				shipstateArray[i].draw();
+				shipbase_alpha = (shipstateArray[i].has_moved || i==0) ? 0.7 : 0.1;
+				shipstateArray[i].draw(shipbase_alpha);
 			}
 		}	
 }
@@ -413,6 +456,7 @@ function process_ship_change(ship_id,ship_config){
 
 	//step2
 	var default_pilot_id;
+	var at_least_one_pilot_found = false;
 	var pilot_buttons = get_button_states(".pilot-option");
 	for (pilot_id in pilot_buttons){
 		yasb_pilot_name = translate_id_to_yasb_name(pilot_id);
@@ -429,7 +473,8 @@ function process_ship_change(ship_id,ship_config){
 		for(i=1;i<pilots_by_ship[yasb_ship_name].length;i++){
 			if(pilots_by_ship[yasb_ship_name][i].pilot_name==yasb_pilot_name && pilots_by_ship[yasb_ship_name][i].faction==ship_config.faction_name){
 			 	$($("#" + pilot_id).parent()).removeClass("d-none");	
-			 	pilot_found = true
+			 	pilot_found = true;
+			 	at_least_one_pilot_found = true;
 			 	break;
 			}
 		}
@@ -437,6 +482,23 @@ function process_ship_change(ship_id,ship_config){
 			$($("#" + pilot_id).parent()).addClass("d-none");
 		}
 	}
+
+	if(at_least_one_pilot_found){
+		$("#Pilot-group").removeClass("d-none");
+	} else {
+		$("#Pilot-group").addClass("d-none");
+	}
+
+    $(".pilot-group").each(function() {
+    	var [slot_name,dummy] = this.id.split("-");
+    	if($.inArray(slot_name,slot_with_available_options)!=-1){
+    		$(this).removeClass("d-none");
+    	} else if (slot_name == "Talent" && $.inArray("Force",slot_with_available_options)!=-1) {
+    		$(this).removeClass("d-none");
+    	} else {
+    		$(this).addClass("d-none");
+    	}
+    });
 
 	//step3
 	var maneuver_buttons = get_button_states(".maneuver-option");
@@ -453,6 +515,7 @@ function process_ship_change(ship_id,ship_config){
 		$($("#" + maneuver_button).parent()).removeClass("d-none"); //make all non-hidden, i.e. make them take up space; will re-evaluate at the end
 		if (speed != "all"){
 			has_speed[speed] = false;
+			$("#" + speed + "-" + "all-row").removeClass("d-none");
 		}
 		if (bearing_direction != "all") {
 			has_bearing_direction[bearing_direction] = false;
@@ -492,7 +555,8 @@ function process_ship_change(ship_id,ship_config){
 		var [speed,bearing_direction] = maneuver_button.split("-");
 		if(!has_speed[speed] && speed != "all"){
 			$($("#" + maneuver_button).parent()).addClass("d-none"); 
-			$("#" + speed + "-" + "all").parent().addClass("d-none"); 
+			$("#" + speed + "-" + "all").parent().addClass("d-none");
+			$("#" + speed + "-" + "all-row").addClass("d-none");
 		}
 		if(!has_bearing_direction[bearing_direction] && bearing_direction != "all"){
 			$($("#" + maneuver_button).parent()).addClass("d-none"); 
@@ -538,6 +602,7 @@ function process_pilot_change(pilot_id,ship_config){
 			ship_config.move_sets.decloak_set = $.extend(true,{},standard_decloak_set); //undo-echo
 		break;
 	}
+	ship_config.update_maneuver_set(); //need to de-enable extra moves like from ryad or ig-88d
 
 	var upgrade_buttons = get_button_states(".upgrade-option");
 
@@ -548,81 +613,51 @@ function process_pilot_change(pilot_id,ship_config){
 			continue;
 		} else {
 			change_button_state(upgrade_id,false);
-		}
-
-		if (
-		$.inArray("Tech",ship_config.pilot.slots)>=0 && $($("#" + upgrade_id).parent()).hasClass("tech-option") &&
-		(!($($("#" + upgrade_id).parent()).hasClass("smallbaseonly")) || ship_config.basesize == smallbase))
-		{
-			$($("#" + upgrade_id).parent()).removeClass("d-none"); 
-		} else if ($($("#" + upgrade_id).parent()).hasClass("tech-option")) {
-			$($("#" + upgrade_id).parent()).addClass("d-none"); 
-		}
-
-		if ($.inArray("Sensor",ship_config.pilot.slots)>=0 && $($("#" + upgrade_id).parent()).hasClass("sensor-option") &&
-		(!($($("#" + upgrade_id).parent()).hasClass("smallbaseonly")) || ship_config.basesize == smallbase)){
-			$($("#" + upgrade_id).parent()).removeClass("d-none"); 
-		} else if ($($("#" + upgrade_id).parent()).hasClass("sensor-option")) {
-			$($("#" + upgrade_id).parent()).addClass("d-none"); 
-		}
-
-		if ($.inArray("Talent",ship_config.pilot.slots)>=0 && $($("#" + upgrade_id).parent()).hasClass("talent-option") &&
-		(!($($("#" + upgrade_id).parent()).hasClass("smallbaseonly")) || ship_config.basesize == smallbase) &&
-		(!($($("#" + upgrade_id).parent()).hasClass("requiresboost")) || $.inArray("Boost",ship_config.action_bar)>-1) &&
-		(!($($("#" + upgrade_id).parent()).hasClass("requiresredroll")) || $.inArray("Barrel Roll",basicCardData().ships[ship_config.ship_name].actionsred)>-1)&&
-		(!($($("#" + upgrade_id).parent()).hasClass("requiresredboost")) || $.inArray("Boost",basicCardData().ships[ship_config.ship_name].actionsred)>-1)){
-			$($("#" + upgrade_id).parent()).removeClass("d-none"); 
-		} else if ($($("#" + upgrade_id).parent()).hasClass("talent-option")) {
-			$($("#" + upgrade_id).parent()).addClass("d-none"); 
-		}
-
-		if ($.inArray("Force",ship_config.pilot.slots)>=0 && $($("#" + upgrade_id).parent()).hasClass("force-option") &&
-		(!($($("#" + upgrade_id).parent()).hasClass("smallbaseonly")) || ship_config.basesize == smallbase)){
-			$($("#" + upgrade_id).parent()).removeClass("d-none"); 
-		} else if ($($("#" + upgrade_id).parent()).hasClass("force-option")) {
-			$($("#" + upgrade_id).parent()).addClass("d-none"); 
-		}
-
-		if ($.inArray("Configuration",ship_config.pilot.slots)>=0 && $($("#" + upgrade_id).parent()).hasClass("configuration-option") &&
-		(!($($("#" + upgrade_id).parent()).hasClass("smallbaseonly")) || ship_config.basesize == smallbase) &&
-		$($("#" + upgrade_id).parent()).hasClass(ship_config.ship_id)){
-			$($("#" + upgrade_id).parent()).removeClass("d-none"); 
-		} else if ($($("#" + upgrade_id).parent()).hasClass("configuration-option")) {
-			$($("#" + upgrade_id).parent()).addClass("d-none"); 
-		}
-
-		if ($.inArray("Title",ship_config.pilot.slots)>=0 && $($("#" + upgrade_id).parent()).hasClass("title-option") &&
-		(!($($("#" + upgrade_id).parent()).hasClass("smallbaseonly")) || ship_config.basesize == smallbase) &&
-		$($("#" + upgrade_id).parent()).hasClass(ship_config.ship_id)){
-			$($("#" + upgrade_id).parent()).removeClass("d-none"); 
-		} else if ($($("#" + upgrade_id).parent()).hasClass("title-option")) {
-			$($("#" + upgrade_id).parent()).addClass("d-none"); 
-		}
-
-		if ($.inArray("Astromech",ship_config.pilot.slots)>=0 && $($("#" + upgrade_id).parent()).hasClass("astromech-option") &&
-		(!($($("#" + upgrade_id).parent()).hasClass("smallbaseonly")) || ship_config.basesize == smallbase)&&
-		(!($($("#" + upgrade_id).parent()).hasClass("resistanceonly")) || ship_config.faction_name == "Resistance")){
-			$($("#" + upgrade_id).parent()).removeClass("d-none"); 
-		} else if ($($("#" + upgrade_id).parent()).hasClass("astromech-option")) {
-			$($("#" + upgrade_id).parent()).addClass("d-none"); 
-		}
-
-		if ($.inArray("Modification",ship_config.pilot.slots)>=0 && $($("#" + upgrade_id).parent()).hasClass("modification-option") &&
-		(!($($("#" + upgrade_id).parent()).hasClass("smallbaseonly")) || ship_config.basesize == smallbase) &&
-		(!($($("#" + upgrade_id).parent()).hasClass("requiresboost")) || $.inArray("Boost",ship_config.action_bar)>-1) &&
-		(!($($("#" + upgrade_id).parent()).hasClass("requiresslam")) || $.inArray("Slam",ship_config.action_bar)>-1) &&
-		(!($($("#" + upgrade_id).parent()).hasClass("requiresredroll")) || $.inArray("Barrel Roll",basicCardData().ships[ship_config.ship_name].actionsred)>-1)&&
-		(!($($("#" + upgrade_id).parent()).hasClass("requiresredboost")) || $.inArray("Boost",basicCardData().ships[ship_config.ship_name].actionsred)>-1)
-		){
-			$($("#" + upgrade_id).parent()).removeClass("d-none"); 
-		} else if ($($("#" + upgrade_id).parent()).hasClass("modification-option")) {
 			$($("#" + upgrade_id).parent()).addClass("d-none"); 
 		}
 	}
-	process_upgrade_buttons(ship_config); 
-	ship_config.update_maneuver_set(); //need to de-enable extra moves like from ryad or ig-88d
-	
 
+	var slot_with_available_options = []
+	for (slot in ship_config.pilot.slots){
+		upgrade_buttons = get_button_states("." + ship_config.pilot.slots[slot] + "-option");
+		for (upgrade_id in upgrade_buttons) {
+			if (
+			  $($("#" + upgrade_id).parent()).hasClass("d-none") &&
+			  (!($($("#" + upgrade_id).parent()).hasClass("smallbaseonly")) || ship_config.basesize == smallbase) &&
+			  (!($($("#" + upgrade_id).parent()).hasClass("mediumbaseonly")) || ship_config.basesize == mediumbase) &&
+			  (!($($("#" + upgrade_id).parent()).hasClass("largebaseonly")) || ship_config.basesize == largebase) &&
+			  (!($($("#" + upgrade_id).parent()).hasClass("requiresboost")) || $.inArray("Boost",ship_config.action_bar)>-1) &&
+			  (!($($("#" + upgrade_id).parent()).hasClass("requiresroll")) || $.inArray("Barrel Roll",ship_config.action_bar)>-1) &&
+			  (!($($("#" + upgrade_id).parent()).hasClass("requiresredboost")) || $.inArray("Boost",basicCardData().ships[ship_config.ship_name].actionsred)>-1) &&
+			  (!($($("#" + upgrade_id).parent()).hasClass("requiresredroll")) || $.inArray("Barrel Roll",basicCardData().ships[ship_config.ship_name].actionsred)>-1) &&
+			  (!($($("#" + upgrade_id).parent()).hasClass("rebelonly")) || ship_config.faction_name == "Rebel Alliance") &&
+			  (!($($("#" + upgrade_id).parent()).hasClass("empireonly")) || ship_config.faction_name == "Galactic Empire") &&
+			  (!($($("#" + upgrade_id).parent()).hasClass("scumonly")) || ship_config.faction_name == "Scum and Villainy") &&
+			  (!($($("#" + upgrade_id).parent()).hasClass("resistanceonly")) || ship_config.faction_name == "Resistance") &&
+			  (!($($("#" + upgrade_id).parent()).hasClass("firstorderonly")) || ship_config.faction_name == "First Order") &&
+			  ((ship_config.pilot.slots[slot] != "Title" && ship_config.pilot.slots[slot] != "Configuration")|| $($("#" + upgrade_id).parent()).hasClass(ship_config.ship_id) )
+			) {
+				$($("#" + upgrade_id).parent()).removeClass("d-none"); 
+				slot_with_available_options.push(ship_config.pilot.slots[slot]);
+			}
+		}
+	}
+
+
+    $(".upgrade-group").each(function() {
+    	var [slot_name,dummy] = this.id.split("-");
+    	if($.inArray(slot_name,slot_with_available_options)!=-1){
+    		$(this).removeClass("d-none");
+    	} else if (slot_name == "Talent" && $.inArray("Force",slot_with_available_options)!=-1) {
+    		$(this).removeClass("d-none");
+    	} else {
+    		$(this).addClass("d-none");
+    	}
+    });
+
+
+
+	process_upgrade_buttons(ship_config); 
 }
 
 function process_upgrade_buttons(ship_config){

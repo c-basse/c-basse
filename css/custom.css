@@ -34,6 +34,36 @@ div.maneuver_content {
 	overflow-y:auto
 }
 
+.padding-custom1 {
+	padding-top:100px;
+	padding-right:0.25rem;
+	padding-left:0.25rem;
+	padding-bottom:0.25rem;
+}
+
+.pure-drawer-thin{
+	width:100px;
+}
+@media only screen and (min-width: 40.063em) {
+  .pure-toggle[data-toggle='left']:checked ~ .pure-overlay[data-overlay='left'] {
+    left: 100px;
+  }
+}
+
+@media only screen and (min-width: 64.063em) {
+  .pure-toggle[data-toggle='left']:checked ~ .pure-overlay[data-overlay='left'] {
+    left: 100px;
+  }
+}
+
+
+.pure-drawer-thick{
+	width:380px;
+}
+.pure-overlay-right-thick{
+	right:380px;
+}
+
 .blue-maneuver {
 	color: blue;
 }

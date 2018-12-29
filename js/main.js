@@ -82,7 +82,7 @@ function ShipState(basesize){
 	this.draw = function(shipbase_alpha) {
 		c.save();
 		this.execute_moves();
-		c.setLineDash([0,0]);		
+		c.setLineDash([]);	
 		// c.moveTo(0,0);
 		// c.beginPath();
 		// c.lineTo(this.basesize/2,0);
@@ -132,7 +132,7 @@ function ShipState(basesize){
 		var draw_type = maneuver.draw_type;
 		switch(draw_type){
 			case 0:
-				c.setLineDash([0,0]);
+				c.setLineDash([]);
 			break;
 			case 1:
 				c.setLineDash([2,2]);

@@ -30,7 +30,9 @@ div.maneuver_content {
     max-width:127vh;
 }
 
-
+.pure-drawer {
+	overflow-y:auto
+}
 
 .blue-maneuver {
 	color: blue;

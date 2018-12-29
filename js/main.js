@@ -318,6 +318,9 @@ function ShipConfig(){
 			case "RZ-2 A-Wing":
 				this.ship_ability.refined_gyrostabilizers = true;
 			break;
+			case "A-Wing":
+				this.ship_ability.vectored_thrusters = true;
+			break;
 		}	
 
 

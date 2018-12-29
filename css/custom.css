@@ -28,6 +28,7 @@ div.maneuver_content {
 .canvas_container {
   max-height:90vh;
     max-width:120vh;
+    margin:auto;
 }
 
 .pure-drawer {

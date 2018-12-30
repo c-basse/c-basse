@@ -10,24 +10,13 @@
       <link href="css/bootstrap.min.css" rel="stylesheet">
       <link rel="stylesheet" type="text/css" href="css/xwing-miniatures.css">
       <link href="css/custom.css" rel="stylesheet">
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
    </head>
    <body>
       <div class="pure-container" data-effect="pure-effect-slide">
-         <input type="checkbox" id="pure-toggle-right" class="pure-toggle" data-toggle="right"/>
          <input type="checkbox" id="pure-toggle-left" class="pure-toggle" data-toggle="left"/>
-         <label class="pure-toggle-label" for="pure-toggle-right" data-toggle-label="right"><span class="pure-toggle-icon"></span></label>
          <label class="pure-toggle-label" for="pure-toggle-left" data-toggle-label="left"><span class="pure-toggle-icon"></span></label>
          <nav class="pure-drawer pure-drawer-thin" data-position="left">
-            <!-- 
-               <div class="row collapse">
-                   <div class="large-12 columns">
-                       <ul class="nav-primary">
-                           <li><a href="/pure-drawer">Home</a></li>
-                           <li><a href="/pure-drawer/documentation">Documentation</a></li>
-                           <li><a href="/pure-drawer/features">Planned Features</a></li>
-                       </ul>
-                   </div>
-               </div> -->
             <div class="d-flex">
                <div class="padding-custom1">
                   <div class="form-group">
@@ -275,8 +264,14 @@
                </div>
             </div>
          </nav>
-         <nav class="pure-drawer pure-drawer-thick" data-position="right">
-            <div class="p-2 buttons_area float-left">
+         <div class="pure-pusher-container">
+            <div class="pure-pusher bg-light">
+               <!--  <p style="width: 300px; height: 1800px; margin: 100px auto;"> -->
+               <div class="d-flex p-3">
+                  <div class="canvas_container fixed_header flex-grow-1" id="fixed_canvas_container">
+                     <canvas id="layer0" class="bg-secondary" width="1024" height="768"></canvas>
+                  </div>
+               <div class="p-2 buttons_area float-left" id="scrollable_buttons_area">
                <div class="form-group maneuver_box">
                   <div class="maneuver_content">
                      <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons" id="5-all-row">
@@ -664,8 +659,26 @@
                   </div>
                </div>
                <div class="form-group">
-                  <label for="start_stress_options" class="control-label">Start State:</label>
-                  <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+                  <label for="show_arc_options" class="control-label">
+                      <i class="xwing-miniatures-font xwing-miniatures-font-frontarc"></i>
+                  </label>
+                  <div class="btn-group btn-group-toggle options-group" role="group" data-toggle="buttons">
+                     <label class="btn btn-sm btn-danger button-option display-option">
+                     <input type="checkbox" name="show_arc_options" id="show_range1" autocomplete="off">R1
+                     </label>
+                     <label class="btn btn-sm btn-danger button-option display-option">
+                     <input type="checkbox" name="show_arc_options" id="show_range2" autocomplete="off">R2
+                     </label>
+                     <label class="btn btn-sm btn-danger button-option display-option">
+                     <input type="checkbox" name="show_arc_options" id="show_range3" autocomplete="off">R3
+                     </label>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <label for="start_stress_options" class="control-label">
+                   <i class="fas fa-step-backward"></i></label>
+                 
+                  <div class="btn-group btn-group-toggle options-group" role="group" data-toggle="buttons">
                      <label class="btn btn-sm btn-dark button-option display-option active">
                      <input type="radio" name="start_state" id="start_unstressed" autocomplete="off" checked>No Stress
                      </label>
@@ -678,8 +691,10 @@
                   </div>
                </div>
                <div class="form-group">
-                  <label for="stress_options" class="control-label">End State:</label>
-                  <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+                  <label for="stress_options" class="control-label">
+                  <i class="fas fa-step-forward"></i>
+              </label>
+                  <div class="btn-group btn-group-toggle options-group" role="group" data-toggle="buttons">
                      <label class="btn btn-sm btn-dark button-option display-option active">
                      <input type="radio" name="end_state" id="show_regardless_stress" autocomplete="off" checked>All
                      </label>
@@ -691,9 +706,9 @@
                      </label>
                   </div>
                </div>
-               <div class="form-group">
+               <div class="form-group d-none">
                   <label for="position" class="control-label">Show Positions:</label>
-                  <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+                  <div class="btn-group btn-group-toggle options-group" role="group" data-toggle="buttons">
                      <label class="btn btn-sm btn-dark button-option display-option active">
                      <input type="radio" name="position" id="show_all_locations" autocomplete="off" checked>All
                      </label>
@@ -706,8 +721,10 @@
                   </div>
                </div>
                <div class="form-group">
-                  <label for="slide" class="control-label">Slide:</label>
-                  <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+                  <label for="slide" class="control-label">
+                      <i class="xwing-miniatures-font xwing-miniatures-font-barrelroll"></i>
+                  </label>
+                  <div class="btn-group btn-group-toggle options-group" role="group" data-toggle="buttons">
                      <label class="btn btn-sm btn-dark button-option display-option ">
                      <input type="radio" name="slide" id="show_fwd_slide" autocomplete="off">Fwd
                      </label>
@@ -723,8 +740,8 @@
                   </div>
                </div>
                <div class="form-group" id="Pilot-group">
-                  <label for="pilot_options" class="control-label">Pilot Ability:</label>
-                  <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+                  <label for="pilot_options" class="control-label">Pilot</label>
+                  <div class="btn-group btn-group-toggle options-group" role="group" data-toggle="buttons">
                      <label class="btn btn-sm btn-dark button-option pilot-option">
                      <input type="radio" name="pilot_options" id="no_pilot" autocomplete="off">None
                      </label>
@@ -756,16 +773,17 @@
                </div>
                <div class="form-group upgrade-group" id="Talent-group">
                   <label for="talent_options" class="control-label">
-                  <i class="xwing-miniatures-font xwing-miniatures-font-talent"></i>/<i class="xwing-miniatures-font xwing-miniatures-font-forcepower"></i>
+             <!--      <i class="xwing-miniatures-font xwing-miniatures-font-talent"></i>/ -->
+                  <i class="xwing-miniatures-font xwing-miniatures-font-forcepower"></i>
                   </label>
-                  <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+                  <div class="btn-group btn-group-toggle options-group" role="group" data-toggle="buttons">
                      <label class="btn btn-sm btn-dark button-option Talent-option upgrade-option">
                      <input type="radio" name="talent_options" id="no_talent" autocomplete="off">None
                      </label>
                      <label class="btn btn-sm btn-dark button-option Force-option upgrade-option smallbaseonly">
                      <input type="radio" name="talent_options" id="supernatural_reflexes" autocomplete="off">SR
                      </label>
-                     <label class="btn btn-sm btn-dark button-option Talent-option upgrade-option smallbaseonly requiresredboost">
+                     <label class="btn btn-sm btn-dark button-option Talent-option upgrade-option smallbaseonly requiresboost">
                      <input type="radio" name="talent_options" id="daredevil" autocomplete="off">DD
                      </label>
                      <label class="btn btn-sm btn-dark button-option Talent-option upgrade-option requiresredroll">
@@ -777,7 +795,7 @@
                   <label for="sensor_options" class="control-label">
                   <i class="xwing-miniatures-font xwing-miniatures-font-sensor"></i>
                   </label>
-                  <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+                  <div class="btn-group btn-group-toggle options-group" role="group" data-toggle="buttons">
                      <label class="btn btn-sm btn-dark button-option Sensor-option upgrade-option">
                      <input type="radio" name="sensor_options" id="no_sensor" autocomplete="off">None
                      </label>
@@ -790,7 +808,7 @@
                   <label for="tech_options" class="control-label">
                   <i class="xwing-miniatures-font xwing-miniatures-font-tech"></i>
                   </label>
-                  <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+                  <div class="btn-group btn-group-toggle options-group" role="group" data-toggle="buttons">
                      <label class="btn btn-sm btn-dark button-option Tech-option upgrade-option">
                      <input type="radio" name="tech_options" id="no_tech" autocomplete="off">None
                      </label>
@@ -806,7 +824,7 @@
                   <label for="configuration_options" class="control-label">
                   <i class="xwing-miniatures-font xwing-miniatures-font-config"></i>
                   </label>
-                  <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+                  <div class="btn-group btn-group-toggle options-group" role="group" data-toggle="buttons">
                      <label class="btn btn-sm btn-dark button-option Configuration-option upgrade-option">
                      <input type="radio" name="configuration_options" id="no_config" autocomplete="off">None
                      </label>
@@ -825,7 +843,7 @@
                   <label for="title_options" class="control-label">
                   <i class="xwing-miniatures-font xwing-miniatures-font-title"></i>
                   </label>
-                  <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+                  <div class="btn-group btn-group-toggle options-group" role="group" data-toggle="buttons">
                      <label class="btn btn-sm btn-dark button-option Title-option upgrade-option">
                      <input type="radio" name="title_options" id="no_title" autocomplete="off">None
                      </label>
@@ -844,7 +862,7 @@
                   <label for="astromech_options" class="control-label">
                   <i class="xwing-miniatures-font xwing-miniatures-font-astromech"></i>
                   </label>
-                  <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+                  <div class="btn-group btn-group-toggle options-group" role="group" data-toggle="buttons">
                      <label class="btn btn-sm btn-dark button-option Astromech-option upgrade-option">
                      <input type="radio" name="astromech_options" id="no_astromech" autocomplete="off">None
                      </label>
@@ -863,7 +881,7 @@
                   <label for="modification_options" class="control-label">
                   <i class="xwing-miniatures-font xwing-miniatures-font-modification"></i>
                   </label>
-                  <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+                  <div class="btn-group btn-group-toggle options-group" role="group" data-toggle="buttons">
                      <label class="btn btn-sm btn-dark button-option Modification-option upgrade-option">
                      <input type="radio" name="modification_options" id="no_mod" autocomplete="off">None
                      </label>
@@ -876,21 +894,12 @@
                   </div>
                </div>
             </div>
-         </nav>
-         <div class="pure-pusher-container">
-            <div class="pure-pusher bg-light">
-               <!--  <p style="width: 300px; height: 1800px; margin: 100px auto;"> -->
-               <div class="d-flex p-3">
-                  <div class="p-2 canvas_container flex-grow-1">
-                     <canvas id="layer0" class="bg-secondary" width="1024" height="768"></canvas>
-                  </div>
                </div>
                <!-- 
                   </p> -->
             </div>
          </div>
          <label class="pure-overlay pure-overlay-left-thin" for="pure-toggle-left" data-overlay="left"></label> 
-         <label class="pure-overlay pure-overlay-right-thick" for="pure-toggle-right" data-overlay="right"></label> 
       </div>
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
       <script src="js/bootstrap.min.js"></script>

@@ -57,12 +57,12 @@ body {
   position: fixed;
   top: 15px;
   z-index: 99;
-  color: #5d809d;
+  color: #FFFFFF;
   width: 70px;
   height: 70px;
   -webkit-transition: all 400ms ease-in-out;
           transition: all 400ms ease-in-out;
-  border: 2px solid #5d809d;
+  border: 2px solid #FFFFFF;
   border-radius: 50%;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -96,7 +96,7 @@ body {
   height: 4px;
   width: 35px;
   cursor: pointer;
-  background: #5d809d;
+  background: #FFFFFF;
   display: block;
   content: '';
   -webkit-transition: all 500ms ease-in-out;
@@ -119,7 +119,8 @@ body {
 }
 
 .pure-toggle-label[data-toggle-label='left'] {
-  left: 15px;
+  left: 30px;
+  top: 30px;
   right: auto;
 }
 

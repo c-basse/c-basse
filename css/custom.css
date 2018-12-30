@@ -13,13 +13,21 @@ label.maneuver {
 div.options_colum {
 }
 div.maneuver_box {
-	height:300px;
+	height:250px;
 	width:368px;
 	position:relative;
 }
-div.buttons_area {
+.buttons_area_below {
 	width:368px;
-}
+	position: absolute;
+    /*left: 50%;
+    margin-left: -184px;*/
+}​
+.buttons_area_right {
+	width:368px;
+	position: absolute;
+}​
+
 div.maneuver_content {
 	position:absolute;
 	bottom:0;
@@ -29,6 +37,20 @@ div.maneuver_content {
   max-height:90vh;
     max-width:120vh;
     margin:auto;
+	padding-top:0.25rem;
+	padding-left:0.25rem;
+	padding-right:1.0rem;
+	padding-bottom:0.25rem;
+}
+.canvas_container {
+  max-height:90vh;
+    max-width:120vh;
+    margin:auto;
+    z-index:999;
+}
+
+.fixed_header {
+	position:fixed;
 }
 
 .pure-drawer {
@@ -57,7 +79,15 @@ div.maneuver_content {
   }
 }
 
+.control-label{
+	width:40px;
+	text-align: center;
 
+}
+
+.options-group{
+	width:85%;
+}
 .pure-drawer-thick{
 	width:380px;
 }

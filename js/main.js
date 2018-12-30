@@ -79,7 +79,7 @@ function ShipState(basesize){
 		}
 	}
 
-	this.draw = function(shipbase_alpha) {
+	this.draw = function(shipbase_alpha, range_bands) {
 		c.save();
 		this.execute_moves();
 		c.setLineDash([]);	
@@ -96,6 +96,7 @@ function ShipState(basesize){
 		} else {
 			c.strokeStyle = '#000000';
 		}
+
 
 		//c.font = "20px Arial";
 		//c.fillText("^", -5, 20);
@@ -114,6 +115,38 @@ function ShipState(basesize){
 		c.lineTo(this.basesize / 5,this.basesize / 5);
 		
 		c.stroke();
+
+		var small_edge = ((this.basesize-60)/1000+0.88)*this.basesize;
+		
+		if(this.has_moved){
+			for (var i = 0; i<range_bands.length; i++){
+
+			c.beginPath();
+			c.moveTo(-1*this.basesize/2-100*(range_bands[i]-1)*Math.sin(0.5*Math.PI-Math.atan(this.basesize/small_edge)),-100*(range_bands[i]-1)*Math.cos(0.5*Math.PI-Math.atan(this.basesize/small_edge)));
+			c.lineTo(-1*this.basesize/2-100*(range_bands[i])*Math.sin(0.5*Math.PI-Math.atan(this.basesize/small_edge)),-100*(range_bands[i])*Math.cos(0.5*Math.PI-Math.atan(this.basesize/small_edge)));
+			c.arc(-1*this.basesize/2,0,100*(range_bands[i]),Math.PI+Math.atan(this.basesize/small_edge),1.5*Math.PI);
+			c.lineTo(this.basesize/2,-100*(range_bands[i]));
+			c.arc(this.basesize/2,0,100*(range_bands[i]),1.5*Math.PI,2*Math.PI-Math.atan(this.basesize/small_edge));
+			c.lineTo(this.basesize/2+100*(range_bands[i])*Math.sin(0.5*Math.PI-Math.atan(this.basesize/small_edge)),-100*(range_bands[i])*Math.cos(0.5*Math.PI-Math.atan(this.basesize/small_edge)));
+			c.lineTo(this.basesize/2+100*(range_bands[i]-1)*Math.sin(0.5*Math.PI-Math.atan(this.basesize/small_edge)),-100*(range_bands[i]-1)*Math.cos(0.5*Math.PI-Math.atan(this.basesize/small_edge)));
+
+			c.arc(this.basesize/2,0,100*(range_bands[i]-1),2*Math.PI-Math.atan(this.basesize/small_edge),1.5*Math.PI,true);
+			c.lineTo(-1*this.basesize/2,-100*(range_bands[i]-1));
+			c.arc(-1*this.basesize/2,0,100*(range_bands[i]-1),1.5*Math.PI,Math.PI+Math.atan(this.basesize/small_edge),true);
+			c.closePath();
+
+			c.globalAlpha = 0.1;
+	    	//c.fillStyle = "#"+("000000"+(0xFF * Math.pow(0x100,range_bands[i]-1)).toString(16)).substr(-6);
+	    	c.fillStyle = "red";
+	    	//c.lineWidth = 4;
+
+	    	c.fill();
+			//c.stroke();
+
+			c.globalAlpha = 1.0;
+		}
+	}
+
 
 		c.restore();
 	}
@@ -403,8 +436,23 @@ function draw_everything(shipstateArray,options,canvas) {
 						)
 					) 
 				) {
-				shipbase_alpha = (shipstateArray[i].has_moved || i==0) ? 0.7 : 0.1;
-				shipstateArray[i].draw(shipbase_alpha);
+
+				var range_bands = [];
+				if(options.show_range1){
+					range_bands.push(1);
+				}
+				if(options.show_range2){
+					range_bands.push(2);
+				}
+				if(options.show_range3){
+					range_bands.push(3);
+				}
+
+
+
+				var shipbase_alpha = (shipstateArray[i].has_moved || i==0) ? 0.7 : 0.1;
+
+				shipstateArray[i].draw(shipbase_alpha,range_bands);
 			}
 		}	
 }
@@ -804,12 +852,42 @@ function process_maneuver_button_change(element){
 	if(input_speed != "all" || input_bearing_direction != "all"){
 		change_button_state("all-all",has_all);
 	}
+
+
+}
+
+function update_css_for_viewport_size(){
+
+    var right_of_fixed = $('#fixed_canvas_container').position().left + $('#fixed_canvas_container').width();
+  	var bottom_of_fixed = $('#fixed_canvas_container').position().top + $('#fixed_canvas_container').height();
+
+  	console.log(right_of_fixed);
+  	console.log(bottom_of_fixed);
+	if($( window ).width() > right_of_fixed+378){
+      $('#scrollable_buttons_area').css('margin-left',right_of_fixed);
+      $('#scrollable_buttons_area').css('margin-top',"0px");
+      $('#scrollable_buttons_area').removeClass("buttons_area_below");
+      $('#scrollable_buttons_area').addClass("buttons_area_right");
+
+  } else {
+  	  var start_of_content = $('#fixed_canvas_container').position().top + $('#fixed_canvas_container').height();
+      $('#scrollable_buttons_area').css('margin-left',"0px");
+      $('#scrollable_buttons_area').css('margin-top',bottom_of_fixed);
+      $('#scrollable_buttons_area').removeClass("buttons_area_right");
+      $('#scrollable_buttons_area').addClass("buttons_area_below");
+  }
 }
 
 var options = {};
 var ship_config = new ShipConfig();
 
 $(document).ready(function(){
+    $(window).on('resize', function(){
+    	update_css_for_viewport_size();      
+	});
+
+    update_css_for_viewport_size();    
+
 
 	process_faction_change(get_selected_radio_option(".faction-option"),ship_config);
 	options = get_button_states(".display-option");
@@ -845,4 +923,5 @@ $(document).ready(function(){
 		process_upgrade_buttons(ship_config);
 		draw_everything(generate_shipstates(ship_config,options),options,c);
 	});
+    
 });

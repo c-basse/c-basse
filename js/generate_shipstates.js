@@ -76,9 +76,9 @@ function generate_shipstates(ship_config, options) {
 	/*******************************/
 	if (ship_config.ship_ability.adaptive_ailerons) {
 		if(ship_config.pilot.pilot_name == '"Duchess"'){
-			shipstateArray = maneuver_phase(shipstateArray, ship_config.move_sets.aileron_set, ship_config, {intermediate_move: true, must_if_unstressed: false});
+			shipstateArray = maneuver_phase(shipstateArray, ship_config.move_sets.aileron_set, ship_config, {intermediate_move: true, must_iff_unstressed: false});
 		} else {
-			shipstateArray = maneuver_phase(shipstateArray, ship_config.move_sets.aileron_set, ship_config, {intermediate_move: true, must_if_unstressed: true});
+			shipstateArray = maneuver_phase(shipstateArray, ship_config.move_sets.aileron_set, ship_config, {intermediate_move: true, must_iff_unstressed: true});
 		}
 	}
 

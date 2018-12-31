@@ -80,7 +80,7 @@ function ShipState(basesize){
 		}
 	}
 
-	this.draw = function(shipbase_alpha, range_bands) {
+	this.draw = function(shipbase_alpha, range_bands, show_bullseye) {
 		c.save();
 		this.execute_moves();
 		c.setLineDash([]);	
@@ -122,30 +122,39 @@ function ShipState(basesize){
 		if(this.has_moved && !this.is_cloaked && !this.is_disarmed){
 			for (var i = 0; i<range_bands.length; i++){
 
-			c.beginPath();
-			c.moveTo(-1*this.basesize/2-100*(range_bands[i]-1)*Math.sin(0.5*Math.PI-Math.atan(this.basesize/small_edge)),-100*(range_bands[i]-1)*Math.cos(0.5*Math.PI-Math.atan(this.basesize/small_edge)));
-			c.lineTo(-1*this.basesize/2-100*(range_bands[i])*Math.sin(0.5*Math.PI-Math.atan(this.basesize/small_edge)),-100*(range_bands[i])*Math.cos(0.5*Math.PI-Math.atan(this.basesize/small_edge)));
-			c.arc(-1*this.basesize/2,0,100*(range_bands[i]),Math.PI+Math.atan(this.basesize/small_edge),1.5*Math.PI);
-			c.lineTo(this.basesize/2,-100*(range_bands[i]));
-			c.arc(this.basesize/2,0,100*(range_bands[i]),1.5*Math.PI,2*Math.PI-Math.atan(this.basesize/small_edge));
-			c.lineTo(this.basesize/2+100*(range_bands[i])*Math.sin(0.5*Math.PI-Math.atan(this.basesize/small_edge)),-100*(range_bands[i])*Math.cos(0.5*Math.PI-Math.atan(this.basesize/small_edge)));
-			c.lineTo(this.basesize/2+100*(range_bands[i]-1)*Math.sin(0.5*Math.PI-Math.atan(this.basesize/small_edge)),-100*(range_bands[i]-1)*Math.cos(0.5*Math.PI-Math.atan(this.basesize/small_edge)));
+				c.beginPath();
+				c.moveTo(-1*this.basesize/2-100*(range_bands[i]-1)*Math.sin(0.5*Math.PI-Math.atan(this.basesize/small_edge)),-100*(range_bands[i]-1)*Math.cos(0.5*Math.PI-Math.atan(this.basesize/small_edge)));
+				c.lineTo(-1*this.basesize/2-100*(range_bands[i])*Math.sin(0.5*Math.PI-Math.atan(this.basesize/small_edge)),-100*(range_bands[i])*Math.cos(0.5*Math.PI-Math.atan(this.basesize/small_edge)));
+				c.arc(-1*this.basesize/2,0,100*(range_bands[i]),Math.PI+Math.atan(this.basesize/small_edge),1.5*Math.PI);
+				c.lineTo(this.basesize/2,-100*(range_bands[i]));
+				c.arc(this.basesize/2,0,100*(range_bands[i]),1.5*Math.PI,2*Math.PI-Math.atan(this.basesize/small_edge));
+				c.lineTo(this.basesize/2+100*(range_bands[i])*Math.sin(0.5*Math.PI-Math.atan(this.basesize/small_edge)),-100*(range_bands[i])*Math.cos(0.5*Math.PI-Math.atan(this.basesize/small_edge)));
+				c.lineTo(this.basesize/2+100*(range_bands[i]-1)*Math.sin(0.5*Math.PI-Math.atan(this.basesize/small_edge)),-100*(range_bands[i]-1)*Math.cos(0.5*Math.PI-Math.atan(this.basesize/small_edge)));
 
-			c.arc(this.basesize/2,0,100*(range_bands[i]-1),2*Math.PI-Math.atan(this.basesize/small_edge),1.5*Math.PI,true);
-			c.lineTo(-1*this.basesize/2,-100*(range_bands[i]-1));
-			c.arc(-1*this.basesize/2,0,100*(range_bands[i]-1),1.5*Math.PI,Math.PI+Math.atan(this.basesize/small_edge),true);
-			c.closePath();
+				c.arc(this.basesize/2,0,100*(range_bands[i]-1),2*Math.PI-Math.atan(this.basesize/small_edge),1.5*Math.PI,true);
+				c.lineTo(-1*this.basesize/2,-100*(range_bands[i]-1));
+				c.arc(-1*this.basesize/2,0,100*(range_bands[i]-1),1.5*Math.PI,Math.PI+Math.atan(this.basesize/small_edge),true);
+				c.closePath();
 
-			c.globalAlpha = 0.1;
-	    	//c.fillStyle = "#"+("000000"+(0xFF * Math.pow(0x100,range_bands[i]-1)).toString(16)).substr(-6);
-	    	c.fillStyle = "red";
-	    	//c.lineWidth = 4;
+				c.globalAlpha = 0.1;
+		    	//c.fillStyle = "#"+("000000"+(0xFF * Math.pow(0x100,range_bands[i]-1)).toString(16)).substr(-6);
+		    	c.fillStyle = "red";
+		    	//c.lineWidth = 4;
 
-	    	c.fill();
-			//c.stroke();
+		    	c.fill();
+				//c.stroke();
 
-			c.globalAlpha = 1.0;
-		}
+				c.globalAlpha = 1.0;
+			}
+			if (show_bullseye) {
+				c.beginPath();
+				c.rect(-1*7.5, -300, 15, 300);
+				c.globalAlpha = 0.1;
+		    	c.fillStyle = "blue";
+		    	c.closePath();
+		    	c.fill();
+				c.globalAlpha = 1.0;
+			}
 	}
 
 
@@ -454,7 +463,7 @@ function draw_everything(shipstateArray,options,canvas) {
 
 				var shipbase_alpha = (shipstateArray[i].has_moved || i==0) ? 0.7 : 0.1;
 
-				shipstateArray[i].draw(shipbase_alpha,range_bands);
+				shipstateArray[i].draw(shipbase_alpha,range_bands,options.show_bullseye);
 			}
 		}	
 }

@@ -36,14 +36,21 @@ div.maneuver_box {
 }
 */
 .canvas_container {
-  max-height:90vh;
-    max-width:120vh;
-    /*margin:auto;*/
-    z-index:999;
+	max-height:90vh;
+	max-width:120vh;
+	/*margin:auto;*/
+	z-index:999;
 	padding-top:0.25rem;
 	padding-left:0.25rem;
 	padding-right:5px;
 	padding-bottom:0.25rem;
+}
+
+.top_block {
+	height: 10px;
+	width: 100%;
+	position:fixed;
+	z-index:998;	
 }
 
 .fixed_canvas {

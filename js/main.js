@@ -123,6 +123,7 @@ function ShipState(basesize){
 			for (var i = 0; i<range_bands.length; i++){
 
 				c.beginPath();
+				var small_edge = ((this.basesize-60)/1000+0.88)*this.basesize;
 				c.moveTo(-1*this.basesize/2-100*(range_bands[i]-1)*Math.sin(0.5*Math.PI-Math.atan(this.basesize/small_edge)),-100*(range_bands[i]-1)*Math.cos(0.5*Math.PI-Math.atan(this.basesize/small_edge)));
 				c.lineTo(-1*this.basesize/2-100*(range_bands[i])*Math.sin(0.5*Math.PI-Math.atan(this.basesize/small_edge)),-100*(range_bands[i])*Math.cos(0.5*Math.PI-Math.atan(this.basesize/small_edge)));
 				c.arc(-1*this.basesize/2,0,100*(range_bands[i]),Math.PI+Math.atan(this.basesize/small_edge),1.5*Math.PI);
@@ -130,7 +131,6 @@ function ShipState(basesize){
 				c.arc(this.basesize/2,0,100*(range_bands[i]),1.5*Math.PI,2*Math.PI-Math.atan(this.basesize/small_edge));
 				c.lineTo(this.basesize/2+100*(range_bands[i])*Math.sin(0.5*Math.PI-Math.atan(this.basesize/small_edge)),-100*(range_bands[i])*Math.cos(0.5*Math.PI-Math.atan(this.basesize/small_edge)));
 				c.lineTo(this.basesize/2+100*(range_bands[i]-1)*Math.sin(0.5*Math.PI-Math.atan(this.basesize/small_edge)),-100*(range_bands[i]-1)*Math.cos(0.5*Math.PI-Math.atan(this.basesize/small_edge)));
-
 				c.arc(this.basesize/2,0,100*(range_bands[i]-1),2*Math.PI-Math.atan(this.basesize/small_edge),1.5*Math.PI,true);
 				c.lineTo(-1*this.basesize/2,-100*(range_bands[i]-1));
 				c.arc(-1*this.basesize/2,0,100*(range_bands[i]-1),1.5*Math.PI,Math.PI+Math.atan(this.basesize/small_edge),true);
@@ -143,12 +143,13 @@ function ShipState(basesize){
 
 		    	c.fill();
 				//c.stroke();
-
+ 
 				c.globalAlpha = 1.0;
 			}
 			if (show_bullseye) {
 				c.beginPath();
 				c.rect(-1*7.5, -300, 15, 300);
+		    	c.closePath();
 				c.globalAlpha = 0.1;
 		    	c.fillStyle = "blue";
 		    	c.closePath();
@@ -639,6 +640,10 @@ function process_ship_change(ship_id,ship_config){
 function process_pilot_change(pilot_id,ship_config){
 	var yasb_pilot_name = translate_id_to_yasb_name(pilot_id);
 
+
+
+
+
 	if(pilot_id == "no_pilot"){
 		ship_config.pilot = pilots_by_ship[ship_config.ship_name][0];
 	} else {
@@ -648,6 +653,17 @@ function process_pilot_change(pilot_id,ship_config){
 				break;
 			}
 		}
+	}
+
+	//reset decloak from whatever special abilities may have been enabled (only works for decloak since it can't be red)
+	ship_config.move_sets.decloak_set = standard_decloak_set;
+
+	//maneuvers can be selectively enabled during "generate shipstates" so no special action to reset (just make sure the get disabled by running update_maneuver_set)
+
+	//boost and roll resets are problematic since we can't just reset to default without knowing color; probably should come up with more elegant solution. Because this is just kare kun so far, we'll do the lazy way for now.
+	if ("kare_kun_boost_left" in ship_config.move_sets.boost_set) {
+		delete ship_config.move_sets.boost_set["kare_kun_boost_left"];
+		delete ship_config.move_sets.boost_set["kare_kun_boost_right"];
 	}
 
 	switch(ship_config.pilot.pilot_name){
@@ -662,8 +678,9 @@ function process_pilot_change(pilot_id,ship_config){
 		break;
 		case "Poe Dameron":
 			ship_config.pilot.starting_force = 1; //using "force" as a stand-in for charge. I don't see any overlap scenario that would cause problems since poe is not a force user. 
-		default:
-			ship_config.move_sets.decloak_set = $.extend(true,{},standard_decloak_set); //undo-echo
+		break;
+		case "Kare Kun":
+			ship_config.move_sets.boost_set = $.extend(true,ship_config.move_sets.boost_set,kare_kun_boost_set);
 		break;
 	}
 	ship_config.update_maneuver_set(); //need to de-enable extra moves like from ryad or ig-88d
@@ -885,9 +902,6 @@ function update_css_for_viewport_size(){
 
     var right_of_fixed = $('#layer0').width() + 10;
   	var bottom_of_fixed = $('#fixed_canvas_container').position().top + $('#fixed_canvas_container').height();
-
-    console.log("right_of_fixed: " + right_of_fixed);
-    console.log("bottom_of_fixed: " + bottom_of_fixed);
 
     $('#fixed_canvas_container').addClass("fixed_canvas");
     $('#pure-toggle-left').addClass("fixed_canvas");

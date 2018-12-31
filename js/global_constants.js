@@ -37,6 +37,11 @@ const ryad_kturn_set = {
 		"4-ryadturn": {bearing:"kturn",speed: 4,direction: normal,roll_direction: normal,slide: false,color: white,enabled: true, draw_type: 0},
 		"5-ryadturn": {bearing:"kturn",speed: 5,direction: normal,roll_direction: normal,slide: false,color: white,enabled: true, draw_type: 0}
 }
+
+const kare_kun_boost_set = {
+		"kare_kun_boost_left": {bearing:"turn",speed: 1,direction: left,roll_direction: normal,slide: false,color: white,enabled: true, draw_type: 1},
+		"kare_kun_boost_right": {bearing:"turn",speed: 1,direction: right,roll_direction: normal,slide: false,color: white,enabled: true, draw_type: 1}
+}
 const pivot_wing_set = {
 		"left_pivot": {bearing:"rotate",speed: 90,direction: left,roll_direction: normal,slide: false,color: red,enabled: true, draw_type: 0},
 		"right_pivot": {bearing:"rotate",speed: 90,direction: right,roll_direction: normal,slide: false,color: red,enabled: true, draw_type: 0},
@@ -163,7 +168,8 @@ const PILOTS_SEED = {
 'T-70 X-Wing':
 	[{pilot_name: 'Black Squadron Ace (T-70)', slots: []},
 	{pilot_name: 'Poe Dameron', slots: []},
-	{pilot_name: 'Nien Nunb', slots: []}],
+	{pilot_name: 'Nien Nunb', slots: []},
+	{pilot_name: 'Kare Kun', slots: []}],
 'TIE/FO Fighter':
 	[{pilot_name: '"Midnight"', slots: []}],
 'TIE/VN Silencer':

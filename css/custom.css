@@ -19,6 +19,16 @@ div.maneuver_box {
 	position:relative;
 }
 
+div.link_style *
+{
+    color: white;
+}
+
+.link_style
+{
+    text-align:center;
+}
+
 .buttons_area_below {
 	width:384px;
 	position: absolute;

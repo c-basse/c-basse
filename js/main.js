@@ -867,6 +867,7 @@ function update_css_for_viewport_size(){
     console.log("bottom_of_fixed: " + bottom_of_fixed);
 
     $('#fixed_canvas_container').addClass("fixed_canvas");
+    $("#pure-toggle-left").addClass("fixed_canvas");
 	
 	if($( window ).width() > right_of_fixed+378){
       $('#scrollable_buttons_area').css('margin-left',right_of_fixed);
@@ -882,6 +883,7 @@ function update_css_for_viewport_size(){
       $('#scrollable_buttons_area').addClass("buttons_area_below");
       if($( window ).height()-bottom_of_fixed < 285){
       	$('#fixed_canvas_container').removeClass("fixed_canvas");
+ 		$("#pure-toggle-left").removeClass("fixed_canvas");
       }
   }
 }

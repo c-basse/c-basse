@@ -64,24 +64,27 @@ div.maneuver_box {
 
 .padding-custom1 {
 	padding-top:100px;
-	padding-right:0.25rem;
+	padding-right:0rem;
 	padding-left:0.25rem;
 	padding-bottom:0.25rem;
 }
 
 .pure-drawer-thin{
-	width:100px;
+	width:96px;
 }
 @media only screen and (min-width: 40.063em) {
   .pure-toggle[data-toggle='left']:checked ~ .pure-overlay[data-overlay='left'] {
-    left: 100px;
+    left: 96px;
   }
 }
 
 @media only screen and (min-width: 64.063em) {
   .pure-toggle[data-toggle='left']:checked ~ .pure-overlay[data-overlay='left'] {
-    left: 100px;
+    left: 96px;
   }
+}
+.btn-group-vertical{
+	width:42px;
 }
 
 .control-label{
@@ -95,8 +98,11 @@ div.maneuver_box {
 
  .pure-toggle-label-custom{
  	text-align:center;
- 	line-height:70px;
- 	font-size:45px;
+ 	line-height:50px;
+ 	font-size:35px;
+ 	height: 50px;
+ 	width: 50px;
+
  }
 
 .form-group-custom{

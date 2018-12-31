@@ -15,18 +15,18 @@ div.options_colum {
 div.maneuver_box {
 	/*height:250px;*/
 	padding-bottom:0.5rem;
-	width:368px;
+	width:384px;
 	position:relative;
 }
 
 .buttons_area_below {
-	width:368px;
+	width:384px;
 	position: absolute;
     /*left: 50%;
     margin-left: -184px;*/
 }​
 .buttons_area_right {
-	width:368px;
+	width:384px;
 	position: absolute;
 }​
 

@@ -207,7 +207,9 @@ function maneuver_phase(shipstateArray, move_set, ship_config, {
 
 							if(ship_config.upgrades.afterburners && maneuver.speed >= 3){
 								new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, {require_move: false, disable_future_actions: false, slam_allowed: false, roll_allowed: false, temp_add_boost: true, force_white: true, even_if_stressed: true}));
-							} 
+							} else if (ship_config.pilot.pilot_name == "Temmin Wexley" && maneuver.speed >= 2 && maneuver.speed <= 4){
+								new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, {require_move: false, disable_future_actions: false, slam_allowed: false, roll_allowed: false, temp_add_boost: true, force_white: true, even_if_stressed: false}));
+							}
 						} //end if not needing to performed emergency 2 straight
 					} //end for loop of slide maneuvers
 				} //end if maneuver enabled

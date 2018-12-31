@@ -503,6 +503,26 @@ function process_faction_change(faction_id,ship_config){
 	process_ship_change(default_ship_id,ship_config);
 }
 
+function is_upgrade_valid(slot_name,upgrade_id,ship_config) {
+	var check = 
+	$.inArray(slot_name,ship_config.pilot.slots) !=-1 &&
+	(!($($("#" + upgrade_id).parent()).hasClass("smallbaseonly")) || ship_config.basesize == smallbase) &&
+	(!($($("#" + upgrade_id).parent()).hasClass("mediumbaseonly")) || ship_config.basesize == mediumbase) &&
+	(!($($("#" + upgrade_id).parent()).hasClass("largebaseonly")) || ship_config.basesize == largebase) &&
+	(!($($("#" + upgrade_id).parent()).hasClass("requiresboost")) || $.inArray("Boost",ship_config.action_bar)>-1) &&
+	(!($($("#" + upgrade_id).parent()).hasClass("requiresroll")) || $.inArray("Barrel Roll",ship_config.action_bar)>-1) &&
+	(!($($("#" + upgrade_id).parent()).hasClass("requiresredboost")) || $.inArray("Boost",basicCardData().ships[ship_config.ship_name].actionsred)>-1) &&
+	(!($($("#" + upgrade_id).parent()).hasClass("requiresredroll")) || $.inArray("Barrel Roll",basicCardData().ships[ship_config.ship_name].actionsred)>-1) &&
+	(!($($("#" + upgrade_id).parent()).hasClass("rebelonly")) || ship_config.faction_name == "Rebel Alliance") &&
+	(!($($("#" + upgrade_id).parent()).hasClass("empireonly")) || ship_config.faction_name == "Galactic Empire") &&
+	(!($($("#" + upgrade_id).parent()).hasClass("scumonly")) || ship_config.faction_name == "Scum and Villainy") &&
+	(!($($("#" + upgrade_id).parent()).hasClass("resistanceonly")) || ship_config.faction_name == "Resistance") &&
+	(!($($("#" + upgrade_id).parent()).hasClass("firstorderonly")) || ship_config.faction_name == "First Order") &&
+	((slot_name != "Title" && slot_name != "Configuration")|| $($("#" + upgrade_id).parent()).hasClass(ship_config.ship_id) );
+	return check;
+			
+}
+
 //process_ship_change
 //step1, update ship config with the new ship
 //step2, select default pilot and set only valid (right ship, right faction) pilot options to show
@@ -528,6 +548,7 @@ function process_ship_change(ship_id,ship_config){
 			$($("#" + pilot_id).parent()).removeClass("d-none"); 
 			default_pilot_id = pilot_id;
 			change_button_state(pilot_id,true);
+			ship_config.pilot = pilots_by_ship[ship_config.ship_name][0]
 			continue;
 		}
 
@@ -626,6 +647,60 @@ function process_ship_change(ship_id,ship_config){
 			$("#" + "all" + "-" + bearing_direction).parent().addClass("d-none"); 
 		}
 	}
+
+	var upgrade_buttons = get_button_states(".upgrade-option");
+
+	for (upgrade_id in upgrade_buttons){
+		if(upgrade_id.substring(0,3) == "no_"){
+			$($("#" + upgrade_id).parent()).removeClass("d-none"); 
+			change_button_state(upgrade_id,true);
+			continue;
+		} else {
+			change_button_state(upgrade_id,false);
+			$($("#" + upgrade_id).parent()).addClass("d-none"); 
+		}
+	}
+
+
+	var slot_with_available_options = []
+	for (slot in pilots_by_ship[ship_config.ship_name][0].slots){
+		upgrade_buttons = get_button_states("." + pilots_by_ship[ship_config.ship_name][0].slots[slot] + "-option");
+		for (upgrade_id in upgrade_buttons) {
+			if (
+			  upgrade_id.substring(0,3) != "no_" &&
+			  is_upgrade_valid(pilots_by_ship[ship_config.ship_name][0].slots[slot],upgrade_id,ship_config) 
+  			) {
+				$($("#" + upgrade_id).parent()).removeClass("d-none"); 
+				slot_with_available_options.push(pilots_by_ship[ship_config.ship_name][0].slots[slot]);
+			}
+		}
+	}
+
+
+    $(".upgrade-group").each(function() {
+    	var [slot_name,dummy] = this.id.split("-");
+    	if($.inArray(slot_name,slot_with_available_options)!=-1){
+    		$(this).removeClass("d-none");
+    	} else if (slot_name == "Talent" && $.inArray("Force",slot_with_available_options)!=-1) {
+    		$(this).removeClass("d-none");
+    	} else {
+    		$(this).addClass("d-none");
+    	}
+    });
+
+    $($("#Pilot-group-label").children()[0]).removeClass("xwing-miniatures-font-helmet-scum");
+    $($("#Pilot-group-label").children()[0]).removeClass("xwing-miniatures-font-helmet-rebel");
+    $($("#Pilot-group-label").children()[0]).removeClass("xwing-miniatures-font-helmet-imperial");
+
+    if (ship_config.faction_name == "First Order" || ship_config.faction_name == "Galactic Empire") {
+   		$($("#Pilot-group-label").children()[0]).addClass("xwing-miniatures-font-helmet-imperial");
+    } else if (ship_config.faction_name == "Scum and Villainy") {
+   		$($("#Pilot-group-label").children()[0]).addClass("xwing-miniatures-font-helmet-scum");
+
+    } else {
+   		$($("#Pilot-group-label").children()[0]).addClass("xwing-miniatures-font-helmet-rebel");
+    }
+
 	process_pilot_change(default_pilot_id,ship_config);
 	process_maneuver_button_change($(document),ship_config);
 	ship_config.update_maneuver_set();
@@ -685,69 +760,52 @@ function process_pilot_change(pilot_id,ship_config){
 	}
 	ship_config.update_maneuver_set(); //need to de-enable extra moves like from ryad or ig-88d
 
-	var upgrade_buttons = get_button_states(".upgrade-option");
 
-	for (upgrade_id in upgrade_buttons){
-		if(upgrade_id.substring(0,3) == "no_"){
-			$($("#" + upgrade_id).parent()).removeClass("d-none"); 
-			change_button_state(upgrade_id,true);
-			continue;
-		} else {
-			change_button_state(upgrade_id,false);
-			$($("#" + upgrade_id).parent()).addClass("d-none"); 
-		}
-	}
-
-	var slot_with_available_options = []
-	for (slot in ship_config.pilot.slots){
-		upgrade_buttons = get_button_states("." + ship_config.pilot.slots[slot] + "-option");
-		for (upgrade_id in upgrade_buttons) {
-			if (
-			  $($("#" + upgrade_id).parent()).hasClass("d-none") &&
-			  (!($($("#" + upgrade_id).parent()).hasClass("smallbaseonly")) || ship_config.basesize == smallbase) &&
-			  (!($($("#" + upgrade_id).parent()).hasClass("mediumbaseonly")) || ship_config.basesize == mediumbase) &&
-			  (!($($("#" + upgrade_id).parent()).hasClass("largebaseonly")) || ship_config.basesize == largebase) &&
-			  (!($($("#" + upgrade_id).parent()).hasClass("requiresboost")) || $.inArray("Boost",ship_config.action_bar)>-1) &&
-			  (!($($("#" + upgrade_id).parent()).hasClass("requiresroll")) || $.inArray("Barrel Roll",ship_config.action_bar)>-1) &&
-			  (!($($("#" + upgrade_id).parent()).hasClass("requiresredboost")) || $.inArray("Boost",basicCardData().ships[ship_config.ship_name].actionsred)>-1) &&
-			  (!($($("#" + upgrade_id).parent()).hasClass("requiresredroll")) || $.inArray("Barrel Roll",basicCardData().ships[ship_config.ship_name].actionsred)>-1) &&
-			  (!($($("#" + upgrade_id).parent()).hasClass("rebelonly")) || ship_config.faction_name == "Rebel Alliance") &&
-			  (!($($("#" + upgrade_id).parent()).hasClass("empireonly")) || ship_config.faction_name == "Galactic Empire") &&
-			  (!($($("#" + upgrade_id).parent()).hasClass("scumonly")) || ship_config.faction_name == "Scum and Villainy") &&
-			  (!($($("#" + upgrade_id).parent()).hasClass("resistanceonly")) || ship_config.faction_name == "Resistance") &&
-			  (!($($("#" + upgrade_id).parent()).hasClass("firstorderonly")) || ship_config.faction_name == "First Order") &&
-			  ((ship_config.pilot.slots[slot] != "Title" && ship_config.pilot.slots[slot] != "Configuration")|| $($("#" + upgrade_id).parent()).hasClass(ship_config.ship_id) )
+	//check if talent or force needs to be reset
+	var has_force_or_talent = false;
+	var upgrade_buttons = get_button_states(".Talent-option");
+	for (upgrade_id in upgrade_buttons) {
+		if (
+			  upgrade_id.substring(0,3) != "no_" &&
+			  is_upgrade_valid("Talent",upgrade_id,ship_config) 
 			) {
 				$($("#" + upgrade_id).parent()).removeClass("d-none"); 
-				slot_with_available_options.push(ship_config.pilot.slots[slot]);
+				has_force_or_talent = true;
+			} else if (upgrade_id.substring(0,3) != "no_") {
+				$($("#" + upgrade_id).parent()).addClass("d-none"); 
+				if(upgrade_buttons[upgrade_id]) {
+					change_button_state(upgrade_id,false); 
+					change_button_state("no_talent",true);
+				}
+			} else {
+				$($("#" + upgrade_id).parent()).removeClass("d-none"); 
 			}
-		}
 	}
 
+	upgrade_buttons = get_button_states(".Force-option");
+	for (upgrade_id in upgrade_buttons) {
+		if (
+			  upgrade_id.substring(0,3) != "no_" &&
+			  is_upgrade_valid("Force",upgrade_id,ship_config) 
+			) {
+				$($("#" + upgrade_id).parent()).removeClass("d-none"); 
+				has_force_or_talent = true;
+			} else if (upgrade_id.substring(0,3) != "no_") {
+				$($("#" + upgrade_id).parent()).addClass("d-none"); 
+				if(upgrade_buttons[upgrade_id]) {
+					change_button_state(upgrade_id,false); 
+					change_button_state("no_talent",true);
+				}
+			} else {
+				$($("#" + upgrade_id).parent()).removeClass("d-none"); 
+			}
+	}
 
-    $(".upgrade-group").each(function() {
-    	var [slot_name,dummy] = this.id.split("-");
-    	if($.inArray(slot_name,slot_with_available_options)!=-1){
-    		$(this).removeClass("d-none");
-    	} else if (slot_name == "Talent" && $.inArray("Force",slot_with_available_options)!=-1) {
-    		$(this).removeClass("d-none");
-    	} else {
-    		$(this).addClass("d-none");
-    	}
-    });
-
-    $($("#Pilot-group-label").children()[0]).removeClass("xwing-miniatures-font-helmet-scum");
-    $($("#Pilot-group-label").children()[0]).removeClass("xwing-miniatures-font-helmet-rebel");
-    $($("#Pilot-group-label").children()[0]).removeClass("xwing-miniatures-font-helmet-imperial");
-
-    if (ship_config.faction_name == "First Order" || ship_config.faction_name == "Galactic Empire") {
-   		$($("#Pilot-group-label").children()[0]).addClass("xwing-miniatures-font-helmet-imperial");
-    } else if (ship_config.faction_name == "Scum and Villainy") {
-   		$($("#Pilot-group-label").children()[0]).addClass("xwing-miniatures-font-helmet-scum");
-
-    } else {
-   		$($("#Pilot-group-label").children()[0]).addClass("xwing-miniatures-font-helmet-rebel");
-    }
+	if(has_force_or_talent){
+		$("#Talent-group").removeClass("d-none");
+	} else {
+		$("#Talent-group").addClass("d-none");
+	}
 
 
 	process_upgrade_buttons(ship_config); 

@@ -169,7 +169,8 @@ const PILOTS_SEED = {
 	[{pilot_name: 'Black Squadron Ace (T-70)', slots: []},
 	{pilot_name: 'Poe Dameron', slots: []},
 	{pilot_name: 'Nien Nunb', slots: []},
-	{pilot_name: 'Kare Kun', slots: []}],
+	{pilot_name: 'Kare Kun', slots: []},
+	{pilot_name: 'Temmin Wexley', slots: []}],
 'TIE/FO Fighter':
 	[{pilot_name: '"Midnight"', slots: []}],
 'TIE/VN Silencer':

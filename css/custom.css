@@ -13,10 +13,12 @@ label.maneuver {
 div.options_colum {
 }
 div.maneuver_box {
-	height:250px;
+	/*height:250px;*/
+	padding-bottom:0.5rem;
 	width:368px;
 	position:relative;
 }
+
 .buttons_area_below {
 	width:368px;
 	position: absolute;
@@ -28,29 +30,25 @@ div.maneuver_box {
 	position: absolute;
 }​
 
-div.maneuver_content {
+/*div.maneuver_content {
 	position:absolute;
 	bottom:0;
 }
-
+*/
 .canvas_container {
   max-height:90vh;
     max-width:120vh;
-    margin:auto;
+    /*margin:auto;*/
+    z-index:999;
 	padding-top:0.25rem;
 	padding-left:0.25rem;
-	padding-right:1.0rem;
+	padding-right:5px;
 	padding-bottom:0.25rem;
 }
-.canvas_container {
-  max-height:90vh;
-    max-width:120vh;
-    margin:auto;
-    z-index:999;
-}
 
-.fixed_header {
+.fixed_canvas {
 	position:fixed;
+    z-index:999;
 }
 
 .pure-drawer {
@@ -80,13 +78,28 @@ div.maneuver_content {
 }
 
 .control-label{
-	width:40px;
-	text-align: center;
+    width: 40px;
+    height: 31px;
+    text-align: center;
+    line-height: 31px;
+    margin-bottom: 0;
+
+}
+
+ .pure-toggle-label-custom{
+ 	text-align:center;
+ 	line-height:70px;
+ 	font-size:45px;
+ }
+
+.form-group-custom{
+    margin-bottom: 0.5rem;
+
 
 }
 
 .options-group{
-	width:85%;
+	width:306px;
 }
 .pure-drawer-thick{
 	width:380px;

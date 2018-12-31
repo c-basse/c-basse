@@ -323,7 +323,7 @@ function action_phase(shipstateArray, ship_config, {
 							  )
 							) {
 								do_action = true;
-								actions_move_set = ship_config.move_sets.maneuver_set; //wait, need to restrict by speeds
+								actions_move_set = ship_config.move_sets.maneuver_set; 
 								white_action_override = force_white;
 								red_action_override = force_red;
 								is_slam = true;
@@ -343,11 +343,16 @@ function action_phase(shipstateArray, ship_config, {
 									
 									var maneuver = $.extend(true,{slide_direction: shipstateArray[i].slide_array[k]},actions_move_set[move_name]); 	
 									var new_ship_state = shipstateArray[i].clone();
+									
 									new_ship_state.add_move(maneuver);
 									new_ship_state.force_count -= force_cost;
 									if(disable_future_actions){
 										new_ship_state.actions_disabled = true;
 									}
+									if(is_slam && !ship_config.upgrades.black_one){
+										new_ship_state.is_disarmed = true;
+									}
+
 									var difficulty = actions_move_set[move_name].color;
 									difficulty = (white_action_override) ? white : difficulty;
 									difficulty = (red_action_override) ? red : difficulty;

@@ -72,6 +72,7 @@ function ShipState(basesize){
 	this.slide_array = []; //available slide maneuvers
 	this.slam_speed = 99; //99 means no slam, unless FFG releases a ship with a 99 speed maneuver. In which case, rekt.
 	this.force_count = 0;
+	this.is_disarmed = false;
 
 	this.execute_moves = function() {
 		for (var i = 0;  i < this.movearray.length; i++) {
@@ -118,7 +119,7 @@ function ShipState(basesize){
 
 		var small_edge = ((this.basesize-60)/1000+0.88)*this.basesize;
 		
-		if(this.has_moved){
+		if(this.has_moved && !this.is_cloaked && !this.is_disarmed){
 			for (var i = 0; i<range_bands.length; i++){
 
 			c.beginPath();
@@ -293,6 +294,7 @@ function ShipState(basesize){
 		cloned_shipstate.slide_array = this.slide_array.slice(0);
 		cloned_shipstate.slam_speed = this.slam_speed;
 		cloned_shipstate.force_count = this.force_count;
+		cloned_shipstate.is_disarmed = this.is_disarmed;
 		return cloned_shipstate;
 	}
 }
@@ -708,6 +710,18 @@ function process_pilot_change(pilot_id,ship_config){
     	}
     });
 
+    $($("#Pilot-group-label").children()[0]).removeClass("xwing-miniatures-font-helmet-scum");
+    $($("#Pilot-group-label").children()[0]).removeClass("xwing-miniatures-font-helmet-rebel");
+    $($("#Pilot-group-label").children()[0]).removeClass("xwing-miniatures-font-helmet-imperial");
+
+    if (ship_config.faction_name == "First Order" || ship_config.faction_name == "Galactic Empire") {
+   		$($("#Pilot-group-label").children()[0]).addClass("xwing-miniatures-font-helmet-imperial");
+    } else if (ship_config.faction_name == "Scum and Villainy") {
+   		$($("#Pilot-group-label").children()[0]).addClass("xwing-miniatures-font-helmet-scum");
+
+    } else {
+   		$($("#Pilot-group-label").children()[0]).addClass("xwing-miniatures-font-helmet-rebel");
+    }
 
 
 	process_upgrade_buttons(ship_config); 
@@ -877,7 +891,8 @@ function update_css_for_viewport_size(){
 
   } else {
   	  var start_of_content = $('#fixed_canvas_container').position().top + $('#fixed_canvas_container').height();
-      $('#scrollable_buttons_area').css('margin-left',"0px");
+  	  var left_side = ($( window ).width()>384) ? (($( window ).width()-384)/2).toString() + "px" : "0px";
+      $('#scrollable_buttons_area').css('margin-left',left_side);
       $('#scrollable_buttons_area').css('margin-top',bottom_of_fixed);
       $('#scrollable_buttons_area').removeClass("buttons_area_right");
       $('#scrollable_buttons_area').addClass("buttons_area_below");

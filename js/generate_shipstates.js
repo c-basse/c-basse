@@ -65,10 +65,10 @@ function generate_shipstates(ship_config, options) {
 	/*******Before you activate*****/
 	/*******************************/
 	if (ship_config.pilot.pilot_name == "Sabine Wren (TIE Fighter)" || ship_config.pilot.pilot_name == "Sabine Wren"){
-		shipstateArray = action_phase(shipstateArray, ship_config, {require_move: false, slam_allowed: false, temp_add_boost: true});
+		shipstateArray = action_phase(shipstateArray, ship_config, options, {require_move: false, slam_allowed: false, temp_add_boost: true});
 	}
 	if (ship_config.upgrades.supernatural_reflexes){
-		shipstateArray = action_phase(shipstateArray, ship_config, {require_move: false, slam_allowed: false, force_cost: 1});
+		shipstateArray = action_phase(shipstateArray, ship_config, options, {require_move: false, slam_allowed: false, force_cost: 1});
 	}
 
 	/*******************************/
@@ -76,9 +76,9 @@ function generate_shipstates(ship_config, options) {
 	/*******************************/
 	if (ship_config.ship_ability.adaptive_ailerons) {
 		if(ship_config.pilot.pilot_name == '"Duchess"'){
-			shipstateArray = maneuver_phase(shipstateArray, ship_config.move_sets.aileron_set, ship_config, {intermediate_move: true, must_iff_unstressed: false});
+			shipstateArray = maneuver_phase(shipstateArray, ship_config.move_sets.aileron_set, ship_config, options, {intermediate_move: true, must_iff_unstressed: false});
 		} else {
-			shipstateArray = maneuver_phase(shipstateArray, ship_config.move_sets.aileron_set, ship_config, {intermediate_move: true, must_iff_unstressed: true});
+			shipstateArray = maneuver_phase(shipstateArray, ship_config.move_sets.aileron_set, ship_config, options, {intermediate_move: true, must_iff_unstressed: true});
 		}
 	}
 
@@ -86,28 +86,28 @@ function generate_shipstates(ship_config, options) {
 	/**After you reveal your dial***/
 	/*******************************/
 	if (ship_config.upgrades.advanced_sensors) {
-		shipstateArray = action_phase(shipstateArray, ship_config, {require_move: false, disable_future_actions: true, slam_allowed: false});
+		shipstateArray = action_phase(shipstateArray, ship_config, options, {require_move: false, disable_future_actions: true, slam_allowed: false});
 	}
 
 	/*******************************/
 	/*Before you execute a maneuver*/
 	/*******************************/
 	if (ship_config.upgrades.bb_astromech){
-		shipstateArray = action_phase(shipstateArray, ship_config, {require_move: false, slam_allowed: false, boost_allowed: false, temp_add_roll: true});
+		shipstateArray = action_phase(shipstateArray, ship_config, options, {require_move: false, slam_allowed: false, boost_allowed: false, temp_add_roll: true});
 	}
 	if (ship_config.upgrades.bb_8){
-		shipstateArray = action_phase(shipstateArray, ship_config, {require_move: false, slam_allowed: false, temp_add_roll: true, temp_add_boost: true});
+		shipstateArray = action_phase(shipstateArray, ship_config, options, {require_move: false, slam_allowed: false, temp_add_roll: true, temp_add_boost: true});
 	}
 
 	/*******************************/
 	/*******Execute a Maneuver******/
 	/*******************************/
-	shipstateArray = maneuver_phase(shipstateArray, ship_config.move_sets.maneuver_set, ship_config, {record_slam_speed: true});
+	shipstateArray = maneuver_phase(shipstateArray, ship_config.move_sets.maneuver_set, ship_config, options, {record_slam_speed: true});
 
 	/*******************************/
 	/*******Perform Action**********/
 	/*******************************/
-	shipstateArray = action_phase(shipstateArray, ship_config);
+	shipstateArray = action_phase(shipstateArray, ship_config, options);
 
 	return shipstateArray;
 }
@@ -122,7 +122,7 @@ Optional Input intermediate_move, if true the maneuvers executed will not count 
 Otional Input must_iff_unstressed, if true the maneuver will only happen for shipstates which are not stressed; AND the if incomign seed ship state is not stressed, the incoming seed ship state will be "frozen" as is no longer a valid seed for future moves
 Optional Input record_slam_speed, this indicates that this maneuver is valid for determining future slam speed
 */
-function maneuver_phase(shipstateArray, move_set, ship_config, {
+function maneuver_phase(shipstateArray, move_set, ship_config, options, {
 	intermediate_move = false,
 	must_iff_unstressed = false,
 	record_slam_speed = false
@@ -185,7 +185,7 @@ function maneuver_phase(shipstateArray, move_set, ship_config, {
 
 								case red:
 									if(ship_config.upgrades.pattern_analyzer){
-										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state],ship_config,{force_red:true})); //force_red so they get stressed afterward for the red maneuver that initiated the action
+										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state],ship_config, options,{force_red:true})); //force_red so they get stressed afterward for the red maneuver that initiated the action
 									}
 									if(ship_config.pilot.pilot_name != "Nien Nunb"){
 										new_ship_state.stress_count += 1;
@@ -206,9 +206,9 @@ function maneuver_phase(shipstateArray, move_set, ship_config, {
 							new_shipstateArray.push(new_ship_state);
 
 							if(ship_config.upgrades.afterburners && maneuver.speed >= 3){
-								new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, {require_move: false, disable_future_actions: false, slam_allowed: false, roll_allowed: false, temp_add_boost: true, force_white: true, even_if_stressed: true}));
+								new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, options, {require_move: false, disable_future_actions: false, slam_allowed: false, roll_allowed: false, temp_add_boost: true, force_white: true, even_if_stressed: true}));
 							} else if (ship_config.pilot.pilot_name == "Temmin Wexley" && maneuver.speed >= 2 && maneuver.speed <= 4){
-								new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, {require_move: false, disable_future_actions: false, slam_allowed: false, roll_allowed: false, temp_add_boost: true, force_white: true, even_if_stressed: false}));
+								new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, options, {require_move: false, disable_future_actions: false, slam_allowed: false, roll_allowed: false, temp_add_boost: true, force_white: true, even_if_stressed: false}));
 							}
 						} //end if not needing to performed emergency 2 straight
 					} //end for loop of slide maneuvers
@@ -233,7 +233,7 @@ Optional Input: temp_add_boost means boost can be performed even if not on actio
 Optional Input: temp_add_roll means barrel roll can be performed even if not on action bar
 Optional Input: even_if_stressed means the action be performed even if stressed
 */
-function action_phase(shipstateArray, ship_config, {
+function action_phase(shipstateArray, ship_config, options, {
 	require_move = true,
 	disable_future_actions = false,
 	boost_allowed = true,
@@ -285,6 +285,7 @@ function action_phase(shipstateArray, ship_config, {
 						case "Barrel Roll":
 							if (
 							  roll_allowed &&
+							  options.enable_roll &&
 							  (
 							   shipstateArray[i].stress_count <= 0 ||
 							   (ship_config.upgrades.primed_thrusters && shipstateArray[i].stress_count <= 2) ||
@@ -301,6 +302,7 @@ function action_phase(shipstateArray, ship_config, {
 						case "Boost":
 							if (
 							  boost_allowed &&
+							  options.enable_boost &&
 							  (
 						  	   shipstateArray[i].stress_count <= 0 ||
 						  	   (ship_config.upgrades.primed_thrusters && shipstateArray[i].stress_count <= 2) ||
@@ -319,6 +321,7 @@ function action_phase(shipstateArray, ship_config, {
 
 							if (
 							  slam_allowed &&
+							  options.enable_slam &&
 							  (
 							   shipstateArray[i].stress_count == 0 ||
 							   even_if_stressed
@@ -374,13 +377,13 @@ function action_phase(shipstateArray, ship_config, {
 									new_shipstateArray.push(new_ship_state);
 									
 									if(ship_config.ship_ability.autothrusters){
-										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, {require_move: false, disable_future_actions: false, slam_allowed: false, force_red: true}));
+										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, options, {require_move: false, disable_future_actions: false, slam_allowed: false, force_red: true}));
 									} else if (ship_config.ship_ability.refined_gyrostabilizers) {
-										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, {require_move: false, disable_future_actions: false, slam_allowed: false, roll_allowed: false, force_red: true}));
+										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, options, {require_move: false, disable_future_actions: false, slam_allowed: false, roll_allowed: false, force_red: true}));
 									} else if (ship_config.ship_ability.vectored_thrusters) {
-										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, {require_move: false, disable_future_actions: false, slam_allowed: false, roll_allowed: false, force_red: true}));
+										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, options, {require_move: false, disable_future_actions: false, slam_allowed: false, roll_allowed: false, force_red: true}));
 									} else if (ship_config.pilot.pilot_name == "Poe Dameron" && new_ship_state.force_count >= 1){
-										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, {require_move: false, disable_future_actions: false, slam_allowed: false, force_red: true, force_cost: 1}));
+										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, options, {require_move: false, disable_future_actions: false, slam_allowed: false, force_red: true, force_cost: 1}));
 									}
 									/*
 									until we model the ability to supernatural boost (take damage) and/or other actions, vader pilot ability is pointless

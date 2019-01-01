@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="css/pure-drawer.css"/>
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="css/xwing-miniatures.css">
+        <link href="css/toggle_switches.css" rel="stylesheet">
         <link href="css/custom.css" rel="stylesheet">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     </head>
@@ -695,6 +696,55 @@
                                 </div>
                             </div>
                             <div class="form-group form-group-custom">
+
+                                
+                              <span class="switch">
+                                <label class="control-label"> <i class="xwing-miniatures-font xwing-miniatures-font-barrelroll"></i></label>
+                                <span class="display-option">
+                                    <input type="checkbox" class="switch" id="enable_roll" checked>
+
+                                <label for="enable_roll" class="no_margin_label"></label>
+                                 </span>
+                              </span>
+                                                            
+                              <span class="switch">
+                                <label class="control-label"> <i class="xwing-miniatures-font xwing-miniatures-font-boost"></i></label>
+                                <span class="display-option">
+                                <input type="checkbox" class="switch" id="enable_boost" checked>
+                                <label for="enable_boost" class="no_margin_label"></label>
+                                 </span>
+                              </span>
+                                                            
+                              <span class="switch">
+                                <label class="control-label"> <i class="xwing-miniatures-font xwing-miniatures-font-slam"></i></label>
+                                 <span class="display-option">
+                                    <input type="checkbox" class="switch" id="enable_slam" checked>
+                                <label for="enable_slam" class="no_margin_label"></label>
+                                 </span>
+                              </span>
+            
+                            </div>
+                            <div class="form-group form-group-custom">
+                                <label for="slide" class="control-label">
+                               <!--  <i class="xwing-miniatures-font xwing-miniatures-font-barrelroll"></i> -->
+                               <i class="fas fa-arrows-alt-v"></i>
+                                </label>
+                                <div class="btn-group btn-group-toggle options-group" role="group" data-toggle="buttons">
+                                    <label class="btn btn-sm btn-dark button-option display-option ">
+                                    <input type="radio" name="slide" id="show_fwd_slide" autocomplete="off">Fwd
+                                    </label>
+                                    <label class="btn btn-sm btn-dark button-option display-option active">
+                                    <input type="radio" name="slide" id="show_mid_slide" autocomplete="off" checked>Mid
+                                    </label>
+                                    <label class="btn btn-sm btn-dark button-option display-option">
+                                    <input type="radio" name="slide" id="show_bwd_slide" autocomplete="off">Bwd
+                                    </label>
+                                    <label class="btn btn-sm btn-dark button-option display-option">
+                                    <input type="radio" name="slide" id="show_all_slide" autocomplete="off">All
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group form-group-custom">
                                 <label for="start_stress_options" class="control-label">
                                 <i class="fas fa-step-backward"></i></label>
                                 <div class="btn-group btn-group-toggle options-group" role="group" data-toggle="buttons">
@@ -736,25 +786,6 @@
                                     </label>
                                     <label class="btn btn-sm btn-dark button-option display-option">
                                     <input type="radio" name="position" id="show_final_location" autocomplete="off">Final
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="form-group form-group-custom">
-                                <label for="slide" class="control-label">
-                                <i class="xwing-miniatures-font xwing-miniatures-font-barrelroll"></i>
-                                </label>
-                                <div class="btn-group btn-group-toggle options-group" role="group" data-toggle="buttons">
-                                    <label class="btn btn-sm btn-dark button-option display-option ">
-                                    <input type="radio" name="slide" id="show_fwd_slide" autocomplete="off">Fwd
-                                    </label>
-                                    <label class="btn btn-sm btn-dark button-option display-option active">
-                                    <input type="radio" name="slide" id="show_mid_slide" autocomplete="off" checked>Mid
-                                    </label>
-                                    <label class="btn btn-sm btn-dark button-option display-option">
-                                    <input type="radio" name="slide" id="show_bwd_slide" autocomplete="off">Bwd
-                                    </label>
-                                    <label class="btn btn-sm btn-dark button-option display-option">
-                                    <input type="radio" name="slide" id="show_all_slide" autocomplete="off">All
                                     </label>
                                 </div>
                             </div>

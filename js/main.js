@@ -527,9 +527,10 @@ function is_upgrade_valid(slot_name,upgrade_id,ship_config) {
 //step1, update ship config with the new ship
 //step2, select default pilot and set only valid (right ship, right faction) pilot options to show
 //step3, setup the maneuver selection area based on available maneuvers and their color
-//step4, calls process_pilot_change with the default "none" pilot for this ship
-//step5, calls process_maneuver_button_change
-//step6, calls update_maneuver_set
+//step4a, make all upgrades invisible except and set all upgrades to default as "None"
+//step4b, only show upgrade types that exist on the given ship
+//step5, update pilot select icon with icon matching faction
+//step7, calls process_pilot_change with default "none" pilot --> calls process_maneuver_button_change --> calls update_maneuver_set --> updates ship select with current ship icon
 function process_ship_change(ship_id,ship_config){
 	var yasb_ship_name = translate_id_to_yasb_name(ship_id);
 
@@ -647,7 +648,8 @@ function process_ship_change(ship_id,ship_config){
 			$("#" + "all" + "-" + bearing_direction).parent().addClass("d-none"); 
 		}
 	}
-
+    
+    //step4a
 	var upgrade_buttons = get_button_states(".upgrade-option");
 
 	for (upgrade_id in upgrade_buttons){
@@ -661,7 +663,7 @@ function process_ship_change(ship_id,ship_config){
 		}
 	}
 
-
+	//step4b
 	var slot_with_available_options = []
 	for (slot in pilots_by_ship[ship_config.ship_name][0].slots){
 		upgrade_buttons = get_button_states("." + pilots_by_ship[ship_config.ship_name][0].slots[slot] + "-option");
@@ -676,7 +678,6 @@ function process_ship_change(ship_id,ship_config){
 		}
 	}
 
-
     $(".upgrade-group").each(function() {
     	var [slot_name,dummy] = this.id.split("-");
     	if($.inArray(slot_name,slot_with_available_options)!=-1){
@@ -688,6 +689,7 @@ function process_ship_change(ship_id,ship_config){
     	}
     });
 
+    //step5
     $($("#Pilot-group-label").children()[0]).removeClass("xwing-miniatures-font-helmet-scum");
     $($("#Pilot-group-label").children()[0]).removeClass("xwing-miniatures-font-helmet-rebel");
     $($("#Pilot-group-label").children()[0]).removeClass("xwing-miniatures-font-helmet-imperial");
@@ -708,15 +710,13 @@ function process_ship_change(ship_id,ship_config){
 	$("#ship_drawer_button").addClass($($("#"+ship_id).parent()).children()[1].className);
 }
 
-//process_pilot_change
 //updates ship_config with pilot
-//setup upgrade buttons with valid options and reset all upgrade choices to default (none)
+//reset maneuver sets
+//import special maneuver sets for specific pilots
+//setup force/talent slot if needed (if prior upgrade is no longer posisble with new pilot)
 //calls process_upgrade_buttons
 function process_pilot_change(pilot_id,ship_config){
 	var yasb_pilot_name = translate_id_to_yasb_name(pilot_id);
-
-
-
 
 
 	if(pilot_id == "no_pilot"){
@@ -855,7 +855,7 @@ function process_upgrade_buttons(ship_config){
 			}
 		}
 
-		ship_config.update_maneuver_set(); //this is needed to denable for things that have changed the maneuver set (e.g. pivot wing)
+		ship_config.update_maneuver_set(); //this is needed to disable for things that have changed the maneuver set (e.g. pivot wing)
 		revalidate_maneuver_button_colors(ship_config); // this updates how maneuver colors are displayed based on some upgrades even though we don't update that actual color in case the upgrade is removed later. color change effect is actually handled in genereate_shipstates maneuver
 
 }

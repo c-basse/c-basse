@@ -29,6 +29,11 @@ div.link_style *
     text-align:center;
 }
 
+.xwing_font{
+	/*font-size: 0.875rem;*/
+	font-family: XWing;
+}
+
 .buttons_area_below {
 	width:384px;
 	position: absolute;
@@ -117,13 +122,21 @@ div.link_style *
 
 .form-group-custom{
     margin-bottom: 0.5rem;
-
-
 }
+
+.no_margin_label{
+	margin-bottom: 0.0rem;
+}
+
 
 .options-group{
 	width:306px;
 }
+
+.options-group-actions {
+	width: 69.5px;
+}
+
 .pure-drawer-thick{
 	width:380px;
 }

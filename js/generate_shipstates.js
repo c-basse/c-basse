@@ -40,15 +40,15 @@ function generate_shipstates(ship_config, options) {
 
 	//assign slide options
     if (options.show_bwd_slide) {
-    	starting_point.slide_array.push(bwd);
+    	starting_point.slide_array.push(BWD);
     } else if (options.show_fwd_slide) {
-    	starting_point.slide_array.push(fwd);
+    	starting_point.slide_array.push(FWD);
     } else if (options.show_mid_slide) {
-    	starting_point.slide_array.push(mid);
+    	starting_point.slide_array.push(MID);
     } else if (options.show_all_slide) {
-    	starting_point.slide_array.push(bwd);
-    	starting_point.slide_array.push(fwd);
-    	starting_point.slide_array.push(mid);
+    	starting_point.slide_array.push(BWD);
+    	starting_point.slide_array.push(FWD);
+    	starting_point.slide_array.push(MID);
     }
 
 	/*******************************/
@@ -131,7 +131,7 @@ function maneuver_phase(shipstateArray, move_set, ship_config, options, {
 	var new_shipstateArray = [];
 	
 	for (var i=0; i<shipstateArray.length; i++) {
-		var performed_emergency_two_straight = false; //this tracks if we have taken an stressed red maneuever so it doesn't need to happen more than once for any shipstate
+		var performed_emergency_two_straight = false; //this tracks if we have taken an stressed RED maneuever so it doesn't need to happen more than once for any shipstate
 
 		if ( //if not already moved, not frozen (i.e. invalid state that can no longer be used to build on), also you can't be stressed if must_iff_unstressed is true
 		  !shipstateArray[i].has_moved &&
@@ -156,14 +156,14 @@ function maneuver_phase(shipstateArray, move_set, ship_config, options, {
 
 						if (
 						  ship_config.upgrades.r4_astromech &&
-						  maneuver.color != blue &&
+						  maneuver.color != BLUE &&
 						  (maneuver.speed == 1 || maneuver.speed == 2)
 						) {
 							maneuver.color -= 1;
 						} 
 
-						if ( //if already stressed and this is a red maneuver, need to execute a emergency white 2 straight (if haven't already)
-						  maneuver.color == red &&
+						if ( //if already stressed and this is a RED maneuver, need to execute a emergency WHITE 2 straight (if haven't already)
+						  maneuver.color == RED &&
 						  (!ship_config.upgrades.reys_falcon || maneuver.bearing != "sloop") &&
 						  new_ship_state.stress_count >= 1 &&
 						  performed_emergency_two_straight == false
@@ -174,7 +174,7 @@ function maneuver_phase(shipstateArray, move_set, ship_config, options, {
 							new_shipstateArray.push(new_ship_state);
 						}
 						else if (
-						  maneuver.color != red ||
+						  maneuver.color != RED ||
 						  (ship_config.upgrades.reys_falcon && maneuver.bearing == "sloop") ||
 						  new_ship_state.stress_count == 0
 						) {
@@ -183,20 +183,20 @@ function maneuver_phase(shipstateArray, move_set, ship_config, options, {
 							new_ship_state.slam_speed = (record_slam_speed) ? maneuver.speed : new_ship_state.slam_speed;
 							switch (maneuver.color) {
 
-								case red:
+								case RED:
 									if(ship_config.upgrades.pattern_analyzer){
-										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state],ship_config, options,{force_red:true})); //force_red so they get stressed afterward for the red maneuver that initiated the action
+										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state],ship_config, options,{force_red:true})); //force_red so they get stressed afterward for the RED maneuver that initiated the action
 									}
 									if(ship_config.pilot.pilot_name != "Nien Nunb"){
 										new_ship_state.stress_count += 1;
 									} 
 								break;
 
-								case white:
+								case WHITE:
 
 								break;
 
-								case blue:
+								case BLUE:
 
 									if(new_ship_state.stress_count > 0){
 										new_ship_state.stress_count -= 1;
@@ -227,7 +227,7 @@ Required Input ship_config (ShipConfig object) is needed as it holds which upgra
 Optional Input require_move = true means that only shipstates that have already taken their normal "dial" maneuver movement this activation will be able to take this action
 Optional Input disable_future_actions means that if a shipstate adds an action here, no further actions are allowed (i.e. adv sensors)
 Optional Input: boost_allowed/roll_allowed/slam_allowed are used to restrict to a certain subset of possible actions if needed (e.g. ship abilties)
-Optional Input: force_red means the action is treated as red even if normally that ship has a white version of the action
+Optional Input: force_red means the action is treated as RED even if normally that ship has a WHITE version of the action
 Optional Input: force_cost means the action cost force point (or charges) to perform
 Optional Input: temp_add_boost means boost can be performed even if not on action bar
 Optional Input: temp_add_roll means barrel roll can be performed even if not on action bar
@@ -359,15 +359,15 @@ function action_phase(shipstateArray, ship_config, options, {
 									}
 
 									var difficulty = actions_move_set[move_name].color;
-									difficulty = (white_action_override) ? white : difficulty;
-									difficulty = (red_action_override) ? red : difficulty;
+									difficulty = (white_action_override) ? WHITE : difficulty;
+									difficulty = (red_action_override) ? RED : difficulty;
 									switch (difficulty) {          //check color
-										case red:
+										case RED:
 											if(ship_config.pilot.pilot_name != "Nien Nunb"){
 												new_ship_state.stress_count += 1;
 											}
 											break;
-										case blue:
+										case BLUE:
 											if(new_ship_state.stress_count > 0){
 												new_ship_state.stress_count -= 1;
 											}

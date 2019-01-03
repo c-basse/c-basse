@@ -33,8 +33,6 @@ $(document).ready(function(){
     	update_css_for_viewport_size();      
 	});
 
-    update_css_for_viewport_size();    
-
 	process_faction_change(get_selected_radio_option("[data-faction-option]"),ship_config);
 	options = get_button_states("[data-display-option]");
 	draw_everything(generate_shipstates(ship_config,options),options,c);
@@ -70,4 +68,6 @@ $(document).ready(function(){
 		process_upgrade_buttons(ship_config);
 		draw_everything(generate_shipstates(ship_config,options),options,c);
 	});   
+	
+    update_css_for_viewport_size();    
 });

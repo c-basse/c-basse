@@ -24,32 +24,33 @@ div.link_style *
     color: white;
 }
 
-.link_style
-{
-    text-align:center;
+
+
+.canvas_container{
+	padding-top: 0.5rem;
+	padding-left: 0.5rem;
 }
 
 .xwing_font{
 	/*font-size: 0.875rem;*/
 	font-family: XWing;
 }
-
-.buttons_area_below {
-	width:384px;
+.buttons_area {
+	width: 384px;
 	position: absolute;
-    /*left: 50%;
-    margin-left: -184px;*/
-}​
-.buttons_area_right {
-	width:384px;
-	position: absolute;
-}​
-
-/*div.maneuver_content {
-	position:absolute;
-	bottom:0;
+	padding-top: 0.5rem;
+	padding-left: 1.0rem;
+	padding-right: 1.0rem;
+	padding-bottom: 1.0rem;
 }
-*/
+
+.link_style
+{
+    text-align:center;
+}
+
+
+
 .canvas_container {
 	max-height:90vh;
 	max-width:120vh;

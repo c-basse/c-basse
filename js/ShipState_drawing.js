@@ -2,7 +2,7 @@ function draw_everything(shipstateArray,options,canvas) {
 
 	canvas.setTransform(1, 0, 0, 1, 0, 0);
   	canvas.clearRect(0, 0, layer0.width, layer0.height);
-  	canvas.translate(layer0.width/2,layer0.height-200);
+  	canvas.translate(layer0.width/2,layer0.height-200-350*options.enable_hd);
   	/*PRO MODE canvas.translate(layer0.width/2,layer0.height-550);*/
 
 	for (var i = (shipstateArray.length-1); i >= 0; i--) {

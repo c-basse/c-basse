@@ -25,6 +25,12 @@ div.link_style *
     color: white;
 }
 
+.bottom_of_drawer{
+	position: fixed;
+    top: 900px;
+    left: 20px;
+    padding-bottom: 10px;
+}
 
 
 .canvas_container{

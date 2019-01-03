@@ -26,3 +26,15 @@ function update_css_for_viewport_size(){
       
   }
 }
+
+function toggle_hd(enable_hd){
+  if(enable_hd){
+    $("#layer0").attr("width","1856");
+    $("#layer0").attr("height","1392");
+
+  }else{
+    $("#layer0").attr("width","1024");
+    $("#layer0").attr("height","768");
+  }
+
+}

@@ -31,7 +31,7 @@ for(j = 0; j<basicCardData().pilotsById.length; j++){
 $(document).ready(function(){
 
     update_css_for_viewport_size();  
-    
+
     $(window).on('resize', function(){
     	update_css_for_viewport_size();      
 	});
@@ -42,6 +42,8 @@ $(document).ready(function(){
 
 	$("[data-display-option]").change(function(){
 		options = get_button_states("[data-display-option]");
+		toggle_hd(options.enable_hd);
+    	update_css_for_viewport_size();  
 		draw_everything(generate_shipstates(ship_config,options),options,c);
 	});
 

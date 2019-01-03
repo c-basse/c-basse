@@ -13,10 +13,11 @@ label.maneuver {
 div.options_colum {
 }
 div.maneuver_box {
-	/*height:250px;*/
-	padding-bottom:0.5rem;
-	width:384px;
+	width:352px;
 	position:relative;
+}
+.maneuver_content{
+	text-align: center;
 }
 
 div.link_style *
@@ -54,7 +55,6 @@ div.link_style *
 .canvas_container {
 	max-height:90vh;
 	max-width:120vh;
-	/*margin:auto;*/
 	z-index:999;
 	padding-top:0.25rem;
 	padding-left:0.25rem;

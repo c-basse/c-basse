@@ -17,6 +17,8 @@ function get_button_states(data_attribute_name){
 }
 
 function change_button_state(html_id,new_state){
+	test = $("#"+html_id);
+	test2 = $("#"+html_id).parent();
 	if (new_state) {
   		$("#"+html_id).prop("checked",true);
   		$($("#"+html_id).parent()).addClass("active");
@@ -51,3 +53,4 @@ function is_upgrade_valid(slot_name,upgrade_id,ship_config) {
 	return check;
 			
 }
+

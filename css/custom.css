@@ -26,10 +26,13 @@ div.link_style *
 }
 
 .bottom_of_drawer{
-	position: fixed;
-    top: 900px;
-    left: 20px;
-    padding-bottom: 10px;
+	position: relative;
+    padding-left: 18px;
+    padding-bottom: 18px;
+}
+
+.min-height-pushdown{
+	min-height: 872px;
 }
 
 
@@ -61,7 +64,7 @@ div.link_style *
 .canvas_container {
 	max-height:90vh;
 	max-width:120vh;
-	z-index:999;
+	z-index:998;
 	padding-top:0.25rem;
 	padding-left:0.25rem;
 	padding-right:5px;
@@ -72,22 +75,42 @@ div.link_style *
 	height: 10px;
 	width: 100%;
 	position:fixed;
-	z-index:998;	
+	z-index:997;	
+}
+
+.data-collect-all-button {
+	position:fixed;
+    z-index:999;
+    top:200px;
+    left: 50px;
+}
+.data-collect-ship-button {
+	position:fixed;
+    z-index:999;
+    top:250px;
+    left: 50px;
 }
 
 .fixed_canvas {
 	position:fixed;
-    z-index:999;
+    z-index:998;
 }
 
 .pure-drawer {
 	overflow-y:auto
 }
 
-.padding-custom1 {
+.padding-customleft {
 	padding-top:100px;
 	padding-right:0rem;
-	padding-left:0.25rem;
+	padding-left:4px;
+	padding-bottom:0.25rem;
+}
+
+.padding-customright {
+	padding-top:100px;
+	padding-right:0px;
+	padding-left:4px;
 	padding-bottom:0.25rem;
 }
 
@@ -157,6 +180,23 @@ div.link_style *
 
 .white-maneuver {
 	color: black;
+}
+
+.rotate22p5 {
+	transform: rotate(-22.5deg);
+
+}
+.rotate112p5 {
+	transform: rotate(-112.5deg);
+
+}
+.rotate202p5 {
+	transform: rotate(-202.5deg);
+
+}
+.rotate292p5 {
+	transform: rotate(-292.5deg);
+
 }
 
 .top-buffer { margin-top:15px; }

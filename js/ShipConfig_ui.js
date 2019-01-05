@@ -13,6 +13,15 @@ function ShipConfig(){
 		maneuver_set: {}
 	};
 
+	this.arc_set = {
+		forward_std: [],
+		rear_std: [],
+		dual_turret: [],
+		single_turret: [],
+		single_turret_fr: [],
+		forward_full: []
+	};
+
 	this.pilot = {};
 	this.ship_ability = {};
 
@@ -86,6 +95,20 @@ function ShipConfig(){
 			}
 		}
 
+
+		this.arc_set.forward_std = ('attack' in yasb_ship) ? [1,2,3] : [];
+		this.arc_set.rear_std = ('attackb' in yasb_ship) ? [1,2,3] : [];
+		this.arc_set.dual_turret = ('attackdt' in yasb_ship) ? [1,2,3] : [];
+		if(yasb_ship.name == "RZ-2 A-Wing" || yasb_ship.name == "TIE/SF Fighter"){
+			this.arc_set.single_turret_fr = ('attackt' in yasb_ship) ? [1,2,3] : [];
+			this.arc_set.single_turret = [];
+		} else {
+			this.arc_set.single_turret = ('attackt' in yasb_ship) ? [1,2,3] : [];
+			this.arc_set.single_turret_fr = [];
+		}
+		this.arc_set.forward_full = ('attackf' in yasb_ship) ? [1,2,3] : [];
+
+
 		for (var speed = 0; speed < yasb_ship.maneuvers.length; speed++) {
 			for (var i = 0; i < yasb_ship.maneuvers[speed].length; i++){
 				if(translate_color[yasb_ship.maneuvers[speed][i]] != NONE){
@@ -151,6 +174,7 @@ function process_faction_change(faction_id,ship_config){
 //process_ship_change
 //step1, update ship config with the new ship
 //step2, select default pilot and set only valid (right ship, right faction) pilot options to show
+//step2a, select default turret option and show turret choices
 //step3, setup the maneuver selection area based on available maneuvers and their color
 //step4a, make all upgrades invisible except and set all upgrades to default as "None"
 //step4b, only show upgrade types that exist on the given ship
@@ -197,6 +221,65 @@ function process_ship_change(ship_id,ship_config){
 		$("#Pilot-group").removeClass("d-none");
 	} else {
 		$("#Pilot-group").addClass("d-none");
+	}
+
+	//step2a
+	$($("#show_single_forward").parent()).addClass("d-none");
+	$($("#show_single_rear").parent()).addClass("d-none");
+	$($("#show_single_left").parent()).addClass("d-none");
+	$($("#show_single_right").parent()).addClass("d-none");
+	$($("#show_dual_parallel").parent()).addClass("d-none");
+	$($("#show_dual_perpendicular").parent()).addClass("d-none");
+	$($($($("#no_turret_arc").parent()).parent()).parent()).addClass("d-none");
+	
+	$("[data-arc-option]").each(function() {
+		if(this.id.substring(0,3) == "no_"){
+			change_button_state(this.id,true);
+		} else {
+			change_button_state(this.id,false);
+		}
+	});	
+
+	for (var arc_name in ship_config.arc_set){
+		if(ship_config.arc_set[arc_name].length > 0){
+			switch(arc_name){
+				case "forward_std":
+					change_button_state("enable_forward_arc",true);
+					change_button_state("no_forward_arc",false);
+				break;
+				case "rear_std":
+					change_button_state("enable_rear_arc",true);
+					change_button_state("no_rear_arc",false);
+				break;
+				case "dual_turret":
+					$($("#show_dual_parallel").parent()).removeClass("d-none");
+					$($("#show_dual_perpendicular").parent()).removeClass("d-none");
+					$($($($("#no_turret_arc").parent()).parent()).parent()).removeClass("d-none");
+					change_button_state("show_dual_parallel",true);
+					change_button_state("no_turret_arc",false);
+				break;
+				case "single_turret":
+					$($("#show_single_forward").parent()).removeClass("d-none");
+					$($("#show_single_rear").parent()).removeClass("d-none");
+					$($("#show_single_left").parent()).removeClass("d-none");
+					$($("#show_single_right").parent()).removeClass("d-none");
+					$($($($("#no_turret_arc").parent()).parent()).parent()).removeClass("d-none");
+					change_button_state("show_single_forward",true);
+					change_button_state("no_turret_arc",false);
+				break;
+				case "single_turret_fr":
+					$($("#show_single_forward").parent()).removeClass("d-none");
+					$($("#show_single_rear").parent()).removeClass("d-none");
+					$($($($("#no_turret_arc").parent()).parent()).parent()).removeClass("d-none");
+					change_button_state("show_single_forward",true);
+					change_button_state("no_turret_arc",false);
+				break;
+				case "forward_full":
+					change_button_state("enable_forward_full_arc",true);
+					change_button_state("no_forward_full_arc",false);
+				break;
+			}
+		}
 	}
 
 	//step3

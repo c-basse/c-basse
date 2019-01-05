@@ -19,9 +19,11 @@
             <label class="pure-toggle-label pure-toggle-label-custom" for="pure-toggle-left" data-toggle-label="left">
             <i class="xwing-miniatures-ship xwing-miniatures-ship-tiesilencer" id="ship_drawer_button"></i>
             </label>
+            <button type="button" class="btn btn-primary data-collect-all-button d-none" id="data-collect-all-button" data-collect>Collect All</button>
+            <button type="button" class="btn btn-primary data-collect-ship-button d-none" id="data-collect-ship-button" data-collect>Collect All in Ship</button>
             <nav class="pure-drawer pure-drawer-thin" data-position="left">
-                <div class="d-flex">
-                    <div class="padding-custom1">
+                <div class="d-flex min-height-pushdown">
+                    <div class="padding-customleft">
                         <div class="form-group form-group-custom">
                             <div class="btn-group-vertical btn-group-toggle" role="group" data-toggle="buttons">
                                 <label class="btn btn-sm btn-dark">
@@ -47,7 +49,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="padding-custom1">
+                    <div class="padding-customright">
                         <div class="form-group form-group-custom">
                             <div class="btn-group-vertical btn-group-toggle" role="group" data-toggle="buttons">
                                 <label class="btn btn-sm btn-dark">
@@ -269,6 +271,8 @@
                             </div>
                         </div>
                     </div>
+                </div>
+
                     <div class="bottom_of_drawer">
 
                                                             
@@ -280,7 +284,6 @@
                                  </span>
                               </span>
                     </div>
-                </div>
             </nav>
             <div class="pure-pusher-container">
                 <div class="pure-pusher bg-secondary">
@@ -686,13 +689,13 @@
                                 </label>
                                 <div class="btn-group btn-group-toggle options-group-style" role="group" data-toggle="buttons">
                                     <label class="btn btn-sm btn-danger">
-                                    <input type="checkbox" name="show_arc_options" id="show_range1" autocomplete="off" data-display-option>R1
+                                    <input type="checkbox" name="show_arc_options" id="show_range1" autocomplete="off" data-display-option data-arcrange-options>R1
                                     </label>
                                     <label class="btn btn-sm btn-danger">
-                                    <input type="checkbox" name="show_arc_options" id="show_range2" autocomplete="off" data-display-option>R2
+                                    <input type="checkbox" name="show_arc_options" id="show_range2" autocomplete="off" data-display-option data-arcrange-options>R2
                                     </label>
                                     <label class="btn btn-sm btn-danger">
-                                    <input type="checkbox" name="show_arc_options" id="show_range3" autocomplete="off" data-display-option>R3
+                                    <input type="checkbox" name="show_arc_options" id="show_range3" autocomplete="off" data-display-option data-arcrange-options>R3
                                     </label>
                                 </div>
                             </div>
@@ -738,6 +741,85 @@
                               </span>
             
                             </div>
+                            
+                            <div class="form-group form-group-custom">
+                                <label for="turret_orientation" class="control-label">
+                                <i class="xwing-miniatures-font xwing-miniatures-font-rotatearc"></i>
+                                </label>
+                                <div class="btn-group btn-group-toggle options-group-style" role="group" data-toggle="buttons">
+                                    <label class="btn btn-sm btn-dark d-none">
+                                    <input type="radio" name="turret_orientation" id="no_turret_arc" autocomplete="off" data-display-option data-arc-option>Off
+                                    </label>
+                                    <label class="btn btn-sm btn-dark">
+                                    <input type="radio" name="turret_orientation" id="show_single_forward" autocomplete="off" data-display-option data-arc-option>
+                                    <div class="rotate22p5"><i class="xwing-miniatures-font xwing-miniatures-font-singleturretarc"></i></div>
+                                    </label>
+                                    <label class="btn btn-sm btn-dark">
+                                    <input type="radio" name="turret_orientation" id="show_single_rear" autocomplete="off" data-display-option data-arc-option>
+                                    <div class="rotate202p5"><i class="xwing-miniatures-font xwing-miniatures-font-singleturretarc"></i></div>
+                                    </label>
+                                    <label class="btn btn-sm btn-dark">
+                                    <input type="radio" name="turret_orientation" id="show_single_left" autocomplete="off" data-display-option data-arc-option>
+                                    <div class="rotate112p5"><i class="xwing-miniatures-font xwing-miniatures-font-singleturretarc"></i></div>
+                                    </label>
+                                    <label class="btn btn-sm btn-dark">
+                                    <input type="radio" name="turret_orientation" id="show_single_right" autocomplete="off" data-display-option data-arc-option>
+                                    <div class="rotate292p5"><i class="xwing-miniatures-font xwing-miniatures-font-singleturretarc"></i></div>
+                                    </label>
+                                    <label class="btn btn-sm btn-dark">
+                                    <input type="radio" name="turret_orientation" id="show_dual_parallel" autocomplete="off" data-display-option data-arc-option>
+                                    <div class="rotate22p5"><i class="xwing-miniatures-font xwing-miniatures-font-doubleturretarc"></i></div>
+                                    </label>
+                                    <label class="btn btn-sm btn-dark">
+                                    <input type="radio" name="turret_orientation" id="show_dual_perpendicular" autocomplete="off" data-display-option data-arc-option>
+                                    <div class="rotate112p5"><i class="xwing-miniatures-font xwing-miniatures-font-doubleturretarc"></i></div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- currently, no reason to show, only 1 choice and always true if available-->
+                            <div class="form-group form-group-custom d-none">
+                                <label for="forward_arc" class="control-label">
+                                <i class="xwing-miniatures-font xwing-miniatures-font-rotatearc"></i>
+                                </label>
+                                <div class="btn-group btn-group-toggle options-group-style" role="group" data-toggle="buttons">
+                                    <label class="btn btn-sm btn-dark">
+                                    <input type="radio" name="arc" id="no_forward_arc" autocomplete="off" data-display-option data-arc-option>Off
+                                    </label>
+                                    <label class="btn btn-sm btn-dark">
+                                    <input type="radio" name="arc" id="enable_forward_arc" autocomplete="off" data-display-option data-arc-option>On
+                                    </label>
+                                </div>
+                            </div>
+                            <!-- currently, no reason to show, only 1 choice and always true if available-->
+                            <div class="form-group form-group-custom d-none">
+                                <label for="rear_arc" class="control-label">
+                                <i class="xwing-miniatures-font xwing-miniatures-font-rotatearc"></i>
+                                </label>
+                                <div class="btn-group btn-group-toggle options-group-style" role="group" data-toggle="buttons">
+                                    <label class="btn btn-sm btn-dark">
+                                    <input type="radio" name="rear_arc" id="no_rear_arc" autocomplete="off" data-display-option data-arc-option>Off
+                                    </label>
+                                    <label class="btn btn-sm btn-dark active">
+                                    <input type="radio" name="rear_arc" id="enable_rear_arc" autocomplete="off" data-display-option data-arc-option>On
+                                    </label>
+                                </div>
+                            </div>
+                            <!-- currently, no reason to show, only 1 choice and always true if available-->
+                            <div class="form-group form-group-custom d-none">
+                                <label for="forward_full_arc" class="control-label">
+                                <i class="xwing-miniatures-font xwing-miniatures-font-rotatearc"></i>
+                                </label>
+                                <div class="btn-group btn-group-toggle options-group-style" role="group" data-toggle="buttons">
+                                    <label class="btn btn-sm btn-dark">
+                                    <input type="radio" name="forward_full_arc" id="no_forward_full_arc" autocomplete="off" data-display-option data-arc-option>Off
+                                    </label>
+                                    <label class="btn btn-sm btn-dark active">
+                                    <input type="radio" name="forward_full_arc" id="enable_forward_full_arc" autocomplete="off" data-display-option data-arc-option>On
+                                    </label>
+                                </div>
+                            </div>
+
                             <div class="form-group form-group-custom">
                                 <label for="slide" class="control-label">
                                <!--  <i class="xwing-miniatures-font xwing-miniatures-font-barrelroll"></i> -->
@@ -850,19 +932,19 @@
                                 </label>
                                 <div class="btn-group btn-group-toggle options-group-style" role="group" data-toggle="buttons">
                                     <label class="btn btn-sm btn-dark">
-                                    <input type="radio" name="talent_options" id="no_talent" autocomplete="off" data-upgrade-option data-talent-option>None
+                                    <input type="radio" name="talent_options" id="no_talent" autocomplete="off" data-upgrade-option data-talent-option data-talentforce-option>None
                                     </label>
                                     <label class="btn btn-sm btn-dark">
                                     <input type="radio" name="talent_options" id="supernatural_reflexes" autocomplete="off"
-                                    data-upgrade-option data-force-option data-req-smallbase="true">SR
+                                    data-upgrade-option data-force-option data-talentforce-option data-req-smallbase="true">SR
                                     </label>
                                     <label class="btn btn-sm btn-dark">
                                     <input type="radio" name="talent_options" id="daredevil" autocomplete="off"
-                                    data-upgrade-option data-talent-option data-req-smallbase data-req-boost="true" data-req-boost="true">DD
+                                    data-upgrade-option data-talent-option data-talentforce-option data-req-smallbase data-req-boost="true" data-req-boost="true">DD
                                     </label>
                                     <label class="btn btn-sm btn-dark requiresredroll">
                                     <input type="radio" name="talent_options" id="expert_handling" autocomplete="off"
-                                    data-upgrade-option data-talent-option data-req-redboost="true">EH
+                                    data-upgrade-option data-talent-option data-talentforce-option data-req-redboost="true">EH
                                     </label>
                                 </div>
                             </div>
@@ -1001,15 +1083,15 @@
         </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="js/bootstrap/bootstrap.min.js"></script>
-        <script src="js/global_constants.js?v=6"></script>
-        <script src="js/special_maneuvers.js?v=6"></script>
-        <script src="js/pilot_decoder.js?v=6"></script>
-        <script src="js/dynamic_css.js?v=6"></script>
-        <script src="js/cards-common.js?v=6"></script>
-        <script src="js/support_functions.js?v=6"></script>
-        <script src="js/generate_shipstates.js?v=6"></script>
-        <script src="js/ShipState_drawing.js?v=6"></script>
-        <script src="js/ShipConfig_ui.js?v=6"></script>
-        <script src="js/main.js?v=6"></script>
+        <script src="js/global_constants.js?v=7"></script>
+        <script src="js/special_maneuvers.js?v=7"></script>
+        <script src="js/pilot_decoder.js?v=7"></script>
+        <script src="js/dynamic_css.js?v=7"></script>
+        <script src="js/cards-common.js?v=7"></script>
+        <script src="js/support_functions.js?v=7"></script>
+        <script src="js/generate_shipstates.js?v=7"></script>
+        <script src="js/ShipState_drawing.js?v=7"></script>
+        <script src="js/ShipConfig_ui.js?v=7"></script>
+        <script src="js/main.js?v=7"></script>
     </body>
 </html>

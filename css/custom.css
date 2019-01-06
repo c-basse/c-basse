@@ -79,13 +79,14 @@ i.xwing-miniatures-font-small {
 	font-family: XWing;
 	text-transform: uppercase;
 	content: 'R';
-	line-height: 20.4px;
+	font-size: 20px;
+    line-height: 20px;
 }
 
 .range1-switch input + label::after{
 	font-size: 16px;
 	font-weight: bold;
-	content: 'R1';
+	content: 'R0';
 }
 
 .range2-switch input + label::after{

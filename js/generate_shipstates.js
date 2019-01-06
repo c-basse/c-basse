@@ -357,7 +357,7 @@ function action_phase(shipstateArray, ship_config, options, action_bar, {
 							}
 						break;
 
-						default:
+						case "Focus":
 
 							if (
 							  (

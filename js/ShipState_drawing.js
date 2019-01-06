@@ -4,41 +4,47 @@ function draw_everything(shipstateArray,options,canvas,collect_data = false) {
 	canvas.setTransform(1, 0, 0, 1, 0, 0);
   	canvas.clearRect(0, 0, layer0.width, layer0.height);
   	canvas.translate(layer0.width/2,layer0.height-200-350*(options.enable_hd || DATA_COLLECTION_MODE));
-  	/*PRO MODE canvas.translate(layer0.width/2,layer0.height-550);*/
 
+	var range_bands = [];
+	if(options.show_range1){
+		range_bands.push(1);
+	}
+	if(options.show_range2){
+		range_bands.push(2);
+	}
+	if(options.show_range3){
+		range_bands.push(3);
+	}
+	
+	var unique_endstate_array = [];
 	for (var i = (shipstateArray.length-1); i >= 0; i--) {
+		var rotated_arc = ($.inArray("Rotate Arc",shipstateArray[i].actions_used) != -1);
+		var focused = ($.inArray("Focus",shipstateArray[i].actions_used) != -1);
+		var can_shoot = shipstateArray[i].has_moved && !shipstateArray[i].is_cloaked && !shipstateArray[i].is_disarmed;
+		var endstate_id = shipstateArray[i].movearray.slice(0);
+		endstate_id.push(rotated_arc);
+		endstate_id.push(can_shoot);
 		if (
 				(
 					(options.show_intermediate_location && i>0 && !shipstateArray[i].has_moved) ||
 					(options.show_final_location && shipstateArray[i].has_moved) ||
 					(i == 0) ||
 					(options.show_all_locations)
+				) && (	
+					(options.show_all_endstates) ||	
+					(options.show_focused && focused) ||	
+					(options.show_unstressed_focused && focused && shipstateArray[i].stress_count == 0) ||	
+					(options.show_unstressed && shipstateArray[i].stress_count == 0) ||
+					!shipstateArray[i].has_moved ||
+					i == 0
 				) && (
-					(
-						(options.show_stressed && shipstateArray[i].stress_count > 0) ||
-						(options.show_unstressed && shipstateArray[i].stress_count == 0) ||
-						(options.show_regardless_stress) ||
-						!shipstateArray[i].has_moved ||
-						i == 0
-					)
-				) 
+					$.inArray(endstate_id,unique_endstate_array) == -1
+				)
 			) {
 
-			var range_bands = [];
-			if(options.show_range1){
-				range_bands.push(1);
-			}
-			if(options.show_range2){
-				range_bands.push(2);
-			}
-			if(options.show_range3){
-				range_bands.push(3);
-			}
-
-
-
 			var shipbase_alpha = (shipstateArray[i].has_moved || i==0) ? 0.7 : 0.1;
-
+		
+			unique_endstate_array.push(endstate_id);
 			shipstateArray[i].draw(shipbase_alpha,range_bands,options);
 		}
 	}
@@ -185,23 +191,23 @@ function ShipState(basesize){
 			c.stroke();	
 		}
 
-		var action_worth_drawing_arc = false;
+		// var action_worth_drawing_arc = false;
 
-		if(this.actions_used.length == 0){
-			action_worth_drawing_arc = true;
-		} else {
-			if(
-				this.actions_used[this.actions_used.length-1] == "Barrel Roll" ||
-		  		this.actions_used[this.actions_used.length-1] == "Boost" ||
-		  		this.actions_used[this.actions_used.length-1] == "Slam" ||
-		  		this.actions_used[this.actions_used.length-1] == "Rotate Arc"
-				) {
-				action_worth_drawing_arc = true;
-			}
-		}
+		// if(this.actions_used.length == 0){
+			// action_worth_drawing_arc = true;
+		// } else {
+			// if(
+				// this.actions_used[this.actions_used.length-1] == "Barrel Roll" ||
+		  		// this.actions_used[this.actions_used.length-1] == "Boost" ||
+		  		// this.actions_used[this.actions_used.length-1] == "Slam" ||
+		  		// this.actions_used[this.actions_used.length-1] == "Rotate Arc"
+				// ) {
+				// action_worth_drawing_arc = true;
+			// }
+		// }
 		
 		if (
-		  this.has_moved && !this.is_cloaked && !this.is_disarmed && action_worth_drawing_arc
+		  this.has_moved && !this.is_cloaked && !this.is_disarmed //&& action_worth_drawing_arc
 		) {
 			for (var i = 0; i<range_bands.length; i++){
 

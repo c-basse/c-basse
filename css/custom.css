@@ -25,6 +25,71 @@ div.link_style *
     color: white;
 }
 
+.left_switch{
+	margin-left: 44px;
+}
+
+.switch-danger input + label::before{
+	background-color: #fbe9eb;
+}
+
+.switch-danger input:checked + label::before {
+	background-color: #dc3545;
+}
+
+
+.switch-primary input + label::before{
+	background-color: #e6f2ff;
+}
+
+.switch-primary input:checked + label::before {
+	background-color: #007bff;
+}
+
+.barrelroll-switch input + label::after{
+	font-family: XWing;
+	content: 'r';
+    text-indent: -2px;
+}
+
+.boost-switch input + label::after{
+	font-family: XWing;
+	content: 'b';
+}
+
+.slam-switch input + label::after{
+	font-family: XWing;
+	content: 's';
+}
+
+.rotate-switch input + label::after{
+	font-family: XWing;
+	content: 'R';
+}
+
+.range1-switch input + label::after{
+	font-size: 16px;
+	font-weight: bold;
+	content: 'R1';
+}
+
+.range2-switch input + label::after{
+	font-size: 16px;
+	font-weight: bold;
+	content: 'R2';
+}
+
+.range3-switch input + label::after{
+	font-size: 16px;
+	font-weight: bold;
+	content: 'R3';
+}
+
+.bullseye-switch input + label::after{
+	font-family: XWing;
+	content: '}';
+}
+
 .bottom_of_drawer{
 	position: relative;
     padding-left: 18px;

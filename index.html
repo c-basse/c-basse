@@ -683,7 +683,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group form-group-custom">
+                           <!--  <div class="form-group form-group-custom">
                                 <label for="show_arc_options" class="control-label">
                                 <i class="xwing-miniatures-font xwing-miniatures-font-frontarc"></i>
                                 </label>
@@ -711,12 +711,70 @@
                                     <input type="radio" name="show_bullseye_options" id="show_no_bullseye" autocomplete="off" data-display-option checked>Off
                                     </label>
                                 </div>
-                            </div>
+                            </div> -->
+
+
                             <div class="form-group form-group-custom">
+                                <label for="show_arc_options" class="control-label">
+                                <i class="xwing-miniatures-font xwing-miniatures-font-frontarc"></i>
+                                </label>
 
                                 
-                              <span class="switch">
-                                <label class="control-label"> <i class="xwing-miniatures-font xwing-miniatures-font-barrelroll"></i></label>
+                              <span class="switch range1-switch switch-danger">
+                                <!-- <label class="control-label"> <i class="xwing-miniatures-font xwing-miniatures-font-barrelroll"></i></label> -->
+                                <span class="">
+                                    <input type="checkbox" class="switch" id="show_range1" data-display-option data-arcrange-options checked>
+
+                                <label for="show_range1" class="no_margin_label"></label>
+                                 </span>
+                              </span>
+                                                            
+                              <span class="switch range2-switch switch-danger">
+                                <!-- <label class="control-label"> <i class="xwing-miniatures-font xwing-miniatures-font-barrelroll"></i></label> -->
+                                <span class="">
+                                    <input type="checkbox" class="switch" id="show_range2" data-display-option data-arcrange-options checked>
+
+                                <label for="show_range2" class="no_margin_label"></label>
+                                 </span>
+                              </span>
+                                                            
+                              <span class="switch range3-switch switch-danger">
+                                <!-- <label class="control-label"> <i class="xwing-miniatures-font xwing-miniatures-font-barrelroll"></i></label> -->
+                                <span class="">
+                                    <input type="checkbox" class="switch" id="show_range3" data-display-option data-arcrange-options checked>
+
+                                <label for="show_range3" class="no_margin_label"></label>
+                                 </span>
+                              </span>
+
+                              <span class="switch bullseye-switch left_switch switch-primary">
+                                <!-- <label class="control-label"> <i class="xwing-miniatures-font xwing-miniatures-font-barrelroll"></i></label> -->
+                                <span class="">
+                                    <input type="checkbox" class="switch" id="show_bullseye" data-display-option checked>
+
+                                <label for="show_bullseye" class="no_margin_label"></label>
+                                 </span>
+                              </span>
+            
+                            </div>
+
+
+
+
+
+
+
+
+
+                            <div class="form-group form-group-custom">
+
+                                <label for="enable_actions" class="control-label">
+                                <b>A</b>
+                                </label>
+
+                                
+                              <span class="switch barrelroll-switch">
+                                <!-- <label class="control-label"> <i class="xwing-miniatures-font xwing-miniatures-font-barrelroll"></i></label> -->
                                 <span class="">
                                     <input type="checkbox" class="switch" id="enable_roll" data-display-option checked>
 
@@ -724,19 +782,27 @@
                                  </span>
                               </span>
                                                             
-                              <span class="switch">
-                                <label class="control-label"> <i class="xwing-miniatures-font xwing-miniatures-font-boost"></i></label>
+                              <span class="switch boost-switch">
+                                <!-- <label class="control-label"> <i class="xwing-miniatures-font xwing-miniatures-font-boost"></i></label> -->
                                 <span class="">
                                 <input type="checkbox" class="switch" id="enable_boost" data-display-option checked>
                                 <label for="enable_boost" class="no_margin_label"></label>
                                  </span>
                               </span>
                                                             
-                              <span class="switch">
-                                <label class="control-label"> <i class="xwing-miniatures-font xwing-miniatures-font-slam"></i></label>
+                              <span class="switch slam-switch">
+                                <!-- <label class="control-label"> <i class="xwing-miniatures-font xwing-miniatures-font-slam"></i></label> -->
                                  <span class="">
                                     <input type="checkbox" class="switch" id="enable_slam" data-display-option checked>
                                 <label for="enable_slam" class="no_margin_label"></label>
+                                 </span>
+                              </span>
+                                                            
+                              <span class="switch rotate-switch">
+                                <!-- <label class="control-label"> <i class="xwing-miniatures-font xwing-miniatures-font-slam"></i></label> -->
+                                 <span class="">
+                                    <input type="checkbox" class="switch" id="enable_rotate" data-display-option checked>
+                                <label for="enable_rotate" class="no_margin_label"></label>
                                  </span>
                               </span>
             
@@ -1091,7 +1157,7 @@
         <script src="js/support_functions.js?v=7"></script>
         <script src="js/generate_shipstates.js?v=7"></script>
         <script src="js/ShipState_drawing.js?v=7"></script>
-        <script src="js/ShipConfig_ui.js?v=7"></script>
+        <script src="js/ShipConfig_ui.js?v=8"></script>
         <script src="js/main.js?v=7"></script>
     </body>
 </html>

@@ -16,15 +16,32 @@ function get_button_states(data_attribute_name){
   	return state_object;
 }
 
+function create_temp_action_bar(ship_config,temp_action_array,color_override,add_no_matter_what) {
+	var output_action_bar = {};
+	for (i in temp_action_array){
+		if(temp_action_array[i] in ship_config.action_bar){
+			output_action_bar[temp_action_array[i]] = $.extend(true,{},ship_config.action_bar[temp_action_array[i]]);
+			output_action_bar[temp_action_array[i]].color = color_override;
+		} else if (add_no_matter_what) {
+			output_action_bar[temp_action_array[i]] = {'color':color_override};
+		}
+	}
+	return output_action_bar;
+}
+
 function change_button_state(html_id,new_state){
 	test = $("#"+html_id);
 	test2 = $("#"+html_id).parent();
 	if (new_state) {
   		$("#"+html_id).prop("checked",true);
-  		$($("#"+html_id).parent()).addClass("active");
+  		if($($("#"+html_id).parent()).hasClass("btn")){
+  			$($("#"+html_id).parent()).addClass("active");
+  		}
   	} else {
   		$("#"+html_id).prop("checked",false);
-  		$($("#"+html_id).parent()).removeClass("active");
+  		if($($("#"+html_id).parent()).hasClass("btn")){
+  			$($("#"+html_id).parent()).removeClass("active");
+  		}
   	}
 }
 

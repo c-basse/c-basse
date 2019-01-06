@@ -184,28 +184,77 @@ function ShipState(basesize){
 			
 			c.stroke();	
 		}
+
+		var action_worth_drawing_arc = false;
+
+		if(this.actions_used.length == 0){
+			action_worth_drawing_arc = true;
+		} else {
+			if(
+				this.actions_used[this.actions_used.length-1] == "Barrel Roll" ||
+		  		this.actions_used[this.actions_used.length-1] == "Boost" ||
+		  		this.actions_used[this.actions_used.length-1] == "Slam" ||
+		  		this.actions_used[this.actions_used.length-1] == "Rotate Arc"
+				) {
+				action_worth_drawing_arc = true;
+			}
+		}
 		
-		if(this.has_moved && !this.is_cloaked && !this.is_disarmed){
+		if (
+		  this.has_moved && !this.is_cloaked && !this.is_disarmed && action_worth_drawing_arc
+		) {
 			for (var i = 0; i<range_bands.length; i++){
 
-				if(options.enable_forward_arc || options.show_single_forward || options.show_dual_parallel){
+				if (
+				  options.enable_forward_arc || options.show_single_forward || options.show_dual_parallel ||
+				  ($.inArray("Rotate Arc",this.actions_used) != -1 && 
+				  	 (
+				  	 	!($($("#show_single_forward").parent()).hasClass("d-none")) ||
+				  	 	!($($("#show_dual_parallel").parent()).hasClass("d-none"))
+				  	 	)
+				  )
+				) {
 					this.draw_arc(range_bands[i],NORMAL,RIGHT);
 					this.draw_arc(range_bands[i],NORMAL,LEFT);
 				}
 
-				if(options.enable_rear_arc || options.show_single_rear || options.show_dual_parallel){
+				if (
+				  options.enable_rear_arc || options.show_single_rear || options.show_dual_parallel || 
+				  ($.inArray("Rotate Arc",this.actions_used) != -1 && 
+				  	 (
+				  	 	!($($("#show_single_rear").parent()).hasClass("d-none")) ||
+				  	 	!($($("#show_dual_parallel").parent()).hasClass("d-none"))
+				  	 	)
+				  )
+				){
 					this.draw_arc(range_bands[i],REAR,RIGHT);
 					this.draw_arc(range_bands[i],REAR,LEFT);
 				}
 
 
-				if(options.show_dual_perpendicular || options.show_single_left){
+				if (
+				  options.show_dual_perpendicular || options.show_single_left || 
+				  ($.inArray("Rotate Arc",this.actions_used) != -1 && 
+				  	 (
+				  	 	!($($("#show_single_left").parent()).hasClass("d-none")) ||
+				  	 	!($($("#show_dual_perpendicular").parent()).hasClass("d-none"))
+				  	 	)
+				  )
+				){
 					this.draw_arc(range_bands[i],LEFT,RIGHT);
 					this.draw_arc(range_bands[i],LEFT,LEFT);
 				}
 
 
-				if(options.show_dual_perpendicular || options.show_single_right){
+				if (
+				  options.show_dual_perpendicular || options.show_single_right || 
+				  ($.inArray("Rotate Arc",this.actions_used) != -1 && 
+				  	 (
+				  	 	!($($("#show_single_right").parent()).hasClass("d-none")) ||
+				  	 	!($($("#show_dual_perpendicular").parent()).hasClass("d-none"))
+				  	 	)
+				  )
+				){
 					this.draw_arc(range_bands[i],RIGHT,RIGHT);
 					this.draw_arc(range_bands[i],RIGHT,LEFT);
 				}

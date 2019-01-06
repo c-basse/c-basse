@@ -4,7 +4,7 @@ function ShipConfig(){
 	this.ship_id = "default";
 	this.faction_name = "";
 	this.basesize = SMALLBASE;
-	this.action_bar = [];
+	this.action_bar = {};
 	this.move_sets = {
 		roll_set: {},
 		boost_set: {},
@@ -80,20 +80,59 @@ function ShipConfig(){
 		this.move_sets.aileron_set = $.extend(true, {}, standard_boost_set);
 		this.move_sets.maneuver_set = {};
 
-		this.action_bar = yasb_ship.actions.slice(0);
-		for(var i=0; i< yasb_ship.actionsred.length; i++){
-			if(yasb_ship.actionsred[i]=="Barrel Roll"){
-				this.action_bar.push(yasb_ship.actionsred[i]);
-				for(var move_name in this.move_sets.roll_set){
-					this.move_sets.roll_set[move_name].color = RED;
-				}
-			} else if (yasb_ship.actionsred[i]=="Boost"){
-				this.action_bar.push(yasb_ship.actionsred[i]);
-				for(var move_name in this.move_sets.boost_set){
-					this.move_sets.boost_set[move_name].color = RED;
+		this.action_bar = {};
+		for(i in yasb_ship.actions){
+			var action_name = yasb_ship.actions[i];
+			if(action_name.substring(0,2) != "> " && action_name.substring(0,3) != "R> "){
+				this.action_bar[action_name] = {'color':WHITE};
+				if (parseInt(i,10)+1 < yasb_ship.actions.length){
+					var link_candidate = yasb_ship.actions[parseInt(i,10)+1];
+					if(link_candidate.substring(0,2) == "> "){
+						var link_name = link_candidate.substring(2);
+						this.action_bar[action_name]['link'] = {};
+						this.action_bar[action_name]['link'][link_name] = {'color':WHITE};
+					} else if (link_candidate.substring(0,3) == "R> ") {
+						var link_name = link_candidate.substring(3);
+						this.action_bar[action_name]['link'] = {};
+						this.action_bar[action_name]['link'][link_name] = {'color':RED};
+					} 
 				}
 			}
 		}
+
+		for(var i in yasb_ship.actionsred){
+			var action_name = yasb_ship.actionsred[i];
+			if(action_name.substring(0,2) != "> " && action_name.substring(0,3) != "R> "){
+				this.action_bar[action_name] = {'color':RED};
+				if (parseInt(i,10)+1 < yasb_ship.actionsred.length){
+					var link_candidate = yasb_ship.actionsred[parseInt(i,10)+1];
+					if(link_candidate.substring(0,2) == "> "){
+						var link_name = link_candidate.substring(2);
+						this.action_bar[action_name]['link'] = {};
+						this.action_bar[action_name]['link'][link_name] = {'color':WHITE};
+					} else if (link_candidate.substring(0,3) == "R> ") {
+						var link_name = link_candidate.substring(3);
+						this.action_bar[action_name]['link'] = {};
+						this.action_bar[action_name]['link'][link_name] = {'color':RED};
+					} 
+				}
+			}
+		}
+
+		// this.action_bar = yasb_ship.actions.slice(0);
+		// for(var i=0; i< yasb_ship.actionsred.length; i++){
+		// 	if(yasb_ship.actionsred[i]=="Barrel Roll"){
+		// 		this.action_bar.push(yasb_ship.actionsred[i]);
+		// 		for(var move_name in this.move_sets.roll_set){
+		// 			this.move_sets.roll_set[move_name].color = RED;
+		// 		}
+		// 	} else if (yasb_ship.actionsred[i]=="Boost"){
+		// 		this.action_bar.push(yasb_ship.actionsred[i]);
+		// 		for(var move_name in this.move_sets.boost_set){
+		// 			this.move_sets.boost_set[move_name].color = RED;
+		// 		}
+		// 	}
+		// }
 
 
 		this.arc_set.forward_std = ('attack' in yasb_ship) ? [1,2,3] : [];
@@ -527,28 +566,34 @@ function process_upgrade_buttons(ship_config){
 
 		if(ship_config.ship_name == "X-Wing") {
 			if(ship_config.upgrades.t65_foils){
-				ship_config.action_bar = ["Focus", "Lock", "Boost","Barrel Roll"];
+				ship_config.action_bar['Boost'] = {color: WHITE};
+				ship_config.action_bar['Focus']['link'] = {'Boost':{color:RED}};
 			} else {
-				ship_config.action_bar = ["Focus", "Lock", "Barrel Roll"];
+				delete ship_config.action_bar['Boost'];
+				ship_config.action_bar['Focus'] = {color:WHITE};
 			}
 		}
 
 		if (ship_config.ship_name == "T-70 X-Wing"){
 			if(ship_config.upgrades.t70_foils){
-				ship_config.action_bar = ["Focus", "Lock", "Boost","Barrel Roll"];
+				ship_config.action_bar['Barrel Roll'] = {color: WHITE};
+				ship_config.action_bar['Focus']['link'] = {'Barrel Roll':{color:RED}};
 			} else {
-				ship_config.action_bar = ["Focus", "Lock", "Boost"];
+				delete ship_config.action_bar['Barrel Roll'];
+				ship_config.action_bar['Focus'] = {color:WHITE};
 			}
 			if(ship_config.upgrades.black_one){
-				ship_config.action_bar.push("Slam")
+				ship_config.action_bar['Slam'] = {color:WHITE};
+			} else {
+				delete ship_config.action_bar['Slam'];
 			}
 		}
 
 		if (ship_config.ship_name == "G-1A Starfighter"){
 			if(ship_config.upgrades.mist_hunter){
-				ship_config.action_bar = ["Focus", "Lock", "Jam","Barrel Roll"];
+				ship_config.action_bar['Barrel Roll'] = {color: WHITE};
 			} else {
-				ship_config.action_bar = ["Focus", "Lock", "Jam"];
+				delete ship_config.action_bar['Barrel Roll'];
 			}
 		}
 

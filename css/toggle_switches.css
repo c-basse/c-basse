@@ -24,7 +24,7 @@
   outline: none;
   user-select: none;
   vertical-align: middle;
-  text-indent: calc(calc(calc(2.375rem * .8) * 2) + .5rem);
+  /*text-indent: calc(calc(calc(2.375rem * .8) * 2) + .5rem);*/
 }
 .switch input + label::before,
 .switch input + label::after {
@@ -43,6 +43,10 @@
   transition: 0.2s all;
 }
 .switch input + label::after {
+
+  text-align: center;
+  line-height: calc(calc(2.375rem * .8) - calc(2px * 2));
+  font-size: 20px;
   top: 2px;
   left: 2px;
   width: calc(calc(2.375rem * .8) - calc(2px * 2));
@@ -107,7 +111,7 @@
   margin-left: calc(3rem * .8);
 }
 .switch + .switch {
-  margin-left: 13px;
+  margin-left: 17px;
 }
 
 .dropdown-menu {

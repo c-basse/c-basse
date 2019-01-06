@@ -65,10 +65,12 @@ function generate_shipstates(ship_config, options) {
 	/*******Before you activate*****/
 	/*******************************/
 	if (ship_config.pilot.pilot_name == "Sabine Wren (TIE Fighter)" || ship_config.pilot.pilot_name == "Sabine Wren"){
-		shipstateArray = action_phase(shipstateArray, ship_config, options, {require_move: false, slam_allowed: false, temp_add_boost: true});
+		var sabine_action_bar = create_temp_action_bar(ship_config,['Boost','Barrel Roll'],WHITE,true);
+		shipstateArray = action_phase(shipstateArray, ship_config, options, sabine_action_bar, {require_move: false});
 	}
 	if (ship_config.upgrades.supernatural_reflexes){
-		shipstateArray = action_phase(shipstateArray, ship_config, options, {require_move: false, slam_allowed: false, force_cost: 1});
+		var sr_action_bar = create_temp_action_bar(ship_config,['Boost','Barrel Roll'],WHITE,false);
+		shipstateArray = action_phase(shipstateArray, ship_config, options, sr_action_bar, {require_move: false,force_cost: 1});
 	}
 
 	/*******************************/
@@ -86,17 +88,19 @@ function generate_shipstates(ship_config, options) {
 	/**After you reveal your dial***/
 	/*******************************/
 	if (ship_config.upgrades.advanced_sensors) {
-		shipstateArray = action_phase(shipstateArray, ship_config, options, {require_move: false, disable_future_actions: true, slam_allowed: false});
+		shipstateArray = action_phase(shipstateArray, ship_config, options, ship_config.action_bar, {require_move: false, disable_future_actions: true, slam_allowed: false});
 	}
 
 	/*******************************/
 	/*Before you execute a maneuver*/
 	/*******************************/
 	if (ship_config.upgrades.bb_astromech){
-		shipstateArray = action_phase(shipstateArray, ship_config, options, {require_move: false, slam_allowed: false, boost_allowed: false, temp_add_roll: true});
+		var bb_action_bar = create_temp_action_bar(ship_config,['Barrel Roll'],WHITE,true);
+		shipstateArray = action_phase(shipstateArray, ship_config, options, bb_action_bar, {require_move: false});
 	}
 	if (ship_config.upgrades.bb_8){
-		shipstateArray = action_phase(shipstateArray, ship_config, options, {require_move: false, slam_allowed: false, temp_add_roll: true, temp_add_boost: true});
+		var bb8_action_bar = create_temp_action_bar(ship_config,['Boost','Barrel Roll'],WHITE,true);
+		shipstateArray = action_phase(shipstateArray, ship_config, options, bb8_action_bar, {require_move: false});
 	}
 
 	/*******************************/
@@ -107,7 +111,7 @@ function generate_shipstates(ship_config, options) {
 	/*******************************/
 	/*******Perform Action**********/
 	/*******************************/
-	shipstateArray = action_phase(shipstateArray, ship_config, options);
+	shipstateArray = action_phase(shipstateArray, ship_config, options, ship_config.action_bar);
 
 	return shipstateArray;
 }
@@ -185,7 +189,7 @@ function maneuver_phase(shipstateArray, move_set, ship_config, options, {
 
 								case RED:
 									if(ship_config.upgrades.pattern_analyzer){
-										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state],ship_config, options,{force_red:true})); //force_red so they get stressed afterward for the RED maneuver that initiated the action
+										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state],ship_config, options, ship_config.action_bar,{force_red:true})); //force_red so they get stressed afterward for the RED maneuver that initiated the action
 									}
 									if(ship_config.pilot.pilot_name != "Nien Nunb"){
 										new_ship_state.stress_count += 1;
@@ -206,9 +210,11 @@ function maneuver_phase(shipstateArray, move_set, ship_config, options, {
 							new_shipstateArray.push(new_ship_state);
 
 							if(ship_config.upgrades.afterburners && maneuver.speed >= 3){
-								new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, options, {require_move: false, disable_future_actions: false, slam_allowed: false, roll_allowed: false, temp_add_boost: true, force_white: true, even_if_stressed: true}));
+								var afterburners_action_bar = create_temp_action_bar(ship_config,['Boost'],WHITE,true);
+								new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, options, afterburners_action_bar, {require_move: false, even_if_stressed: true}));
 							} else if (ship_config.pilot.pilot_name == "Temmin Wexley" && maneuver.speed >= 2 && maneuver.speed <= 4){
-								new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, options, {require_move: false, disable_future_actions: false, slam_allowed: false, roll_allowed: false, temp_add_boost: true, force_white: true, even_if_stressed: false}));
+								var temmin_action_bar = create_temp_action_bar(ship_config,['Boost'],WHITE,true);
+								new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, options, temmin_action_bar, {require_move: false}));
 							}
 						} //end if not needing to performed emergency 2 straight
 					} //end for loop of slide maneuvers
@@ -233,11 +239,9 @@ Optional Input: temp_add_boost means boost can be performed even if not on actio
 Optional Input: temp_add_roll means barrel roll can be performed even if not on action bar
 Optional Input: even_if_stressed means the action be performed even if stressed
 */
-function action_phase(shipstateArray, ship_config, options, {
+function action_phase(shipstateArray, ship_config, options, action_bar, {
 	require_move = true,
 	disable_future_actions = false,
-	boost_allowed = true,
-	roll_allowed = true,
 	slam_allowed = true,
 	force_red =  false,
 	force_white = false,
@@ -257,34 +261,34 @@ function action_phase(shipstateArray, ship_config, options, {
 		  (require_move == false || shipstateArray[i].has_moved)
 		) { 
 			
-			var action_array = ship_config.action_bar.slice(0);
+			//var action_array = ship_config.action_bar.slice(0);
 			
 			//add actions not on action bar based on temp_add inputs
-			if(temp_add_boost && $.inArray("Boost",ship_config.action_bar)==-1) {
-				action_array.push("Boost");
-			}
-			if(temp_add_roll && $.inArray("Barrel Roll",ship_config.action_bar)==-1){
-				action_array.push("Barrel Roll");
-			}
+			// if(temp_add_boost && $.inArray("Boost",ship_config.action_bar)==-1) {
+			// 	action_array.push("Boost");
+			// }
+			// if(temp_add_roll && $.inArray("Barrel Roll",ship_config.action_bar)==-1){
+			// 	action_array.push("Barrel Roll");
+			// }
 
-			for (var j = 0; j < action_array.length; j++) {
+			for (var action_name in action_bar) {
 				
-				//need a restriction ofr roll, boost, slam
 				if (
-				  $.inArray(action_array[j],shipstateArray[i].actions_used) == -1 &&
+				  $.inArray(action_name,shipstateArray[i].actions_used) == -1 &&
 				  force_cost<=shipstateArray[i].force_count
 				) { //make sure this action has not already been performed
 					var actions_move_set;
 					var white_action_override;
 					var red_action_override;
 					var is_slam = false; //for slam
+					var moveless_action = false;
 					var do_action = false;
 
-					switch(action_array[j]) {
+					switch(action_name) {
 
 						case "Barrel Roll":
 							if (
-							  roll_allowed &&
+							  //roll_allowed &&
 							  options.enable_roll &&
 							  (
 							   shipstateArray[i].stress_count <= 0 ||
@@ -301,7 +305,7 @@ function action_phase(shipstateArray, ship_config, options, {
 
 						case "Boost":
 							if (
-							  boost_allowed &&
+							  //boost_allowed &&
 							  options.enable_boost &&
 							  (
 						  	   shipstateArray[i].stress_count <= 0 ||
@@ -334,6 +338,41 @@ function action_phase(shipstateArray, ship_config, options, {
 								is_slam = true;
 							}
 						break; 
+
+						case "Rotate Arc":
+
+							if (
+							  //rotate_allowed &&
+							  options.enable_rotate &&
+							  (
+							   shipstateArray[i].stress_count == 0 ||
+							   even_if_stressed
+							  )
+							) {
+								do_action = true;
+								actions_move_set = {"rotate-arc": {bearing:"straight",speed: 0,direction: NORMAL,roll_direction: NORMAL,slide: false,color: WHITE,enabled: true, draw_type: 0}}; 
+								white_action_override = force_white;
+								red_action_override = force_red;
+								moveless_action = true;
+							}
+						break;
+
+						default:
+
+							if (
+							  (
+							   shipstateArray[i].stress_count == 0 ||
+							   even_if_stressed
+							  )
+							) {
+								do_action = true;
+								actions_move_set = {"rotate-arc": {bearing:"straight",speed: 0,direction: NORMAL,roll_direction: NORMAL,slide: false,color: WHITE,enabled: true, draw_type: 0}}; 
+								white_action_override = force_white;
+								red_action_override = force_red;
+								moveless_action = true;
+							}
+
+						break;
 						}
 
 					if (do_action) {
@@ -349,7 +388,9 @@ function action_phase(shipstateArray, ship_config, options, {
 									var maneuver = $.extend(true,{slide_direction: shipstateArray[i].slide_array[k]},actions_move_set[move_name]); 	
 									var new_ship_state = shipstateArray[i].clone();
 									
-									new_ship_state.add_move(maneuver);
+									if(!moveless_action){
+										new_ship_state.add_move(maneuver);
+									}
 									new_ship_state.force_count -= force_cost;
 									if(disable_future_actions){
 										new_ship_state.actions_disabled = true;
@@ -357,8 +398,8 @@ function action_phase(shipstateArray, ship_config, options, {
 									if(is_slam && !ship_config.upgrades.black_one){
 										new_ship_state.is_disarmed = true;
 									}
-
-									var difficulty = actions_move_set[move_name].color;
+									
+									var difficulty = action_bar[action_name].color;
 									difficulty = (white_action_override) ? WHITE : difficulty;
 									difficulty = (red_action_override) ? RED : difficulty;
 									switch (difficulty) {          //check color
@@ -373,17 +414,46 @@ function action_phase(shipstateArray, ship_config, options, {
 											}
 											break;
 									}
-									new_ship_state.actions_used.push(action_array[j]); 
+
+									if(is_slam){
+										difficulty = actions_move_set[move_name].color;
+										switch (difficulty) {          //check color
+											case RED:
+												if(ship_config.pilot.pilot_name != "Nien Nunb"){
+													new_ship_state.stress_count += 1;
+												}
+												break;
+											case BLUE:
+												if(new_ship_state.stress_count > 0){
+													new_ship_state.stress_count -= 1;
+												}
+												break;
+										}
+									}
+
+									new_ship_state.actions_used.push(action_name); 
 									new_shipstateArray.push(new_ship_state);
 									
 									if(ship_config.ship_ability.autothrusters){
-										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, options, {require_move: false, disable_future_actions: false, slam_allowed: false, force_red: true}));
+										var autothrusters_action_bar = create_temp_action_bar(ship_config,['Boost','Barrel Roll'],RED,true);
+										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, options,autothrusters_action_bar, {require_move: false}));
 									} else if (ship_config.ship_ability.refined_gyrostabilizers) {
-										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, options, {require_move: false, disable_future_actions: false, slam_allowed: false, roll_allowed: false, force_red: true}));
+										var ref_gyro_action_bar = create_temp_action_bar(ship_config,['Boost','Rotate Arc'],RED,true);
+										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, options, ref_gyro_action_bar, {require_move: false}));
 									} else if (ship_config.ship_ability.vectored_thrusters) {
-										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, options, {require_move: false, disable_future_actions: false, slam_allowed: false, roll_allowed: false, force_red: true}));
+										var vec_thrust_action_bar = create_temp_action_bar(ship_config,['Boost'],RED,true);
+										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, options,vec_thrust_action_bar, {require_move: false}));
 									} else if (ship_config.pilot.pilot_name == "Poe Dameron" && new_ship_state.force_count >= 1){
-										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, options, {require_move: false, disable_future_actions: false, slam_allowed: false, force_red: true, force_cost: 1}));
+										var poe_action_array = [];
+										for(var poe_action_name in ship_config.action_bar){
+											if(ship_config.action_bar[poe_action_name].color == WHITE){
+												poe_action_array.push(poe_action_name);
+											}
+										}
+										var poe_action_bar = create_temp_action_bar(ship_config,poe_action_array,RED,false);
+										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, options, poe_action_bar, {require_move: false, slam_allowed: false, force_cost: 1}));
+									} else if ('link' in action_bar[action_name]) {
+										new_shipstateArray = new_shipstateArray.concat(action_phase([new_ship_state], ship_config, options, action_bar[action_name]['link'], {require_move: false}));
 									}
 									/*
 									until we model the ability to supernatural boost (take damage) and/or other actions, vader pilot ability is pointless

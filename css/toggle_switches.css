@@ -18,7 +18,7 @@
   min-width: calc(calc(2.375rem * .8) * 2);
   border-radius: calc(2.375rem * .8);
   height: calc(2.375rem * .8);
-  line-height: calc(2.375rem * .8);
+  /* line-height: calc(2.375rem * .8); */
   display: inline-block;
   cursor: pointer;
   outline: none;
@@ -45,7 +45,7 @@
 .switch input + label::after {
 
   text-align: center;
-  line-height: calc(calc(2.375rem * .8) - calc(2px * 2));
+  /* line-height: calc(calc(2.375rem * .8) - calc(2px * 2)); */
   font-size: 20px;
   top: 2px;
   left: 2px;

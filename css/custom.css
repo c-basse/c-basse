@@ -79,7 +79,7 @@ i.xwing-miniatures-font-small {
 	font-family: XWing;
 	text-transform: uppercase;
 	content: 'R';
-	line-height: calc(calc(2.375rem * .8) - calc(5px * 2));
+	line-height: 20.4px;
 }
 
 .range1-switch input + label::after{

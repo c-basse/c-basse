@@ -46,8 +46,10 @@ body {
 }
 
 .pure-toggle:focus ~ .pure-toggle-label {
-  border-color: #1fc08e;
-  color: #1fc08e;
+  /* border-color: #1fc08e; */
+  /* color: #1fc08e; */
+  border-color: #000000;
+  color: #000000;
 }
 
 .pure-toggle-label {

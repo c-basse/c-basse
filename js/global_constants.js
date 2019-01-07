@@ -1,4 +1,4 @@
-const DATA_COLLECTION_MODE = true;
+const DATA_COLLECTION_MODE = false;
 const SMALLBASE = 40;
 const MEDIUMBASE = 60;
 const LARGEBASE = 80;

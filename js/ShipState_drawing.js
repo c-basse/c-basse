@@ -49,37 +49,6 @@ function draw_everything(shipstateArray,options,canvas,collect_data = false) {
 		}
 	}
 
-	/**************************
-		Data Collection Mode
-	**************************/
-
-	if(DATA_COLLECTION_MODE && collect_data){
-		canvas.restore();
-		var myGetImageData = canvas.getImageData(0,0,1856, 1392);
-
-		var data = myGetImageData.data;
-	        // iterate over all pixels
-	        var red_count = 0;
-	        var black_count = 0;
-	        var white_count = 0;
-	        var grey_count = 0;
-	        var blue_count = 0;
-	        var green_count = 0;
-	        for(var i = 0, n = data.length; i < n; i += 4) {
-	          var is_black = data[i]==255 && data[i + 1]== 255 && data[i + 2] == 255;
-	          var is_white = data[i]==0 && data[i + 1]== 0 && data[i + 2] == 0;
-	          var is_bw = data[i]==data[i+1] && data[i] == data[i+2];
-	          red_count += (data[i]>0 && !is_black && !is_bw) ? 1 : 0;
-	          green_count += (data[i+1]>0 && !is_black && !is_bw) ? 1 : 0;
-	          blue_count += (data[i+2]>0 && !is_black && !is_bw) ? 1 : 0;
-	          black_count += (is_black) ? 1 : 0;
-	          white_count += (is_white) ? 1 : 0;
-	          grey_count += (!is_black && !is_white && is_bw) ? 1: 0;
-	        }
-
-	        return([red_count,green_count,blue_count]);
-
-	}
 
 }
 

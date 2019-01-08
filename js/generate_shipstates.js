@@ -373,6 +373,23 @@ function action_phase(shipstateArray, ship_config, options, action_bar, {
 							}
 
 						break;
+
+						case "Calculate":
+
+							if (
+							  (
+							   shipstateArray[i].stress_count == 0 ||
+							   even_if_stressed
+							  )
+							) {
+								do_action = true;
+								actions_move_set = {"rotate-arc": {bearing:"straight",speed: 0,direction: NORMAL,roll_direction: NORMAL,slide: false,color: WHITE,enabled: true, draw_type: 0}}; 
+								white_action_override = force_white;
+								red_action_override = force_red;
+								moveless_action = true;
+							}
+
+						break;
 						}
 
 					if (do_action) {

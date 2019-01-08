@@ -19,7 +19,7 @@ function draw_everything(shipstateArray,options,canvas,collect_data = false) {
 	var unique_endstate_array = [];
 	for (var i = (shipstateArray.length-1); i >= 0; i--) {
 		var rotated_arc = ($.inArray("Rotate Arc",shipstateArray[i].actions_used) != -1);
-		var focused = ($.inArray("Focus",shipstateArray[i].actions_used) != -1);
+		var focused = ($.inArray("Focus",shipstateArray[i].actions_used) != -1) || ($.inArray("Calculate",shipstateArray[i].actions_used) != -1);
 		var can_shoot = shipstateArray[i].has_moved && !shipstateArray[i].is_cloaked && !shipstateArray[i].is_disarmed;
 		var endstate_id = shipstateArray[i].movearray.slice(0);
 		endstate_id.push(rotated_arc);
